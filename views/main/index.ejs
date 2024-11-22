@@ -186,13 +186,7 @@
                             <div class="card">
                                 <div class="card-header">Döviz Kurları</div>
                                 <div class="card-body">
-                                    <ul class="list-group list-group-flush">
-                                        <% ['USD', 'EUR', 'GBP'].forEach(code => { %>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <%= code %>: <span><%= rates[code] ? rates[code] + ' TL' : 'Veri yok' %></span>
-                                            </li>
-                                        <% }) %>
-                                    </ul>
+                                    
                                 </div>
                             </div>
                             
@@ -254,13 +248,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card col-md-3 mb-4">
-                            <div class="card-header">Yemek Listesi</div>
-                            <div class="card-body">
-                                <a href="/uploads/yemek-listesi.pdf" target="_blank">Yemek Listesi İçin
-                                    Tıklayınız</a>
+                        <div class="col-md-3">
+                            <div class="card mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>Günün Yemek Listesi</span>
+                                    <a href="/uploads/yemek-listesi.pdf" target="_blank" class=" text-decoration-none small">
+                                        Tümünü Gör
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="menu">
+                                        <% if (todayMenu) { %>
+                                            <ul class="list-group list-group-flush">
+                                                <% todayMenu.meals.forEach(meal => { %>
+                                                    <li class="list-group-item"><i class="bi bi-check-circle text-success"></i> <%= meal %></li>
+                                                <% }) %>
+                                            </ul>
+                                        <% } else { %>
+                                            <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
+                                        <% } %>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        
                     </div>
 
                 </div> <!-- container -->
