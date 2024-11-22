@@ -45,9 +45,9 @@ app.use((err, req, res, next) => {
 });
 
 // Sunucuyu başlat
-app.listen(5000, function (err) {
+app.listen(3000, function (err) {
     if (err) {
         return console.log("An error occurred:", err);
     }
-    console.log("The server is running on http://localhost:5000");
+    console.log("The server is running on http://localhost:3000");
 });
