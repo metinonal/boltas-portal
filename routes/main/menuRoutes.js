@@ -6,6 +6,5 @@ const menuController = require("../../controllers/main/menuController");
 router.get("/today-menu", menuController.getTodayMenu);
 router.get("/yemek-listesi", menuController.getAllMenus);
 
-
 module.exports = router;
 

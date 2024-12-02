@@ -1,0 +1,155 @@
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* İçerik alanını kapsayıcı olarak tanımlıyoruz */
+.container {
+    flex: 1;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    color: #ff6600;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #ff6600;
+}
+
+.list-group-item {
+    border: none;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-group-item a {
+    color: #000080;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.list-group-item a:hover {
+    text-decoration: underline;
+}
+
+.list-group-item small {
+    color: #ff6600;
+}
+
+footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Header Tasarımı */
+.custom-header {
+    background-color: #887d7f;
+    color: white;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.custom-header .logo {
+    height: 40px;
+}
+
+.custom-header .nav-links {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.custom-header .nav-links a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.custom-header .nav-links a:hover {
+    text-decoration: underline;
+}
+
+.custom-header .social-icons {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.custom-header .social-icons a {
+    margin-left: 10px;
+    color: white;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.custom-header .social-icons a:hover {
+    color: #ff6600;
+}
+
+.social-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px; /* Sağdan boşluk */
+    transform: translateY(-50%);
+    display: flex;
+    gap: 10px; /* İkonlar arasındaki boşluk */
+}
+
+.social-icons a {
+    text-decoration: none;
+    color: #555;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #007bff; /* İkonlara hover efekti */
+}
+
+/* Mobil Uyum (Media Query) */
+@media (max-width: 768px) {
+    .custom-header .row {
+        flex-direction: column; /* Elemanları dikey hizala */
+        align-items: center;
+    }
+
+    .custom-header .nav-links {
+        justify-content: center;
+        margin-top: 10px; /* Mobilde üstten boşluk */
+        display: flex;
+        gap: 10px;
+    }
+
+    .custom-header .social-icons {
+        position: static; /* Sabit konumu kaldır */
+        margin-top: 10px;
+        justify-content: center;
+        transform: none; /* Yükseklik ortalamayı kaldır */
+    }
+
+    .custom-header .logo {
+        text-align: center;
+        margin-bottom: 10px; /* Logonun altına boşluk */
+    }
+
+    .custom-header .nav-links a {
+        font-size: 0.9rem; /* Mobilde daha küçük yazı boyutu */
+    }
+}
