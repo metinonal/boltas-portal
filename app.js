@@ -33,8 +33,8 @@ app.use(
 );
 
 // Rotalar
-app.use("/admin", adminRoutes); // Admin rotaları
-app.use("/admin", yemekRoutes); // Admin rotaları
+app.use("/ikyonetim", adminRoutes); // Admin rotaları
+app.use("/ikyonetim", yemekRoutes); // Admin rotaları
 app.use("/", menuRoutes); // Menü rotaları
 app.use("/", indexRoutes); // Ana sayfa rotaları
 

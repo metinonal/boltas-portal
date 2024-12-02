@@ -1,16 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+
 </head>
-<body>
-    <h1>Yemek Listesi Yükleme</h1>
-    <form action="/admin/yemek-listesi" method="POST" enctype="multipart/form-data">
-        <input type="file" name="yemekDosyasi" required>
-        <button type="submit">Yükle</button>
-    </form>
-    <a href="/admin">Admin Paneline Dön</a>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                <!--- Sidemenu -->
+                <%- include("partials/sidemenu") %>
+                    <!-- End Sidebar -->
+
+                    <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Yemek Listesi</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="/admin/yemek-listesi" method="POST" enctype="multipart/form-data">
+                                            <div class="row mb-3">
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="header" class="form-label">Yemek Listesi (Excel):</label>
+                                                    <input type="file" class="form-control"  name="yemekDosyasi" required>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">Yükle</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- end page title -->
+
+                        <!-- end row -->
+
+                        <!-- end row -->
+                    </div>
+                     <!-- container -->
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- Right Sidebar -->
+    <%- include("partials/right-sidebar") %>
+
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
+
+    <%- include("partials/scripts") %>
+
 </body>
+
 </html>

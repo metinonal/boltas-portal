@@ -1,212 +1,222 @@
 [
     {
-        "date": "2024-11-01",
-        "meals": [
-            "SEBZE ÇORBA",
-            "PİLİÇ ŞİŞ/AYVA DİLİM PATATES",
-            "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "MEŞRUBAT"
-        ]
-    },
-    {
-        "date": "2024-11-04",
-        "meals": [
-            "MANTAR ÇORBA",
-            "ETLİ NOHUT",
-            "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "MEYVE"
-        ]
-    },
-    {
-        "date": "2024-11-05",
+        "date": "2024-12-02",
         "meals": [
             "MERCİMEK ÇORBA",
-            "BEĞENDİLİ KÖFTE",
-            "CEVİZLİ ERİŞTE KAVURMA",
-            "SALATA BÜFESİ",
-            "KAKAOLU PUDİNG"
-        ]
-    },
-    {
-        "date": "2024-11-06",
-        "meals": [
-            "BROKOLİ  ÇORBA",
-            "FIRINDA PİLİÇ BAGET",
-            "SOSLU MAKARNA",
-            "SALATA BÜFESİ",
-            "MEYVE"
-        ]
-    },
-    {
-        "date": "2024-11-07",
-        "meals": [
-            "EZOGELİN ÇORBA",
-            "KARNIYARIK",
-            "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "KADAYIF"
-        ]
-    },
-    {
-        "date": "2024-11-08",
-        "meals": [
-            "TARHANA ÇORBA",
-            "SOSLU MİTİTE KÖFTE",
-            "ŞEHRİYELİ PİLAV",
-            "SALATA BÜFESİ",
-            "MEYVE"
-        ]
-    },
-    {
-        "date": "2024-11-11",
-        "meals": [
-            "ŞEHRİYE ÇORBA",
             "ET DÖNER",
             "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
             "AYRAN"
         ]
     },
     {
-        "date": "2024-11-12",
+        "date": "2024-12-03",
         "meals": [
-            "TARHANA ÇORBA",
-            "BAHÇIVAN KEBAP",
-            "DOMATES SOSLU SPAGETTİ",
-            "SALATA BÜFESİ",
-            "BAKLAVA"
+            "YOĞURT ÇORBA",
+            "FIRINDA BEŞAMEL SOSLU KIYMALI KARNABAHAR",
+            "PEYNİRLİ ERİŞTE KAVURMA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "CEVİZLİ BAKLAVA"
         ]
     },
     {
-        "date": "2024-11-13",
+        "date": "2024-12-04",
+        "meals": [
+            "SEBZE ÇORBASI",
+            "BEĞENDİLİ TAVUK SOTE",
+            "ŞEHRİYELİ PİLAV",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
+        ]
+    },
+    {
+        "date": "2024-12-05",
         "meals": [
             "EZOGELİN ÇORBA",
-            "PİLİÇ HAŞLAMA",
+            "PASTIRMALI FASULYE",
             "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "MEYVE"
-        ]
-    },
-    {
-        "date": "2024-11-14",
-        "meals": [
-            "ALACA ÇORBA",
-            "ETLİ TAZE FASÜLYE",
-            "ŞEHRİYELİ PİLAV",
-            "SALATA BÜFESİ",
-            "REVANİ"
-        ]
-    },
-    {
-        "date": "2024-11-15",
-        "meals": [
-            "YAYLA ÇORBA",
-            "PİLİÇ TANTUNİ LAVAŞ İLE",
-            "BULGUR PİLAVI",
-            "SALATA BÜFESİ",
-            "MEŞRUBAT"
-        ]
-    },
-    {
-        "date": "2024-11-18",
-        "meals": [
-            "EKŞİLİ ÇORBA",
-            "ETLİ KURU FASULYE",
-            "BULGUR PİLAVI",
-            "SALATA BÜFESİ",
-            "MEYVE"
-        ]
-    },
-    {
-        "date": "2024-11-19",
-        "meals": [
-            "MERCİMEK ÇORBA",
-            "BEĞENDİLİ IZGARA KÖFTE",
-            "BULGUR PİLAVI",
-            "SALATA BÜFESİ",
-            "LİMONATA"
-        ]
-    },
-    {
-        "date": "2024-11-20",
-        "meals": [
-            "DÜĞÜN ÇORBA",
-            "YUMARTALI ISPANAK ",
-            "SU BÖREĞİ",
-            "SALATA BÜFESİ",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
             "ŞEKERPARE"
         ]
     },
     {
-        "date": "2024-11-21",
+        "date": "2024-12-06",
         "meals": [
-            "EZOGELİN ÇORBA",
-            "ARNAVUT CİĞERİ",
-            "BULGUR PİLAVI",
-            "SALATA BÜFESİ",
-            "AYRAN"
-        ]
-    },
-    {
-        "date": "2024-11-22",
-        "meals": [
-            "ŞEHRİYE ÇORBA",
-            "ORMAN KEBABI",
-            "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
+            "KREMALI MANTAR ÇORBA",
+            "PÜRELİ KÖFTE",
+            "SPAGETTİ MAKARNA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
             "MEYVE"
         ]
     },
     {
-        "date": "2024-11-25",
+        "date": "2024-12-09",
+        "meals": [
+            "YAYLA ÇORBA",
+            "ETLİ NOHUT",
+            "ŞEHRİYELİ PİLAV",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "SUPANGLE"
+        ]
+    },
+    {
+        "date": "2024-12-10",
         "meals": [
             "EZOGELİN ÇORBA",
-            "TAVUK DÖNER",
+            "PİLİÇ TANTUNİ-LAVAŞ",
             "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "İÇECEK"
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "AYRAN"
         ]
     },
     {
-        "date": "2024-11-26",
+        "date": "2024-12-11",
+        "meals": [
+            "DOMATES ÇORBA",
+            "MEVSİM BALIK/PATATES",
+            "SPAGETTİ MAKARNA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "İRMİK HELVASI"
+        ]
+    },
+    {
+        "date": "2024-12-12",
         "meals": [
             "SEBZE ÇORBA",
-            "İZMİR KÖFTE",
-            "BULGUR PİLAVI",
-            "SALATA BÜFESİ",
-            "KEMALPAŞA TATLISI"
+            "ÇİFTLİK KEBABI",
+            "PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
         ]
     },
     {
-        "date": "2024-11-27",
+        "date": "2024-12-13",
+        "meals": [
+            "TUTMAÇ ÇORBASI",
+            "İZMİR KÖFTE",
+            "BULGUR PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "KAYISI KOMPOSTO"
+        ]
+    },
+    {
+        "date": "2024-12-16",
+        "meals": [
+            "YOĞURT ÇORBA",
+            "KIYMALI SEBZE GRATEN",
+            "PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
+        ]
+    },
+    {
+        "date": "2024-12-17",
+        "meals": [
+            "EZOGELİN ÇORBA",
+            "FIRIN PİLİÇ BAGET",
+            "SOSLU MAKARNA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEŞRUBAT"
+        ]
+    },
+    {
+        "date": "2024-12-18",
+        "meals": [
+            "TAVUKLU ŞEHRİYE ÇORBA",
+            "KAYSERİ USULÜ YEŞİL MERCİMEK",
+            "ŞEHRİYELİ PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "KABAK TATLISI"
+        ]
+    },
+    {
+        "date": "2024-12-19",
+        "meals": [
+            "MAHLUTA ÇORBA",
+            "MANTAR SOSLU FIRIN KÖFTE",
+            "ERİŞTE KAVURMA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
+        ]
+    },
+    {
+        "date": "2024-12-20",
+        "meals": [
+            "MERCİMEK ÇORBA",
+            "IZGARA KANAT",
+            "PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEŞRUBAT"
+        ]
+    },
+    {
+        "date": "2024-12-23",
+        "meals": [
+            "HAVUÇ ÇORBA",
+            "TAVUK DÖNER",
+            "PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "AYRAN"
+        ]
+    },
+    {
+        "date": "2024-12-24",
         "meals": [
             "TARHANA ÇORBA",
             "PATLICAN MUSAKKA",
             "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "CEVİZLİ KADAYIF"
+        ]
+    },
+    {
+        "date": "2024-12-25",
+        "meals": [
+            "MERCİMEK ÇORBA",
+            "BEĞENİLİ HİNDİ TANDIR",
+            "İÇ PİLAV",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEŞRUBAT"
+        ]
+    },
+    {
+        "date": "2024-12-26",
+        "meals": [
+            "KREMALI MANTAR ÇORBA",
+            "ET SOTE",
+            "PİRİNÇ PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "KABAK TATLISI"
+        ]
+    },
+    {
+        "date": "2024-12-27",
+        "meals": [
+            "MERCİMEK  ÇORBA",
+            "ARNAVUT CİĞERİ",
+            "BULGUR PİLAVI",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
             "MEYVE"
         ]
     },
     {
-        "date": "2024-11-28",
+        "date": "2024-12-30",
         "meals": [
-            "MERCİMEK ÇORBA",
-            "KAYSERİ MANTI",
-            "İÇLİ KÖFTE",
-            "SALATA BÜFESİ",
-            "SÜTLAÇ"
+            "SEBZE ÇORBA",
+            "IZGARA KÖFTE",
+            "SOSLU MAKARNA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
         ]
     },
     {
-        "date": "2024-11-29",
+        "date": "2024-12-31",
         "meals": [
-            "ANADOLU ÇORBA",
-            "PİLİÇ IZGARA PİRZOLA",
-            "PİRİNÇ PİLAVI",
-            "SALATA BÜFESİ",
-            "AYRAN"
+            "YAYLA ÇORBA",
+            "FIRIN PİLİÇ BUT",
+            " SPAGETTİ MAKARNA",
+            "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+            "MEYVE"
         ]
     }
 ]
