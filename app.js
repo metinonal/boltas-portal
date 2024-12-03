@@ -10,6 +10,9 @@ const adminRoutes = require("./routes/admin/adminRoutes"); // Admin Paneli Rotas
 const menuRoutes = require("./routes/main/menuRoutes"); // Menü Rotası
 const yemekRoutes = require("./routes/admin/yemekRoutes"); // Yemek Yönetimi Rotası
 
+const authRoutes = require('./routes/admin/authRoutes'); // auth rotası
+const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
+
 
 // Görüntü motorunun tercihi
 app.set("view engine", "ejs");
@@ -29,12 +32,19 @@ app.use(
         secret: "boltas", // Güçlü bir anahtar seçin
         resave: false,
         saveUninitialized: true,
+        cookie: {
+            maxAge: 30 * 60 * 1000 // Session duration set to 30 minutes / Oturum süresi 30 dakika olarak ayarlanır
+        }
     })
 );
 
+app.use(sessionTimeoutMiddleware);
+
+app.use(authRoutes);
+
 // Rotalar
-app.use("/ikyonetim", adminRoutes); // Admin rotaları
-app.use("/ikyonetim", yemekRoutes); // Admin rotaları
+app.use("/ikyonetim", authMiddleware, adminRoutes); // Admin rotaları
+app.use("/ikyonetim", authMiddleware, yemekRoutes); // Admin rotaları
 app.use("/", menuRoutes); // Menü rotaları
 app.use("/", indexRoutes); // Ana sayfa rotaları
 
