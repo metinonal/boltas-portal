@@ -23,11 +23,14 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            user-select: none; /* Kartın metni seçilemesin */
+            user-select: none;
         }
         .meal-card:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .highlight {
+            background-color: #e9ecef; /* Açık gri arka plan */
         }
         .date-title {
             font-weight: bold;
@@ -44,10 +47,8 @@
             color: #adb5bd;
             font-style: italic;
         }
-        .non-selectable {
-            user-select: none; /* Row içindeki tüm metin seçilemesin */
-        }
     </style>
+    
     
 
 </head>
@@ -99,9 +100,12 @@
                     <div class="container">
                         <% if (menuData && menuData.length > 0) { %>
                             <div class="row g-4 non-selectable">
+                                <% 
+                                    const today = new Date().toISOString().split('T')[0]; // Bugünün tarihi (YYYY-MM-DD formatında)
+                                %>
                                 <% menuData.forEach((menu) => { %>
                                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                                        <div class="meal-card">
+                                        <div class="meal-card <%= menu.date === today ? 'highlight' : '' %>">
                                             <!-- Tarih -->
                                             <% if (menu.date) { %>
                                                 <span class="date-title">
@@ -117,7 +121,7 @@
                                             <% } else { %>
                                                 <span class="date-title">Tarih Bilinmiyor</span>
                                             <% } %>
-                        
+                    
                                             <!-- Yemekler -->
                                             <% if (menu.meals && menu.meals.length > 0) { %>
                                                 <% menu.meals.forEach(meal => { %>
@@ -133,9 +137,8 @@
                         <% } else { %>
                             <p class="text-center text-muted">Henüz bir yemek listesi yüklenmedi.</p>
                         <% } %>
-                        
-                        
                     </div>
+                    
                     
 
                     <!-- Footer Start -->
