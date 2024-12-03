@@ -51,3 +51,44 @@
         });
     });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const citySelect = document.getElementById('citySelect');
+        citySelect.addEventListener('change', async function getWeather() {
+            const city = citySelect.value;
+            const weatherInfo = document.getElementById('weather-info');
+    
+            if (!city) {
+                weatherInfo.innerHTML = "<p class='text-danger'>Lütfen bir şehir seçin.</p>";
+                return;
+            }
+    
+            const apiKey = 'aab6b5f43323f1d3590fca07dc1c07f2'; // OpenWeatherMap API anahtarınızı buraya ekleyin
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=tr`;
+    
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Hava durumu bilgisi alınamadı');
+    
+                const data = await response.json();
+                const iconCode = data.weather[0].icon;
+                const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+    
+                weatherInfo.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${iconUrl}" alt="Hava Durumu İkonu" class="me-3">
+                        <div>
+                            <p class="mb-0"><strong>Sıcaklık:</strong> ${data.main.temp}°C</p>
+                            <p class="mb-0"><strong>Hissedilen:</strong> ${data.main.feels_like}°C</p>
+                            <p class="mb-0"><strong>Durum:</strong> ${data.weather[0].description}</p>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                weatherInfo.innerHTML = `<p class='text-danger'>Hata: ${error.message}</p>`;
+            }
+        });
+    });
+    
+        </script>
