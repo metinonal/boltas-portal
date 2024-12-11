@@ -22,16 +22,16 @@
             <!-- LOGO -->
             <%- include("partials/logo") %>
 
-            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
 
-                <!--- Sidemenu -->
-                <%- include("partials/sidemenu") %>
-                    <!-- End Sidebar -->
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
 
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
 
-            </div>
-            <!-- Sidebar -left -->
+                </div>
+                <!-- Sidebar -left -->
 
         </div>
         <!-- Left Sidebar End -->
@@ -82,7 +82,7 @@
                                 </a>
                             </div>
                             <!-- Bilgi Bankası -->
-    
+
                             <!-- Yemek Listesi ve Hava Durumu -->
                             <div class="col-md-3">
                                 <div class="card mb-4 mt-3">
@@ -109,13 +109,33 @@
                                 <div class="card">
                                     <div class="card-header">Döviz Kurları</div>
                                     <div class="card-body">
-                                        <p style="color: red;">Bakımda</p>
+                                      <table class="table table-sm">
+                                        <thead>
+                                          <tr>
+                                            <th>Döviz Kodu</th>
+                                            <th>Alış Fiyatı (TL)</th>
+                                            <th>Satış Fiyatı (TL)</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <% currencies.forEach(currency => { %>
+                                            <% if (['USD', 'EUR', 'GBP'].includes(currency.currencyCode)) { %>
+                                              <tr>
+                                                <td><%= currency.currencyCode %></td>
+                                                <td><%= currency.forexBuying %></td>
+                                                <td><%= currency.forexSelling %></td>
+                                              </tr>
+                                            <% } %>
+                                          <% }) %>
+                                        </tbody>
+                                      </table>
                                     </div>
-                                </div>
-                                
+                                  </div>
+                                  
+
                             </div>
                         </div>
-    
+
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="card mb-4">
@@ -179,29 +199,33 @@
                                         <div class="menu">
                                             <% if (todayMenu) { %>
                                                 <ul class="list-group list-group-flush">
-                                                    <% todayMenu.meals.forEach(meal => { %>
-                                                        <li class="list-group-item"><i class="bi bi-check-circle text-success"></i> <%= meal %></li>
-                                                    <% }) %>
+                                                    <% todayMenu.meals.forEach(meal=> { %>
+                                                        <li class="list-group-item"><i
+                                                                class="bi bi-check-circle text-success"></i>
+                                                            <%= meal %>
+                                                        </li>
+                                                        <% }) %>
                                                 </ul>
-                                            <% } else { %>
-                                                <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
-                                            <% } %>
+                                                <% } else { %>
+                                                    <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
+                                                    </p>
+                                                    <% } %>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <!-- end row -->
                     </div>
-                     <!-- container -->
+                    <!-- container -->
 
             </div> <!-- content -->
 
             <!-- Footer Start -->
             <%- include("partials/footer") %>
-            <!-- end Footer -->
+                <!-- end Footer -->
 
         </div>
 
@@ -217,10 +241,52 @@
     <!-- Right Sidebar -->
     <%- include("partials/right-sidebar") %>
 
-    <div class="rightbar-overlay"></div>
-    <!-- /End-bar -->
+        <div class="rightbar-overlay"></div>
+        <!-- /End-bar -->
 
-    <%- include("partials/scripts") %>
+        <%- include("partials/scripts") %>
+
+          <script>
+          // Sayfa yüklendiğinde seçilen şehri geri yükle
+          document.addEventListener("DOMContentLoaded", () => {
+            const citySelect = document.getElementById("citySelect");
+            const savedCity = getCookie("selectedCity");
+          
+            if (savedCity) {
+              citySelect.value = savedCity;
+            }
+          });
+          
+          // Şehir seçimi değiştiğinde çereze kaydet
+          document.getElementById("citySelect").addEventListener("change", (e) => {
+            const selectedCity = e.target.value;
+            if (selectedCity) {
+              setCookie("selectedCity", selectedCity, 30); // 30 gün boyunca geçerli olacak
+            }
+          });
+          
+          // Çerez (cookie) oluşturma fonksiyonu
+          function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+          }
+          
+          // Çerez okuma fonksiyonu
+          function getCookie(name) {
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookiesArray = decodedCookie.split(';');
+            for (let i = 0; i < cookiesArray.length; i++) {
+              let cookie = cookiesArray[i].trim();
+              if (cookie.indexOf(name + "=") == 0) {
+                return cookie.substring(name.length + 1);
+              }
+            }
+            return "";
+          }
+          </script>
+          
 
 </body>
 
