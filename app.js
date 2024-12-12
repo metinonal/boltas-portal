@@ -1,14 +1,21 @@
 const express = require("express");
 const app = express();
+const connectDB = require('./data/db');
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
 
-// Rota dosyaları
-const indexRoutes = require("./routes/main/indexRoutes"); // Ana Sayfa Rotası
+connectDB();
+
+//Admin Rota dosyaları
 const adminRoutes = require("./routes/admin/adminRoutes"); // Admin Paneli Rotası
-const menuRoutes = require("./routes/main/menuRoutes"); // Menü Rotası
 const yemekRoutes = require("./routes/admin/yemekRoutes"); // Yemek Yönetimi Rotası
+const sliderRoutes = require("./routes/admin/sliderRoutes"); // Yemek Yönetimi Rotası
+
+//Main Rota dosyaları
+const menuRoutes = require("./routes/main/menuRoutes"); // Menü Rotası
+const indexRoutes = require("./routes/main/indexRoutes"); // Ana Sayfa Rotası
+
 
 const authRoutes = require('./routes/admin/authRoutes'); // auth rotası
 const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
@@ -43,8 +50,9 @@ app.use(sessionTimeoutMiddleware);
 app.use(authRoutes);
 
 // Rotalar
-app.use("/ikyonetim", authMiddleware, adminRoutes); // Admin rotaları
 app.use("/ikyonetim", authMiddleware, yemekRoutes); // Admin rotaları
+app.use("/ikyonetim", authMiddleware, sliderRoutes); // Admin rotaları
+app.use("/ikyonetim", authMiddleware, adminRoutes); // Admin rotaları
 app.use("/", menuRoutes); // Menü rotaları
 app.use("/", indexRoutes); // Ana sayfa rotaları
 
