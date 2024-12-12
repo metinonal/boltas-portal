@@ -47,29 +47,32 @@
                     <!-- end Topbar -->
 
                     <!-- Start Content-->
-                    <div class="container-fluid">
+                    <div class="container-fluid" style="padding: 0px 40px 0px 40px;">
 
                         <!-- start page title -->
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <h4 class="page-title">Boltas Portal</h4>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <!-- end page title -->
 
-                        <div class="row mb-3">
+                        <div class="row mb-3 mt-3">
                             <div id="slider" class="col-md-9 carousel slide carousel-fade" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <a href="#"><img class="d-block img-fluid" src="assets/img/depo foto.jpg"
-                                                style="width: 100%;"></a>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <a href="#"><img class="d-block img-fluid" src="assets/img/GTİP.png"
-                                                style="width: 100%;"></a>
-                                    </div>
+                                    <% sliders.forEach((slider, index) => { %>
+                                        <div class="carousel-item <%= slider.isMain && index === 0 ? 'active' : '' %>">
+                                            <a href="https://<%= slider.link %>">
+                                                <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
+                                            </a>
+                                            <div class="carousel-caption" style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
+                                                <h5><%= slider.title %></h5>
+                                                <p><%= slider.description %></p>
+                                            </div>
+                                        </div>
+                                    <% }); %>
                                 </div>
                                 <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"
@@ -85,7 +88,7 @@
 
                             <!-- Yemek Listesi ve Hava Durumu -->
                             <div class="col-md-3">
-                                <div class="card mb-4 mt-3">
+                                <div class="card mb-4 ">
                                     <div class="card-header">Hava Durumu</div>
                                     <div class="card-body">
                                         <label for="citySelect" class="form-label">Şehir Seçin:</label>

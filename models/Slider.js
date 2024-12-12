@@ -6,6 +6,7 @@ const sliderSchema = new mongoose.Schema({
     description: { type: String },
     link: { type: String },
     isActive: { type: Boolean, default: true },
+    isMain: { type: Boolean, default: false }, // Yeni alan eklendi
     createdAt: { type: Date, default: Date.now }
 });
 

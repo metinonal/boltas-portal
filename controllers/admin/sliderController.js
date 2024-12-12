@@ -28,7 +28,7 @@ exports.showUpdateSliderPage = async (req, res) => {
 exports.updateSlider = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, link, isActive } = req.body;
+        const { title, description, link, isActive, isMain } = req.body;
 
         // Güncellenecek slider'ı bul
         const slider = await Slider.findById(id);
@@ -40,10 +40,11 @@ exports.updateSlider = async (req, res) => {
         // Eğer yeni bir resim yüklenmişse eski resmi sil ve yeni resmi kaydet
         if (req.file) {
             const oldImagePath = path.join(__dirname, '../../public', slider.imageUrl);
-            fs.unlink(oldImagePath, (err) => {
-                if (err) console.error("Eski dosya silinirken hata oluştu:", err);
-            });
-
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlink(oldImagePath, (err) => {
+                    if (err) console.error("Eski dosya silinirken hata oluştu:", err);
+                });
+            }
             slider.imageUrl = `/uploads/${req.file.filename}`;
         }
 
@@ -52,6 +53,7 @@ exports.updateSlider = async (req, res) => {
         slider.description = description;
         slider.link = link;
         slider.isActive = isActive === '1' ? true : false;
+        slider.isMain = isMain === '1' ? true : false;
 
         // Güncellemeyi kaydet
         await slider.save();
@@ -83,7 +85,7 @@ exports.sliderAdd = async (req, res) => {
             `);
         }
 
-        const { title, description, link, isActive } = req.body;
+        const { title, description, link, isActive, isMain } = req.body;
         const imageUrl = `/uploads/${req.file.filename}`;
 
         // Yeni slider belgesi oluştur
@@ -93,6 +95,7 @@ exports.sliderAdd = async (req, res) => {
             description,
             link,
             isActive: isActive === '1' ? true : false,
+            isMain: isMain === '1' ? true : false, 
             createdAt: new Date()
         });
 
@@ -162,7 +165,8 @@ exports.sliderEditPage = async (req, res) => {
                 month: '2-digit',
                 year: 'numeric'
             }),
-            isActive: slider.isActive ? 1 : 0
+            isActive: slider.isActive ? 1 : 0,
+            isMain: slider.isMain ? 1 : 0
         }));
 
         // Verileri 'admin/slider-edit' sayfasında render et

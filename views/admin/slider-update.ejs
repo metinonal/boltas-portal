@@ -70,26 +70,33 @@
                                                     <input type="text" id="title" class="form-control" value="<%= slider.title %>" name="title" required>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="image" class="form-label">Resim Seç:</label>
-                                                    <input type="file" id="image" class="form-control" name="image" required>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                                    <label for="description" class="form-label">Açıklama:</label>
-                                                    <input type="text" id="description" value="<%= slider.description %>" class="form-control" name="description" required>
+                                                    <label for="image" class="form-label">Resim Seç: <span style="font-size: 0.7em;">(1920x1080 boyutunda olması önemlidir.)</span> </label>
+                                                    <input type="file" id="image" class="form-control" name="image">
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="link" class="form-label">Link:</label>
+                                                    <label for="description" class="form-label">Açıklama:</label>
+                                                    <input type="text" id="description" value="<%= slider.description %>" class="form-control" name="description" required>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="link" class="form-label">Link:<span style="font-size: 0.7em;">(www ile başlayan bir link yazınız.)</span></label>
                                                     <input type="text" id="link" class="form-control" value="<%= slider.link %>" name="link" required>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="isMain" class="form-label">Ana Slider Mı?: <span style="font-size: 0.7em;">(Bu özellik sadece 1 adet slider için geçerli olabilir. Aksi halde slider çalışmaz.)</span></label>
+                                                    <select class="form-select mb-3" id="isMain" name="isMain">
+                                                        <option value="1" <%= slider.isMain ? 'selected' : '' %>>Evet</option>
+                                                        <option value="0" <%= !slider.isMain ? 'selected' : '' %>>Hayır</option>
+                                                    </select>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="isActive" class="form-label">Aktif Mi?:</label>
                                                     <select class="form-select mb-3" id="isActive" name="isActive">
-                                                        <option value="1" <%= slider.isActive ? 'selected' : '' %>>Aktif</option>
-                                                        <option value="0" <%= !slider.isActive ? 'selected' : '' %>>Pasif</option>
+                                                        <option value="1" <%= slider.isActive ? 'selected' : '' %>>Evet</option>
+                                                        <option value="0" <%= !slider.isActive ? 'selected' : '' %>>Hayır</option>
                                                     </select>
                                                 </div>
                                             </div>

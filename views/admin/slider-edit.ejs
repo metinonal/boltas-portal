@@ -87,6 +87,7 @@
                                                         <th width="20">ID</th>
                                                         <th class="all">Slider Adı</th>
                                                         <th>Eklenme Tarihi</th>
+                                                        <th>Ana Slider Mı?</th>
                                                         <th>Statü</th>
                                                         <th style="width: 85px;">Aksiyon</th>
                                                     </tr>
@@ -114,6 +115,13 @@
                                                             </td>
                                                             <td>
                                                                 <%= s.createdAt %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (s.isMain===1) { %>
+                                                                    <span class="badge bg-success">Evet</span>
+                                                                    <% } else { %>
+                                                                        <span class="badge bg-danger">Hayır</span>
+                                                                        <% } %>
                                                             </td>
                                                             <td>
                                                                 <% if (s.isActive===1) { %>
