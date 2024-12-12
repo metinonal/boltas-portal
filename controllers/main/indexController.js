@@ -1,7 +1,8 @@
 const menuController = require("./menuController");
 const axios = require('axios');
 const xml2js = require('xml2js');
-const Slider = require('../../models/Slider'); // Slider modelini içe aktar
+const { getDb } = require('../../data/db'); // MongoClient bağlantısını içe aktar
+const { ObjectId } = require('mongodb');
 
 exports.indexPage = async (req, res) => {
     try {
@@ -27,8 +28,14 @@ exports.indexPage = async (req, res) => {
             }));
 
             try {
+                // MongoDB bağlantısını al
+                const db = getDb();
+                if (!db) {
+                    throw new Error("Veritabanı bağlantısı kurulamadı.");
+                }
+
                 // Slider verilerini al ve isMain değeri true olanları en üste getir
-                const sliders = await Slider.find().sort({ isMain: -1 });
+                const sliders = await db.collection('sliders').find().sort({ isMain: -1 }).toArray();
 
                 // Ana sayfa görünümüne döviz kurları, bugünün menüsü ve slider verilerini gönder
                 res.render('main/index', { todayMenu, currencies, sliders });

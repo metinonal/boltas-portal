@@ -1,25 +1,30 @@
 const express = require("express");
 const app = express();
-const connectDB = require('./data/db');
+const { connectDB } = require('./data/db'); // MongoClient bağlantısı
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const path = require("path");
 
-connectDB();
+// MongoDB bağlantısını başlat
+connectDB().then(() => {
+    console.log("Veritabanı bağlantısı başarılı.");
+}).catch(err => {
+    console.error("Veritabanı bağlantısı başarısız:", err);
+    process.exit(1);
+});
 
-//Admin Rota dosyaları
+// Admin Rota dosyaları
 const adminRoutes = require("./routes/admin/adminRoutes"); // Admin Paneli Rotası
 const yemekRoutes = require("./routes/admin/yemekRoutes"); // Yemek Yönetimi Rotası
-const sliderRoutes = require("./routes/admin/sliderRoutes"); // Yemek Yönetimi Rotası
+const sliderRoutes = require("./routes/admin/sliderRoutes"); // Slider Yönetimi Rotası
 
-//Main Rota dosyaları
+// Main Rota dosyaları
 const menuRoutes = require("./routes/main/menuRoutes"); // Menü Rotası
 const indexRoutes = require("./routes/main/indexRoutes"); // Ana Sayfa Rotası
 
-
-const authRoutes = require('./routes/admin/authRoutes'); // auth rotası
+// Auth Rota dosyası
+const authRoutes = require('./routes/admin/authRoutes'); // Auth Rotası
 const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
-
 
 // Görüntü motorunun tercihi
 app.set("view engine", "ejs");
@@ -33,26 +38,30 @@ app.use(express.static("node_modules"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Session Middleware (isteğe bağlı)
+// Session Middleware
 app.use(
     session({
         secret: "boltas", // Güçlü bir anahtar seçin
         resave: false,
         saveUninitialized: true,
         cookie: {
-            maxAge: 30 * 60 * 1000 // Session duration set to 30 minutes / Oturum süresi 30 dakika olarak ayarlanır
+            maxAge: 30 * 60 * 1000 // Oturum süresi 30 dakika
         }
     })
 );
 
+// Session timeout kontrolü
 app.use(sessionTimeoutMiddleware);
 
+// Auth rotalarını dahil etme
 app.use(authRoutes);
 
-// Rotalar
-app.use("/ikyonetim", authMiddleware, yemekRoutes); // Admin rotaları
-app.use("/ikyonetim", authMiddleware, sliderRoutes); // Admin rotaları
-app.use("/ikyonetim", authMiddleware, adminRoutes); // Admin rotaları
+// Admin rotaları
+app.use("/ikyonetim", authMiddleware, adminRoutes); // Genel admin rotaları
+app.use("/ikyonetim", authMiddleware, yemekRoutes); // Yemek yönetimi rotaları
+app.use("/ikyonetim", authMiddleware, sliderRoutes); // Slider yönetimi rotaları
+
+// Main rotaları
 app.use("/", menuRoutes); // Menü rotaları
 app.use("/", indexRoutes); // Ana sayfa rotaları
 
@@ -63,9 +72,10 @@ app.use((err, req, res, next) => {
 });
 
 // Sunucuyu başlat
-app.listen(3000, function (err) {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, (err) => {
     if (err) {
         return console.log("An error occurred:", err);
     }
-    console.log("The server is running on http://localhost:3000");
+    console.log(`The server is running on http://localhost:${PORT}`);
 });

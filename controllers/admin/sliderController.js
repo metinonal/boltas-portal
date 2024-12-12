@@ -1,13 +1,23 @@
-const Slider = require('../../models/Slider'); // Slider modelini içe aktar
+const { getDb } = require('../../data/db'); // MongoClient bağlantısını içe aktar
+const { ObjectId } = require('mongodb');
 const fs = require('fs');
 const path = require('path');
+const cache = require('memory-cache');
 
+// Cache temizleme fonksiyonu
+const clearCache = () => {
+    cache.clear();
+    console.log('Cache temizlendi');
+};
+
+// Slider güncelleme sayfasını göster
 exports.showUpdateSliderPage = async (req, res) => {
     try {
+        const db = getDb();
         const { id } = req.params;
 
         // Veritabanından ilgili slider'ı bul
-        const slider = await Slider.findById(id);
+        const slider = await db.collection('sliders').findOne({ _id: new ObjectId(id) });
 
         if (!slider) {
             return res.status(404).send("Slider bulunamadı.");
@@ -25,47 +35,49 @@ exports.showUpdateSliderPage = async (req, res) => {
     }
 };
 
+// Slider güncelleme işlemi
 exports.updateSlider = async (req, res) => {
     try {
+        const db = getDb();
         const { id } = req.params;
         const { title, description, link, isActive, isMain } = req.body;
 
-        // Güncellenecek slider'ı bul
-        const slider = await Slider.findById(id);
+        const slider = await db.collection('sliders').findOne({ _id: new ObjectId(id) });
 
         if (!slider) {
             return res.status(404).send("Slider bulunamadı.");
         }
 
-        // Eğer yeni bir resim yüklenmişse eski resmi sil ve yeni resmi kaydet
+        let imageUrl = slider.imageUrl;
+
         if (req.file) {
             const oldImagePath = path.join(__dirname, '../../public', slider.imageUrl);
-            if (fs.existsSync(oldImagePath)) {
-                fs.unlink(oldImagePath, (err) => {
-                    if (err) console.error("Eski dosya silinirken hata oluştu:", err);
-                });
-            }
-            slider.imageUrl = `/uploads/${req.file.filename}`;
+            fs.unlink(oldImagePath, (err) => {
+                if (err) console.error("Eski dosya silinirken hata oluştu:", err);
+            });
+            imageUrl = `/uploads/${req.file.filename}`;
         }
 
-        // Diğer alanları güncelle
-        slider.title = title;
-        slider.description = description;
-        slider.link = link;
-        slider.isActive = isActive === '1' ? true : false;
-        slider.isMain = isMain === '1' ? true : false;
+        await db.collection('sliders').updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: {
+                    title,
+                    imageUrl,
+                    description,
+                    link,
+                    isActive: isActive === '1',
+                    isMain: isMain === '1',
+                    updatedAt: new Date()
+                }
+            }
+        );
 
-        // Güncellemeyi kaydet
-        await slider.save();
-
-        res.redirect('/ikyonetim/slider-edit');
+        clearCache();
+        res.redirect("/ikyonetim/slider-edit");
     } catch (err) {
         console.error(err);
-        res.status(500).send(`
-            <h1>Internal Server Error</h1>
-            <p>Slider güncellenirken bir hata oluştu.</p>
-            <pre>${err.message}</pre>
-        `);
+        res.status(500).send("Slider güncellenirken bir hata oluştu.");
     }
 };
 
@@ -77,94 +89,78 @@ exports.sliderAddPage = (req, res) => {
 // Slider ekleme işlemi
 exports.sliderAdd = async (req, res) => {
     try {
-        // Dosya yüklenip yüklenmediğini kontrol et
+        const db = getDb();
+
         if (!req.file) {
-            return res.status(400).send(`
-                <h1>Bad Request</h1>
-                <p>Lütfen bir resim dosyası yükleyin.</p>
-            `);
+            return res.status(400).send("Lütfen bir resim dosyası yükleyin.");
         }
 
         const { title, description, link, isActive, isMain } = req.body;
         const imageUrl = `/uploads/${req.file.filename}`;
 
-        // Yeni slider belgesi oluştur
-        const newSlider = new Slider({
+        await db.collection('sliders').insertOne({
             title,
             imageUrl,
             description,
             link,
-            isActive: isActive === '1' ? true : false,
-            isMain: isMain === '1' ? true : false, 
+            isActive: isActive === '1',
+            isMain: isMain === '1',
             createdAt: new Date()
         });
 
-        // Slider'ı veritabanına kaydet
-        await newSlider.save();
-
-        // Başarılı ekleme sonrası yönlendirme
+        clearCache();
         res.redirect("/ikyonetim/slider-edit");
     } catch (err) {
         console.error(err);
-        res.status(500).send(`
-            <h1>Internal Server Error</h1>
-            <p>Slider eklenirken bir hata oluştu.</p>
-            <pre>${err.message}</pre>
-        `);
+        res.status(500).send("Slider eklenirken bir hata oluştu.");
     }
 };
 
+// Slider silme işlemi
 exports.deleteSlider = async (req, res) => {
     try {
+        const db = getDb();
         const { id } = req.params;
 
-        // Veritabanından ilgili slider'ı bul
-        const slider = await Slider.findById(id);
+        const slider = await db.collection('sliders').findOne({ _id: new ObjectId(id) });
 
         if (!slider) {
             return res.status(404).send("Slider bulunamadı.");
         }
 
-        // Resim dosyasının yolunu al
         const imagePath = path.join(__dirname, '../../public', slider.imageUrl);
+        await db.collection('sliders').deleteOne({ _id: new ObjectId(id) });
 
-        // Slider'ı veritabanından sil
-        await Slider.findByIdAndDelete(id);
-
-        // Dosyayı sil
         fs.unlink(imagePath, (err) => {
-            if (err) {
-                console.error("Dosya silinirken hata oluştu:", err);
-            } else {
-                console.log("Dosya başarıyla silindi.");
-            }
+            if (err) console.error("Dosya silinirken hata oluştu:", err);
         });
 
-        // Başarılı silme sonrası yönlendirme
+        clearCache();
         res.redirect("/ikyonetim/slider-edit");
     } catch (err) {
         console.error(err);
-        res.status(500).send(`
-            <h1>Internal Server Error</h1>
-            <p>Slider silinirken bir hata oluştu.</p>
-            <pre>${err.message}</pre>
-        `);
+        res.status(500).send("Slider silinirken bir hata oluştu.");
     }
 };
 
+// Slider düzenleme sayfasını göster
 exports.sliderEditPage = async (req, res) => {
     try {
+        const db = getDb();
+
         // Slider koleksiyonundan tüm verileri al
-        const sliders = await Slider.find();
+        const sliders = await db.collection('sliders').find().toArray();
 
         // Tarihi dd/mm/yyyy formatına dönüştür
         const formattedSliders = sliders.map(slider => ({
-            ...slider._doc,
-            createdAt: slider.createdAt.toLocaleDateString('tr-TR', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-            }),
+            ...slider,
+            createdAt: slider.createdAt
+                ? slider.createdAt.toLocaleDateString('tr-TR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                })
+                : '',
             isActive: slider.isActive ? 1 : 0,
             isMain: slider.isMain ? 1 : 0
         }));

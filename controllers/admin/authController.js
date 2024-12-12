@@ -1,4 +1,5 @@
-const User = require('../../models/User'); // User modelini içe aktar
+const { getDb } = require('../../data/db'); // MongoClient bağlantısını içe aktar
+const { ObjectId } = require('mongodb');
 
 // Giriş sayfasını göster
 exports.loginPage = (req, res) => {
@@ -10,8 +11,14 @@ exports.authenticate = async (req, res) => {
     const { username, password } = req.body;
 
     try {
+        // MongoDB bağlantısını al
+        const db = getDb();
+        if (!db) {
+            throw new Error("Veritabanı bağlantısı kurulamadı.");
+        }
+
         // Kullanıcıyı MongoDB'den ara
-        const user = await User.findOne({ userMail: username, userPassword: password });
+        const user = await db.collection('users').findOne({ userMail: username, userPassword: password });
 
         if (user) {
             req.session.authenticated = true;
@@ -20,7 +27,7 @@ exports.authenticate = async (req, res) => {
             res.render("admin/login", { error: "Kullanıcı adı veya şifre yanlış" });
         }
     } catch (err) {
-        console.error(err);
+        console.error("Kimlik doğrulama hatası:", err);
         res.status(500).send("Internal Server Error");
     }
 };
@@ -29,7 +36,7 @@ exports.authenticate = async (req, res) => {
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            console.log(err);
+            console.log("Çıkış sırasında hata oluştu:", err);
             res.status(500).send("Internal Server Error");
         } else {
             res.redirect("/login");
