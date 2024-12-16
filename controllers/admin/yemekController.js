@@ -48,7 +48,7 @@ exports.uploadExcel = (req, res) => {
         fs.writeFileSync(jsonFilePath, JSON.stringify(menuData, null, 4), "utf-8");
 
         // İşlem tamamlandıktan sonra kullanıcıyı yönlendir
-        res.redirect("/admin/yemek-listesi");
+        res.redirect("/ikyonetim/yemek-listesi");
     } catch (err) {
         console.error("Excel dosyası yüklenirken bir hata oluştu:", err);
         res.status(500).send("Excel dosyası yüklenirken bir hata oluştu.");
