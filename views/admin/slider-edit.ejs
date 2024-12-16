@@ -104,7 +104,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <%= s._id %>
+                                                                <%= s.id %>
                                                             </td>
                                                             <td>
                                                                 <img src="<%= s.imageUrl %>" alt="blog-img"
@@ -136,7 +136,7 @@
                                                                     <i class="mdi mdi-eye"></i>
                                                                 </a>
                                                                 <form
-                                                                    action="/ikyonetim/slider-edit/slider-delete/<%= s._id %>"
+                                                                    action="/ikyonetim/slider-edit/slider-delete/<%= s.id %>"
                                                                     onsubmit="return confirmDelete();" method="post"
                                                                     style="display: inline;">
                                                                     <button style="border: none; background: none;"
@@ -144,7 +144,7 @@
                                                                         <i class="mdi mdi-delete"></i>
                                                                     </button>
                                                                 </form>
-                                                                <a href="/ikyonetim/slider-edit/slider-update/<%= s._id %>"
+                                                                <a href="/ikyonetim/slider-edit/slider-update/<%= s.id %>"
                                                                     class="action-icon">
                                                                     <i class="mdi mdi-square-edit-outline"></i>
                                                                 </a>

@@ -1,7 +1,7 @@
 const menuController = require("./menuController");
 const axios = require('axios');
 const xml2js = require('xml2js');
-const Slider = require('../../models/Slider'); // Slider modelini içe aktar
+const db = require('../../data/db'); // MySQL bağlantısını içe aktar
 
 exports.indexPage = async (req, res) => {
     try {
@@ -12,7 +12,7 @@ exports.indexPage = async (req, res) => {
         const response = await axios.get('https://www.tcmb.gov.tr/kurlar/today.xml');
 
         // XML verisini JSON'a çevir
-        xml2js.parseString(response.data, async (err, result) => {
+        xml2js.parseString(response.data, (err, result) => {
             if (err) {
                 console.error('XML parse hatası:', err);
                 return res.status(500).send('Veri işlenirken hata oluştu.');
@@ -26,16 +26,18 @@ exports.indexPage = async (req, res) => {
                 forexSelling: item.ForexSelling ? item.ForexSelling[0] : 'N/A',
             }));
 
-            try {
-                // Slider verilerini al ve isMain değeri true olanları en üste getir
-                const sliders = await Slider.find().sort({ isMain: -1 });
+            // Slider verilerini al ve isMain değeri true olanları en üste getir
+            const query = 'SELECT * FROM sliders ORDER BY isMain DESC';
+
+            db.query(query, (sliderError, sliders) => {
+                if (sliderError) {
+                    console.error('Slider verileri alınırken hata oluştu:', sliderError);
+                    return res.status(500).send('Slider verileri alınırken bir sorun oluştu.');
+                }
 
                 // Ana sayfa görünümüne döviz kurları, bugünün menüsü ve slider verilerini gönder
                 res.render('main/index', { todayMenu, currencies, sliders });
-            } catch (sliderError) {
-                console.error('Slider verileri alınırken hata oluştu:', sliderError);
-                res.status(500).send('Slider verileri alınırken bir sorun oluştu.');
-            }
+            });
         });
     } catch (err) {
         console.error('API çağrısı sırasında hata oluştu:', err);
