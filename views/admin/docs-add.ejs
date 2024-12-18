@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                <!--- Sidemenu -->
+                <%- include("partials/sidemenu") %>
+                    <!-- End Sidebar -->
+
+                    <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Mevcut Dökümanlar</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="/ikyonetim/docs-edit/docs-add" method="post" enctype="multipart/form-data">
+                                            <div class="row mb-3">
+                                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                                    <label for="docName" class="form-label">Başlık:</label>
+                                                    <input type="text" id="docName" class="form-control" name="docName" required>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="docFile" class="form-label">Döküman Seç: <span style="font-size: 0.7em;">(1920x1080 boyutunda olması önemlidir.)</span></label>
+                                                    <input type="file" id="docFile" class="form-control" name="docFile" required>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="isActive" class="form-label">Aktif Mi?:</label>
+                                                    <select class="form-select mb-3" id="isActive" name="isActive">
+                                                        <option value="1">Evet</option>
+                                                        <option value="0">Hayır</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Ekle</button>
+                                        </form>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div>
+                        </div>
+
+                    </div>
+                     <!-- container -->
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- Right Sidebar -->
+    <%- include("partials/right-sidebar") %>
+
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
+
+    <%- include("partials/scripts") %>
+
+</body>
+
+</html>

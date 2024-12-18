@@ -55,19 +55,26 @@ app.use(
     })
 );
 
-// Middleware'ler ve Rotalar
+// Middleware
 const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
+
+// Admin rotaları
 const adminRoutes = require("./routes/admin/adminRoutes");
 const yemekRoutes = require("./routes/admin/yemekRoutes");
 const sliderRoutes = require("./routes/admin/sliderRoutes");
+const documentRoutes = require("./routes/admin/documentRoutes");
+const authRoutes = require("./routes/admin/authRoutes");
+
+// İndex rotaları
 const menuRoutes = require("./routes/main/menuRoutes");
 const indexRoutes = require("./routes/main/indexRoutes");
-const authRoutes = require("./routes/admin/authRoutes");
+
 
 app.use(sessionTimeoutMiddleware);
 app.use(authRoutes);
 app.use("/ikyonetim", authMiddleware, yemekRoutes);
 app.use("/ikyonetim", authMiddleware, sliderRoutes);
+app.use("/ikyonetim", authMiddleware, documentRoutes);
 app.use("/ikyonetim", authMiddleware, adminRoutes);
 app.use("/", menuRoutes);
 app.use("/", indexRoutes);

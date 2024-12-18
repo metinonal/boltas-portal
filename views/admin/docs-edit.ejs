@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                <!--- Sidemenu -->
+                <%- include("partials/sidemenu") %>
+                    <!-- End Sidebar -->
+
+                    <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Mevcut Dökümanlar</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-sm-5">
+                                                <a href="/ikyonetim/docs-edit/docs-add" class="btn btn-danger mb-2">
+                                                    <i class="mdi mdi-plus-circle me-2"></i> Döküman Ekle
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-centered w-100 dt-responsive nowrap"
+                                                id="docs-datatable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="all" style="width: 20px;">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input"
+                                                                    id="customCheck1">
+                                                                <label class="form-check-label"
+                                                                    for="customCheck1">&nbsp;</label>
+                                                            </div>
+                                                        </th>
+                                                        <th width="20">ID</th>
+                                                        <th class="all">Döküman Adı</th>
+                                                        <th>Döküman Linki</th>
+                                                        <th>Statü</th>
+                                                        <th style="width: 85px;">Aksiyon</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% docs.forEach(d=> { %>
+                                                        <tr>
+                                                            <td>
+                                                                <div class="form-check">
+                                                                    <input type="checkbox" class="form-check-input"
+                                                                        id="customCheck2">
+                                                                    <label class="form-check-label"
+                                                                        for="customCheck2">&nbsp;</label>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <%= d._id %>
+                                                            </td>
+                                                            <td>
+                                                                <p class="m-0 d-inline-block align-middle font-16">
+                                                                    <%= d.docName %>
+                                                                </p>
+                                                            </td>
+                                                            <td>
+                                                                <a href="<%= d.docLink %>">Tıklayınız</a>
+                                                            </td>
+                                                            <td>
+                                                                <% if (d.isActive===1) { %>
+                                                                    <span class="badge bg-success">Aktif</span>
+                                                                    <% } else { %>
+                                                                        <span class="badge bg-danger">Pasif</span>
+                                                                        <% } %>
+                                                            </td>
+                                                            <td class="table-action" style="width: 10%;">
+                                                                <a href="/" target="_blank"
+                                                                    class="action-icon">
+                                                                    <i class="mdi mdi-eye"></i>
+                                                                </a>
+                                                                <form
+                                                                    action="/ikyonetim/docs-edit/docs-delete/<%= d._id %>"
+                                                                    onsubmit="return confirmDelete();" method="post"
+                                                                    style="display: inline;">
+                                                                    <button style="border: none; background: none;"
+                                                                        type="submit" class="action-icon">
+                                                                        <i class="mdi mdi-delete"></i>
+                                                                    </button>
+                                                                </form>
+                                                                <a href="/ikyonetim/docs-edit/docs-update/<%= d._id %>"
+                                                                    class="action-icon">
+                                                                    <i class="mdi mdi-square-edit-outline"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        <% }); %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                     <!-- container -->
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- Right Sidebar -->
+    <%- include("partials/right-sidebar") %>
+
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
+
+    <%- include("partials/scripts") %>
+    
+    <script>
+    function confirmDelete() {
+        return confirm('Bu dökümanı silmek istediğinizden emin misiniz?');
+    }
+    </script>
+
+</body>
+
+</html>
