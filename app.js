@@ -1,25 +1,35 @@
 const express = require("express");
-const app = express();
-const connectDB = require('./data/db');
+const fs = require("fs");
+const https = require("https");
+const http = require("http");
+const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
-const path = require("path");
+const connectDB = require('./data/db');
 
+const app = express();
 connectDB();
 
-//Admin Rota dosyaları
-const adminRoutes = require("./routes/admin/adminRoutes"); // Admin Paneli Rotası
-const yemekRoutes = require("./routes/admin/yemekRoutes"); // Yemek Yönetimi Rotası
-const sliderRoutes = require("./routes/admin/sliderRoutes"); // Yemek Yönetimi Rotası
+// SSL Sertifikası (.pfx dosyası)
+const options = {
+    pfx: fs.readFileSync(path.join(__dirname, "2025_yildiz.boltas.com.pfx")),
+    passphrase: "Bolat2020!*" // Sertifika oluşturulurken belirlediğiniz şifre (varsa)
+};
 
-//Main Rota dosyaları
-const menuRoutes = require("./routes/main/menuRoutes"); // Menü Rotası
-const indexRoutes = require("./routes/main/indexRoutes"); // Ana Sayfa Rotası
+// HTTP'den HTTPS'ye yönlendirme
+const redirectToHttps = (req, res, next) => {
+    if (!req.secure) {
+        return res.redirect(`https://${req.headers.host}${req.url}`);
+    }
+    next();
+};
 
-
-const authRoutes = require('./routes/admin/authRoutes'); // auth rotası
-const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
-
+// HTTP Sunucusu (HTTPS'ye yönlendirme için)
+const httpApp = express();
+httpApp.use(redirectToHttps);
+http.createServer(httpApp).listen(80, () => {
+    console.log("HTTP server is running on http://localhost:80 and redirecting to HTTPS");
+});
 
 // Görüntü motorunun tercihi
 app.set("view engine", "ejs");
@@ -40,21 +50,27 @@ app.use(
         resave: false,
         saveUninitialized: true,
         cookie: {
-            maxAge: 30 * 60 * 1000 // Session duration set to 30 minutes / Oturum süresi 30 dakika olarak ayarlanır
+            maxAge: 30 * 60 * 1000 // Oturum süresi 30 dakika
         }
     })
 );
 
+// Middleware'ler ve Rotalar
+const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
+const adminRoutes = require("./routes/admin/adminRoutes");
+const yemekRoutes = require("./routes/admin/yemekRoutes");
+const sliderRoutes = require("./routes/admin/sliderRoutes");
+const menuRoutes = require("./routes/main/menuRoutes");
+const indexRoutes = require("./routes/main/indexRoutes");
+const authRoutes = require("./routes/admin/authRoutes");
+
 app.use(sessionTimeoutMiddleware);
-
 app.use(authRoutes);
-
-// Rotalar
-app.use("/ikyonetim", authMiddleware, yemekRoutes); // Admin rotaları
-app.use("/ikyonetim", authMiddleware, sliderRoutes); // Admin rotaları
-app.use("/ikyonetim", authMiddleware, adminRoutes); // Admin rotaları
-app.use("/", menuRoutes); // Menü rotaları
-app.use("/", indexRoutes); // Ana sayfa rotaları
+app.use("/ikyonetim", authMiddleware, yemekRoutes);
+app.use("/ikyonetim", authMiddleware, sliderRoutes);
+app.use("/ikyonetim", authMiddleware, adminRoutes);
+app.use("/", menuRoutes);
+app.use("/", indexRoutes);
 
 // Hata İşleyici Middleware
 app.use((err, req, res, next) => {
@@ -62,10 +78,10 @@ app.use((err, req, res, next) => {
     res.status(500).send("Bir şeyler ters gitti!");
 });
 
-// Sunucuyu başlat
-app.listen(3000, function (err) {
+// HTTPS Sunucusu
+https.createServer(options, app).listen(443, (err) => {
     if (err) {
         return console.log("An error occurred:", err);
     }
-    console.log("The server is running on http://localhost:3000");
+    console.log("The HTTPS server is running on https://localhost:443");
 });
