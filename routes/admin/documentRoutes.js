@@ -9,7 +9,7 @@ router.get('/docs-edit/docs-add', documentController.showAddDocPage);
 router.post('/docs-edit/docs-add', documentController.addDoc);
 router.get('/docs-edit/docs-update/:id', documentController.showUpdateDocPage);
 router.post('/docs-edit/docs-update/:id', documentController.updateDoc);
-router.get('/docs-edit/docs-delete/:id', documentController.deleteDoc);
+router.post('/docs-edit/docs-delete/:id', documentController.deleteDoc);
 
 
 module.exports = router;

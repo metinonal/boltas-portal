@@ -14962,7 +14962,7 @@ body {
 }
 
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) {
-    min-height: 1600px
+    /* min-height: 1600px */
 }
 
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu {

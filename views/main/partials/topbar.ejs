@@ -1,5 +1,64 @@
+<style>
+    #arama-motoru {
+        justify-content: center;
+        text-align: center;
+        display: flex;
+    }
+
+    .search-bar {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 50px;
+        padding: 5px 15px;
+        width: 600px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+    }
+
+    .search-bar input {
+        flex-grow: 1;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        padding: 10px;
+        color: #333;
+    }
+
+    .search-bar input::placeholder {
+        color: #888;
+    }
+
+    .search-bar .icon {
+        margin-left: 10px;
+        cursor: pointer;
+        color: #555;
+        font-size: 24px;
+    }
+</style>
+
 <div class="navbar-custom">
     <button class="button-menu-mobile open-left">
         <i class="mdi mdi-menu"></i>
     </button>
+
+    <div id="arama-motoru" class="mt-1">
+        <div class="search-bar">
+            <i class="mdi mdi-google google-icon"></i>
+            <input type="text" id="searchQuery" placeholder="Google'da arayın veya URL'yi yazın">
+            <i class="mdi mdi-magnify icon"></i>
+        </div>
+    </div>
+
 </div>
+<script>
+    document.querySelector('.search-bar input').addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            const query = this.value.trim();
+            if (query) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+        }
+    });
+</script>

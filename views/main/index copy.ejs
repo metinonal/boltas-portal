@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-leftbar-compact-mode="condensed"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
+
+                        <div class="clearfix"></div>
+
+                </div>
+                <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <!-- Start Content-->
+                    <div class="container-fluid" style="padding: 0px 40px 0px 40px;">
+
+                        <!-- start page title -->
+                        <!-- <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Boltas Portal</h4>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- end page title -->
+
+                        <div class="row mb-3 mt-3">
+                            <div id="slider" class="col-md-6 carousel slide carousel-fade" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <% sliders.forEach((slider, index) => { %>
+                                        <div class="carousel-item <%= slider.isMain && index === 0 ? 'active' : '' %>">
+                                            <a href="https://<%= slider.link %>">
+                                                <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
+                                            </a>
+                                            <div class="carousel-caption" style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
+                                                <h5><%= slider.title %></h5>
+                                                <p><%= slider.description %></p>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                </div>
+                                <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"
+                                        style="color: black;"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#slider" role="button" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </a>
+                            </div>
+                            <!-- Bilgi Bankası -->
+
+                            <!-- Yemek Listesi ve Hava Durumu -->
+                            <div class="col-md-3">
+                                <div class="card mb-4 ">
+                                    <div class="card-header">Hava Durumu</div>
+                                    <div class="card-body">
+                                        <label for="citySelect" class="form-label">Şehir Seçin:</label>
+                                        <select class="form-select" id="citySelect">
+                                            <option selected value="">Lütfen bir şehir seçin</option>
+                                            <option value="Istanbul">İstanbul</option>
+                                            <option value="Ankara">Ankara</option>
+                                            <option value="İzmir">İzmir</option>
+                                            <option value="Adana">Adana</option>
+                                            <option value="Nürnberg">Nürnberg</option>
+                                            <option value="Trieste">Trieste</option>
+                                            <option value="Willich">Willich</option>
+                                            <option value="Bucuresti">Bucuresti</option>
+                                            <option value="Akyaka">Akyaka</option>
+                                            <option value="Hamzabeyli">Hamzabeyli</option>
+                                            <option value="Edirne">Kapıkule</option>
+                                        </select>
+                                        <div id="weather-info" class="mt-3"></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header">Döviz Kurları</div>
+                                    <div class="card-body">
+                                      <table class="table table-sm">
+                                        <thead>
+                                          <tr>
+                                            <th>Döviz Kodu</th>
+                                            <th>Alış Fiyatı (TL)</th>
+                                            <th>Satış Fiyatı (TL)</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <% currencies.forEach(currency => { %>
+                                            <% if (['USD', 'EUR', 'GBP'].includes(currency.currencyCode)) { %>
+                                              <tr>
+                                                <td><%= currency.currencyCode %></td>
+                                                <td><%= currency.forexBuying %></td>
+                                                <td><%= currency.forexSelling %></td>
+                                              </tr>
+                                            <% } %>
+                                          <% }) %>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="card mb-4">
+                                    <div class="card-header">Bilgi Bankası</div>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <a href="https://ikportal.boltas.com/">İK Portal</a><br>
+                                            <small>İnsan Kaynakları</small>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <a href="https://flow.boltas.com/">Flow(Eba)</a><br>
+                                            <small>Bilgi Teknolojileri</small>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- Diğer Kartlar -->
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">Doküman Yönetim Sistemi</div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Antetli Kağıt
+                                                <span class="float-end"><a
+                                                        href="https://boltas.sharepoint.com/:w:/g/Dokumanlar/EQcIL_ilmfRGnG0DQI6z3QQBkUGOBHy-nfdfM8tLPtDtyg">Tıklayınız...</a></span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Öneri Formu - İK.FR.004
+                                                <span class="float-end"><a
+                                                        href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7BD09EB508-9D04-40CA-91B4-A00E85F63D28%7D&file=%C3%96neri%20Formu%20-%20%C4%B0K.FR.004.docx&action=default&mobileredirect=true">Tıklayınız...</a></span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                İzin Talep Formu - İK.FR.006
+                                                <span class="float-end"><a
+                                                        href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B35B5046E-4249-4972-A8E0-EE5E3573D80B%7D&file=%C4%B0zin%20Talep%20Formu%20-%20%C4%B0K.FR.006.docx&action=default&mobileredirect=true">Tıklayınız...</a></span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Toplantı Tutanağı - KY.FR.002
+                                                <span class="float-end"><a
+                                                        href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/WopiFrame.aspx?sourcedoc=%7BBF352D2F-6525-4731-ADC3-CE104D1469F8%7D&file=Toplant%C4%B1%20Tutana%C4%9F%C4%B1%20%20-%20KY.FR.002.rtf&action=default">Tıklayınız...</a></span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Avans Talep Formu - İK.FR.005
+                                                <span class="float-end"><a
+                                                        href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B9DE0183B-3071-41F9-AA6F-82F478DAA20E%7D&file=Avans%20Talep%20Formu%20-%20%C4%B0K.FR.005.docx&action=default&mobileredirect=true">Tıklayınız...</a></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <span>Günün Yemek Listesi</span>
+                                        <a href="/yemek-listesi" class=" text-decoration-none small">
+                                            Tümünü Gör
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="menu">
+                                            <% if (todayMenu) { %>
+                                                <ul class="list-group list-group-flush">
+                                                    <% todayMenu.meals.forEach(meal=> { %>
+                                                        <li class="list-group-item"><i
+                                                                class="bi bi-check-circle text-success"></i>
+                                                            <%= meal %>
+                                                        </li>
+                                                        <% }) %>
+                                                </ul>
+                                                <% } else { %>
+                                                    <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
+                                                    </p>
+                                                    <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- end row -->
+                    </div>
+                    <!-- container -->
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+                <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+
+    <!-- Right Sidebar -->
+    <%- include("partials/right-sidebar") %>
+
+        <div class="rightbar-overlay"></div>
+        <!-- /End-bar -->
+
+        <%- include("partials/scripts") %>
+
+          <script>
+          // Sayfa yüklendiğinde seçilen şehri geri yükle
+          document.addEventListener("DOMContentLoaded", () => {
+            const citySelect = document.getElementById("citySelect");
+            const savedCity = getCookie("selectedCity");
+          
+            if (savedCity) {
+              citySelect.value = savedCity;
+            }
+          });
+          
+          // Şehir seçimi değiştiğinde çereze kaydet
+          document.getElementById("citySelect").addEventListener("change", (e) => {
+            const selectedCity = e.target.value;
+            if (selectedCity) {
+              setCookie("selectedCity", selectedCity, 30); // 30 gün boyunca geçerli olacak
+            }
+          });
+          
+          // Çerez (cookie) oluşturma fonksiyonu
+          function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            const expires = "expires=" + date.toUTCString();
+            document.cookie = `${name}=${value}; ${expires}; path=/`;
+          }
+          
+          // Çerez okuma fonksiyonu
+          function getCookie(name) {
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookiesArray = decodedCookie.split(';');
+            for (let i = 0; i < cookiesArray.length; i++) {
+              let cookie = cookiesArray[i].trim();
+              if (cookie.indexOf(name + "=") == 0) {
+                return cookie.substring(name.length + 1);
+              }
+            }
+            return "";
+          }
+          </script>
+          
+
+</body>
+
+</html>

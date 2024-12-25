@@ -2,6 +2,7 @@ const menuController = require("./menuController");
 const axios = require('axios');
 const xml2js = require('xml2js');
 const Slider = require('../../models/Slider'); // Slider modelini içe aktar
+const Docs = require('../../models/Doc'); // Slider modelini içe aktar
 
 exports.indexPage = async (req, res) => {
     try {
@@ -29,9 +30,10 @@ exports.indexPage = async (req, res) => {
             try {
                 // Slider verilerini al ve isMain değeri true olanları en üste getir
                 const sliders = await Slider.find().sort({ isMain: -1 });
+                const docs = await Docs.find()
 
                 // Ana sayfa görünümüne döviz kurları, bugünün menüsü ve slider verilerini gönder
-                res.render('main/index', { todayMenu, currencies, sliders });
+                res.render('main/index', { todayMenu, currencies, sliders, docs });
             } catch (sliderError) {
                 console.error('Slider verileri alınırken hata oluştu:', sliderError);
                 res.status(500).send('Slider verileri alınırken bir sorun oluştu.');
