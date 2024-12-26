@@ -68,6 +68,7 @@ const authRoutes = require("./routes/admin/authRoutes");
 // İndex rotaları
 const menuRoutes = require("./routes/main/menuRoutes");
 const indexRoutes = require("./routes/main/indexRoutes");
+const phoneRoutes = require("./routes/main/phoneRoutes");
 
 
 app.use(sessionTimeoutMiddleware);
@@ -77,6 +78,7 @@ app.use("/ikyonetim", authMiddleware, sliderRoutes);
 app.use("/ikyonetim", authMiddleware, documentRoutes);
 app.use("/ikyonetim", authMiddleware, adminRoutes);
 app.use("/", menuRoutes);
+app.use("/", phoneRoutes);
 app.use("/", indexRoutes);
 
 // Hata İşleyici Middleware

@@ -1,0 +1,48 @@
+<!-- views/main/telefon-rehberi.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telefon Rehberi</title>
+    <link rel="stylesheet" href="/styles/main.css"> <!-- Gerekirse CSS dosyanızı bağlayın -->
+</head>
+<body>
+    <h1>Telefon Rehberi</h1>
+
+    <div>
+        <strong>Toplam Kayıt Sayısı: </strong> <%= users.length %>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Ad Soyad</th>
+                <th>E-posta</th>
+                <th>Telefon</th>
+                <th>Dahili</th>
+                <th>userAccountControl</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (users && users.length > 0) { %>
+                <% users.sort((a, b) => a.DisplayName.localeCompare(b.DisplayName)).forEach(user => { %>
+                    <% if (user.Mobile) { %>
+                        <tr>
+                            <td><%= user.DisplayName %></td>
+                            <td><%= user.mail %></td>
+                            <td><%= user.Mobile %></td>
+                            <td style="text-align: center;"><%= user.physicalDeliveryOfficeName %></td>
+                            <td style="text-align: center;"><%= user.userAccountControl %></td>
+                        </tr>
+                    <% } %>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="3">Kayıt bulunamadı.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>
