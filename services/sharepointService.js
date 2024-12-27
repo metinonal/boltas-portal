@@ -19,19 +19,45 @@ function sleep(ms) {
 
 async function initializeBrowser() {
     browser = await puppeteer.launch({
-        headless: false, // Tarayıcı açık kalacak
+        // headless: false,
         args: ['--start-maximized'], // Tam ekran başlatma
     });
 
     page = await browser.newPage();
     console.log('Tarayıcı başlatıldı, SharePoint ana sayfasına gidiliyor...');
 
-    await page.goto('https://boltas.sharepoint.com/');
-    console.log('SharePoint sayfasına gidildi. 30 saniye bekleniyor...');
+    await page.goto('https://boltas.sharepoint.com/', { waitUntil: 'networkidle2' });
+    console.log('SharePoint sayfasına gidildi. Giriş işlemi başlatılıyor...');
 
-    // Kullanıcının giriş yapması için 30 saniye bekle
-    await sleep(30000);
-    console.log('İlk bekleme tamamlandı. Tarayıcı açık kalacak.');
+    await sleep(2000);
+
+    // Giriş bilgilerini doldurma
+    await page.waitForSelector('input[type="email"]', { visible: true });
+    await page.type('input[type="email"]', 'metin.onal@boltas.com');
+    await page.click('input[type="submit"]');
+    console.log('E-posta adresi girildi, ileri butonuna tıklandı.');
+
+    await sleep(2000);
+
+    // Şifreyi girme
+    await page.waitForSelector('input[type="password"]', { visible: true });
+    await page.type('input[type="password"]', 'Talisca34.');
+    await page.click('input[type="submit"]');
+    console.log('Şifre girildi, oturum açma butonuna tıklandı.');
+
+    await sleep(2000);
+
+    // "Beni bir daha gösterme" seçeneğini işaretleme ve devam etme
+    await page.waitForSelector('input[name="DontShowAgain"]', { visible: true });
+    await page.click('input[name="DontShowAgain"]');
+    console.log('"Beni bir daha gösterme" seçeneği işaretlendi.');
+
+    await page.waitForSelector('#idSIButton9', { visible: true });
+    await page.click('#idSIButton9');
+
+    console.log('Devam et butonuna tıklandı. 15 saniye bekleniyor...');
+    await sleep(15000);
+    console.log('Giriş işlemi tamamlandı. Tarayıcı açık kalacak.');
 }
 
 async function fetchPhotos() {
