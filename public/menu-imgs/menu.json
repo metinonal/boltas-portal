@@ -172,11 +172,11 @@
     {
         "date": "2024-12-25",
         "meals": [
-            "MERCİMEK ÇORBA",
-            "BEĞENİLİ HİNDİ TANDIR",
-            "İÇ PİLAV",
+            "YAYLA ÇORBA",
+            "FIRIN PİLİÇ BUT",
+            " SPAGETTİ MAKARNA",
             "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-            "MEŞRUBAT"
+            "MEYVE"
         ]
     },
     {
@@ -212,11 +212,11 @@
     {
         "date": "2024-12-31",
         "meals": [
-            "YAYLA ÇORBA",
-            "FIRIN PİLİÇ BUT",
-            " SPAGETTİ MAKARNA",
+            "MERCİMEK ÇORBA",
+            "BEĞENİLİ HİNDİ TANDIR",
+            "İÇ PİLAV",
             "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-            "MEYVE"
+            "MEŞRUBAT"
         ]
     }
 ]
