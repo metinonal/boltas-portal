@@ -58,6 +58,11 @@ app.use(
 // Middleware
 const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
 
+// Services
+const sharepointService = require('./services/sharepointService');
+console.log('SharePoint servis başlatılıyor...');
+// sharepointService.start();
+
 // Admin rotaları
 const adminRoutes = require("./routes/admin/adminRoutes");
 const yemekRoutes = require("./routes/admin/yemekRoutes");
@@ -86,6 +91,7 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send("Bir şeyler ters gitti!");
 });
+
 
 // HTTPS Sunucusu
 https.createServer(options, app).listen(443, (err) => {

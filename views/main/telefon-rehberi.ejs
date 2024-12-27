@@ -13,7 +13,7 @@
 </head>
 
 <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
-data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
+    data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ========== Left Sidebar Start ========== -->
@@ -22,16 +22,16 @@ data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
             <!-- LOGO -->
             <%- include("partials/logo") %>
 
-            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
 
-                <!--- Sidemenu -->
-                <%- include("partials/sidemenu") %>
-                    <!-- End Sidebar -->
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
 
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
 
-            </div>
-            <!-- Sidebar -left -->
+                </div>
+                <!-- Sidebar -left -->
 
         </div>
         <!-- Left Sidebar End -->
@@ -77,32 +77,47 @@ data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% if (users && users.length > 0) { %>
-                                                        <% users.sort((a, b) => a.DisplayName.localeCompare(b.DisplayName)).forEach(user => { %>
+                                                    <% if (users && users.length> 0) { %>
+                                                        <% users.sort((a, b)=>
+                                                            a.DisplayName.localeCompare(b.DisplayName)).forEach(user =>
+                                                            { %>
                                                             <% if (user.Mobile) { %>
                                                                 <tr>
-                                                                    <td><%= user.DisplayName %></td>
-                                                                    <td><%= user.mail %></td>
-                                                                    <td><%= user.Mobile %></td>
-                                                                    <td><%= user.physicalDeliveryOfficeName %></td>
+                                                                    <td>
+                                                                        <img src="uploads/pphotos/<%= user.mail %>.jpg" alt="blog-img"
+                                                                            title="blog-img" class="rounded-circle me-3"
+                                                                            height="48" width="48" style="object-fit: cover;">
+                                                                        <p class="m-0 d-inline-block align-middle font-16">
+                                                                            <%= user.DisplayName %>
+                                                                        </p>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= user.mail %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= user.Mobile %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= user.physicalDeliveryOfficeName %>
+                                                                    </td>
                                                                     <td class="table-action" style="width: 10%;">
-                                                                        <a href="https://wa.me/<%= user.Mobile.replace(/\s+/g, '') %>" target="_blank"
-                                                                            class="action-icon">
+                                                                        <a href="https://wa.me/<%= user.Mobile.replace(/\s+/g, '') %>"
+                                                                            target="_blank" class="action-icon">
                                                                             <i class="mdi mdi-whatsapp"></i>
                                                                         </a>
-                                                                        <a href="tel:<%= user.Mobile.replace(/\s+/g, '') %>" target="_blank"
-                                                                            class="action-icon">
+                                                                        <a href="tel:<%= user.Mobile.replace(/\s+/g, '') %>"
+                                                                            target="_blank" class="action-icon">
                                                                             <i class="mdi mdi-phone"></i>
                                                                         </a>
                                                                     </td>
                                                                 </tr>
-                                                            <% } %>
-                                                        <% }); %>
-                                                    <% } else { %>
-                                                        <tr>
-                                                            <td colspan="3">Kayıt bulunamadı.</td>
-                                                        </tr>
-                                                    <% } %>
+                                                                <% } %>
+                                                                    <% }); %>
+                                                                        <% } else { %>
+                                                                            <tr>
+                                                                                <td colspan="3">Kayıt bulunamadı.</td>
+                                                                            </tr>
+                                                                            <% } %>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -110,15 +125,15 @@ data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
                                 </div>
                             </div>
                         </div>
-                       
+
                     </div>
-                     <!-- container -->
+                    <!-- container -->
 
             </div> <!-- content -->
 
             <!-- Footer Start -->
             <%- include("partials/footer") %>
-            <!-- end Footer -->
+                <!-- end Footer -->
 
         </div>
 
@@ -132,12 +147,12 @@ data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
 
 
     <%- include("partials/scripts") %>
-    
-    <script>
-    function confirmDelete() {
-        return confirm('Bu dökümanı silmek istediğinizden emin misiniz?');
-    }
-    </script>
+
+        <script>
+            function confirmDelete() {
+                return confirm('Bu dökümanı silmek istediğinizden emin misiniz?');
+            }
+        </script>
 
 </body>
 
