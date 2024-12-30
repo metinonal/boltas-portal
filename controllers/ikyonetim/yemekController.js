@@ -14,7 +14,7 @@ exports.getYemekListesiPanel = (req, res) => {
 };
 
 // Excel dosyası yükleme işlemi
-exports.uploadExcel = (req, res) => {
+exports.uploadExcel = async (req, res) => {
     try {
         const uploadDir = path.join(__dirname, "../../public/menu-imgs");
         const uploadedFilePath = path.join(uploadDir, req.file.filename);
@@ -41,7 +41,7 @@ exports.uploadExcel = (req, res) => {
         });
 
         // Yeni yüklenen Excel dosyasını işle
-        const menuData = parseExcel(uploadedFilePath);
+        const menuData = await parseExcel(uploadedFilePath);
 
         // JSON dosyasını 'menu.json' olarak kaydet
         const jsonFilePath = path.join(uploadDir, "menu.json");
