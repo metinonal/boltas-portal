@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const yemekController = require("../../controllers/admin/yemekController");
+const yemekController = require("../../controllers/ikyonetim/yemekController");
 
 const router = express.Router();
 const upload = multer({ dest: "public/menu-imgs/" }); // Yükleme klasörü

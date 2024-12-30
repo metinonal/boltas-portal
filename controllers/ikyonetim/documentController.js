@@ -25,7 +25,7 @@ const upload = multer({ storage });
 exports.getDocs = async (req, res) => {
     try {
         const docs = await Doc.find();
-        res.render('admin/docs-edit', { docs });
+        res.render('ikyonetim/docs-edit', { docs });
     } catch (err) {
         console.error("Dökümanlar alınırken hata oluştu:", err);
         res.status(500).send("Dökümanlar alınırken bir hata oluştu.");
@@ -34,7 +34,7 @@ exports.getDocs = async (req, res) => {
 
 // Döküman ekleme sayfasını gösterme
 exports.showAddDocPage = (req, res) => {
-    res.render('admin/docs-add', { error: null });
+    res.render('ikyonetim/docs-add', { error: null });
 };
 
 // Döküman ekleme işlemi
@@ -79,7 +79,7 @@ exports.showUpdateDocPage = async (req, res) => {
             isActive: doc.isActive ? 1 : 0
         };
 
-        res.render('admin/docs-update', { doc: formattedDoc });
+        res.render('ikyonetim/docs-update', { doc: formattedDoc });
     } catch (err) {
         console.error("Döküman güncelleme sayfası görüntülenirken hata oluştu:", err);
         res.status(500).send("Döküman güncelleme sayfası görüntülenirken bir hata oluştu.");

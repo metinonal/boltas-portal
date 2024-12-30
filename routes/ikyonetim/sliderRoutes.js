@@ -1,11 +1,11 @@
 const express = require("express");
-const sliderController = require("../../controllers/admin/sliderController");
+const sliderController = require("../../controllers/ikyonetim/sliderController");
 const upload = require('../../middlewares/upload');
 
 
 const router = express.Router();
 
-// Admin paneli ana sayfası
+// ikyonetim paneli ana sayfası
 router.get("/slider-edit", sliderController.sliderEditPage);
 router.get("/slider-edit/slider-update/:id", sliderController.showUpdateSliderPage);
 router.post("/slider-edit/slider-update/:id", upload.single('image'), sliderController.updateSlider);

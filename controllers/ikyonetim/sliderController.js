@@ -14,7 +14,7 @@ exports.showUpdateSliderPage = async (req, res) => {
         }
 
         // Güncelleme sayfasını render et ve slider bilgilerini gönder
-        res.render('admin/slider-update', { slider });
+        res.render('ikyonetim/slider-update', { slider });
     } catch (err) {
         console.error(err);
         res.status(500).send(`
@@ -71,7 +71,7 @@ exports.updateSlider = async (req, res) => {
 
 // Slider ekleme sayfasını göster
 exports.sliderAddPage = (req, res) => {
-    res.render("admin/slider-add", { error: null });
+    res.render("ikyonetim/slider-add", { error: null });
 };
 
 // Slider ekleme işlemi
@@ -169,8 +169,8 @@ exports.sliderEditPage = async (req, res) => {
             isMain: slider.isMain ? 1 : 0
         }));
 
-        // Verileri 'admin/slider-edit' sayfasında render et
-        res.render("admin/slider-edit", {
+        // Verileri 'ikyonetim/slider-edit' sayfasında render et
+        res.render("ikyonetim/slider-edit", {
             sliders: formattedSliders
         });
     } catch (err) {

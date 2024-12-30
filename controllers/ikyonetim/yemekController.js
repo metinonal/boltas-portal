@@ -6,7 +6,7 @@ const moment = require("moment");
 // Yemek listesi görünümü
 exports.getYemekListesiPanel = (req, res) => {
     try {
-        res.render("admin/yemek-listesi", { title: "Yemek Listesi Yükleme" });
+        res.render("ikyonetim/yemek-listesi", { title: "Yemek Listesi Yükleme" });
     } catch (err) {
         console.error("Yemek listesi paneli görüntülenirken bir hata oluştu:", err);
         res.status(500).send("Yemek listesi paneli görüntülenirken bir hata oluştu.");

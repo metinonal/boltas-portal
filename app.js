@@ -63,12 +63,12 @@ const sharepointService = require('./services/sharepointService');
 console.log('SharePoint servis başlatılıyor...');
 // sharepointService.start();
 
-// Admin rotaları
-const adminRoutes = require("./routes/admin/adminRoutes");
-const yemekRoutes = require("./routes/admin/yemekRoutes");
-const sliderRoutes = require("./routes/admin/sliderRoutes");
-const documentRoutes = require("./routes/admin/documentRoutes");
-const authRoutes = require("./routes/admin/authRoutes");
+// ikyonetim rotaları
+const adminRoutes = require("./routes/ikyonetim/adminRoutes");
+const yemekRoutes = require("./routes/ikyonetim/yemekRoutes");
+const sliderRoutes = require("./routes/ikyonetim/sliderRoutes");
+const documentRoutes = require("./routes/ikyonetim/documentRoutes");
+const authRoutes = require("./routes/ikyonetim/authRoutes");
 
 // İndex rotaları
 const menuRoutes = require("./routes/main/menuRoutes");

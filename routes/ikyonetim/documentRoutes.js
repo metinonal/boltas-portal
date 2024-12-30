@@ -1,9 +1,9 @@
 const express = require("express");
-const documentController = require("../../controllers/admin/documentController");
+const documentController = require("../../controllers/ikyonetim/documentController");
 
 const router = express.Router();
 
-// Admin paneli ana sayfası
+// ikyonetim paneli ana sayfası
 router.get("/docs-edit", documentController.getDocs);
 router.get('/docs-edit/docs-add', documentController.showAddDocPage);
 router.post('/docs-edit/docs-add', documentController.addDoc);

@@ -2,7 +2,7 @@ const User = require('../../models/User'); // User modelini içe aktar
 
 // Giriş sayfasını göster
 exports.loginPage = (req, res) => {
-    res.render("admin/login", { error: null });
+    res.render("ikyonetim/login", { error: null });
 };
 
 // Kimlik doğrulama işlemi
@@ -17,7 +17,7 @@ exports.authenticate = async (req, res) => {
             req.session.authenticated = true;
             res.redirect("/ikyonetim");
         } else {
-            res.render("admin/login", { error: "Kullanıcı adı veya şifre yanlış" });
+            res.render("ikyonetim/login", { error: "Kullanıcı adı veya şifre yanlış" });
         }
     } catch (err) {
         console.error(err);
