@@ -10,14 +10,12 @@
 
     <%- include("partials/css") %>
         <style>
-        
+            
             .meal-card {
                 background-color: #ffffff;
                 border: 1px solid #dee2e6;
                 border-radius: 8px;
-                /* Daha yuvarlak bir görünüm */
                 padding: 10px;
-                /* Dolgu alanı azaltıldı */
                 height: 100%;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 text-align: left;
@@ -32,28 +30,30 @@
 
             .highlight {
                 background-color: #f8f9fa;
-                /* Daha açık bir gri arka plan */
             }
 
             .date-title {
                 font-weight: bold;
                 font-size: 14px;
-                /* Tarih yazı boyutu küçültüldü */
                 color: #495057;
                 margin-bottom: 8px;
             }
 
             .list-group-item {
                 font-size: 13px;
-                /* Yemek isimleri için yazı boyutu küçültüldü */
                 padding: 5px 10px;
-                /* Liste elemanlarının dolgu alanı azaltıldı */
+                border: none;
+                /* Kenarlık kaldırıldı */
             }
 
             .badge {
                 font-size: 12px;
-                /* Kalori bilgisi için yazı boyutu küçültüldü */
                 padding: 2px 6px;
+            }
+
+            .collapse-item {
+                padding-left: 20px;
+                /* Alt maddeler için biraz iç boşluk */
             }
 
             .no-data {
@@ -113,9 +113,9 @@
 
                     <div class="container">
                         <% if (menuData && menuData.length > 0) { %>
-                            <div class="row g-3 non-selectable"> <!-- Daha kompakt bir görünüm için boşluk azaltıldı -->
+                            <div class="row g-3 non-selectable">
                                 <% 
-                                    const today = new Date().toISOString().split('T')[0]; // Bugünün tarihi (YYYY-MM-DD formatında)
+                                    const today = new Date().toISOString().split('T')[0];
                                 %>
                                 <% menuData.forEach((menu) => { %>
                                     <div class="col-12 col-md-6 col-lg-4 col-xl-3">
@@ -139,13 +139,31 @@
                                             <!-- Yemekler -->
                                             <% if (menu.meals && menu.meals.length > 0) { %>
                                                 <ul class="list-group">
-                                                    <% menu.meals.forEach(meal => { %>
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            <span><%= meal.name %></span>
-                                                            <% if (meal.calorie) { %>
+                                                    <% menu.meals.forEach((meal, index) => { %>
+                                                        <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span data-bs-toggle="collapse" data-bs-target="#dropdown-<%= index %>" aria-expanded="false" aria-controls="dropdown-<%= index %>" style="cursor: pointer;">
+                                                                    <%= meal.name %>
+                                                                </span>
+                                                                <% if (meal.calorie) { %>
+                                                                    <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                <% } %>
+                                                            </li>
+                                                            <ul class="list-group list-group-flush collapse" id="dropdown-<%= index %>">
+                                                                <% menu.meals.slice(menu.meals.indexOf(meal) + 1).forEach(subMeal => { %>
+                                                                    <% if (!subMeal.calorie) { %>
+                                                                        <li class="list-group-item collapse-item"><%= subMeal.name %></li>
+                                                                    <% } else { return; } %>
+                                                                <% }); %>
+                                                            </ul>
+                                                        <% } else if (meal.calorie) { %>
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span><%= meal.name %></span>
                                                                 <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
-                                                            <% } %>
-                                                        </li>
+                                                            </li>
+                                                        <% } else { %>
+                                                            <li class="list-group-item"><%= meal.name %></li>
+                                                        <% } %>
                                                     <% }) %>
                                                 </ul>
                                             <% } else { %>
