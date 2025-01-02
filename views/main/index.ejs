@@ -10,6 +10,22 @@
 
     <%- include("partials/css") %>
 
+        <style>
+            .clickable {
+                cursor: pointer;
+                user-select: none;
+                color: #ff6600;
+                /* Bootstrap'in mavi tonuna uygun */
+            }
+
+            .clickable:hover {
+                color: #0056b3;
+                /* Daha koyu bir mavi tonu */
+                text-decoration: none;
+                /* Hover sırasında altı çizgi kalkar */
+            }
+        </style>
+
 </head>
 
 <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
@@ -72,11 +88,47 @@
                                         <div class="menu">
                                             <% if (todayMenu) { %>
                                                 <ul class="list-group list-group-flush">
-                                                    <% todayMenu.meals.forEach(meal=> { %>
-                                                        <li class="list-group-item">
-                                                            <%= meal %>
-                                                        </li>
-                                                        <% }) %>
+                                                    <% todayMenu.meals.forEach((meal, index)=> { %>
+                                                        <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
+                                                            <li
+                                                                class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span class="clickable" data-bs-toggle="collapse"
+                                                                    data-bs-target="#dropdown-<%= index %>"
+                                                                    aria-expanded="false"
+                                                                    aria-controls="dropdown-<%= index %>">
+                                                                    <%= meal.name %>
+                                                                </span>
+                                                                <% if (meal.calorie) { %>
+                                                                    <span class="badge bg-primary text-white">
+                                                                        <%= meal.calorie %> kcal
+                                                                    </span>
+                                                                    <% } %>
+                                                            </li>
+                                                            <ul class="list-group list-group-flush collapse"
+                                                                id="dropdown-<%= index %>">
+                                                                <% todayMenu.meals.slice(todayMenu.meals.indexOf(meal) +
+                                                                    1).forEach(subMeal=> { %>
+                                                                    <% if (!subMeal.calorie) { %>
+                                                                        <li class="list-group-item">
+                                                                            <span>
+                                                                                <%= subMeal.name %>
+                                                                            </span>
+                                                                        </li>
+                                                                        <% } %>
+                                                                            <% }); %>
+                                                            </ul>
+                                                            <% } else if (meal.calorie) { %>
+                                                                <li
+                                                                    class="list-group-item d-flex justify-content-between align-items-center">
+                                                                    <span>
+                                                                        <%= meal.name %>
+                                                                    </span>
+                                                                    <span class="badge bg-primary text-white">
+                                                                        <%= meal.calorie %> kcal
+                                                                    </span>
+                                                                </li>
+                                                                <% } %>
+                                                                    <% }) %>
                                                 </ul>
                                                 <% } else { %>
                                                     <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
@@ -85,6 +137,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="card mb-3">
                                     <div class="card-header"><strong>Bilgi Bankası</strong></div>
                                     <ul class="list-group list-group-flush">
@@ -137,16 +190,18 @@
                                     <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
                                     <div class="card-body">
                                         <ul class="list-group list-group-flush">
-                                            <% const activeDocs = docs.filter(doc => doc.isActive); %> <!-- Aktif dokümanları filtrele -->
-                                            <% activeDocs.forEach((doc) => { %>
-                                            <li class="list-group-item">
-                                                <%= doc.docName %>
-                                                <span class="float-end">
-                                                    <a href="https://portal.boltas.com/<%= doc.docFile %>" target="_blank">Tıklayınız...</a>
-                                                </span>
-                                            </li>
-                                            <% }); %>
-                                        </ul>                                        
+                                            <% const activeDocs=docs.filter(doc=> doc.isActive); %>
+                                                <!-- Aktif dokümanları filtrele -->
+                                                <% activeDocs.forEach((doc)=> { %>
+                                                    <li class="list-group-item">
+                                                        <%= doc.docName %>
+                                                            <span class="float-end">
+                                                                <a href="https://portal.boltas.com/<%= doc.docFile %>"
+                                                                    target="_blank">Tıklayınız...</a>
+                                                            </span>
+                                                    </li>
+                                                    <% }); %>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -234,48 +289,48 @@
     <!-- END wrapper -->
 
 
-        <%- include("partials/scripts") %>
+    <%- include("partials/scripts") %>
 
-            <script>
-                // Sayfa yüklendiğinde seçilen şehri geri yükle
-                document.addEventListener("DOMContentLoaded", () => {
-                    const citySelect = document.getElementById("citySelect");
-                    const savedCity = getCookie("selectedCity");
+        <script>
+            // Sayfa yüklendiğinde seçilen şehri geri yükle
+            document.addEventListener("DOMContentLoaded", () => {
+                const citySelect = document.getElementById("citySelect");
+                const savedCity = getCookie("selectedCity");
 
-                    if (savedCity) {
-                        citySelect.value = savedCity;
-                    }
-                });
-
-                // Şehir seçimi değiştiğinde çereze kaydet
-                document.getElementById("citySelect").addEventListener("change", (e) => {
-                    const selectedCity = e.target.value;
-                    if (selectedCity) {
-                        setCookie("selectedCity", selectedCity, 30); // 30 gün boyunca geçerli olacak
-                    }
-                });
-
-                // Çerez (cookie) oluşturma fonksiyonu
-                function setCookie(name, value, days) {
-                    const date = new Date();
-                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                    const expires = "expires=" + date.toUTCString();
-                    document.cookie = `${name}=${value}; ${expires}; path=/`;
+                if (savedCity) {
+                    citySelect.value = savedCity;
                 }
+            });
 
-                // Çerez okuma fonksiyonu
-                function getCookie(name) {
-                    const decodedCookie = decodeURIComponent(document.cookie);
-                    const cookiesArray = decodedCookie.split(';');
-                    for (let i = 0; i < cookiesArray.length; i++) {
-                        let cookie = cookiesArray[i].trim();
-                        if (cookie.indexOf(name + "=") == 0) {
-                            return cookie.substring(name.length + 1);
-                        }
-                    }
-                    return "";
+            // Şehir seçimi değiştiğinde çereze kaydet
+            document.getElementById("citySelect").addEventListener("change", (e) => {
+                const selectedCity = e.target.value;
+                if (selectedCity) {
+                    setCookie("selectedCity", selectedCity, 30); // 30 gün boyunca geçerli olacak
                 }
-            </script>
+            });
+
+            // Çerez (cookie) oluşturma fonksiyonu
+            function setCookie(name, value, days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                const expires = "expires=" + date.toUTCString();
+                document.cookie = `${name}=${value}; ${expires}; path=/`;
+            }
+
+            // Çerez okuma fonksiyonu
+            function getCookie(name) {
+                const decodedCookie = decodeURIComponent(document.cookie);
+                const cookiesArray = decodedCookie.split(';');
+                for (let i = 0; i < cookiesArray.length; i++) {
+                    let cookie = cookiesArray[i].trim();
+                    if (cookie.indexOf(name + "=") == 0) {
+                        return cookie.substring(name.length + 1);
+                    }
+                }
+                return "";
+            }
+        </script>
 
 
 </body>

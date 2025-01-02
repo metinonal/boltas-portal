@@ -13,11 +13,11 @@ function parseExcel(filePath) {
 
     const data = xlsx.utils.sheet_to_json(sheet, { header: 1 });
     const menu = [];
-    const headerRows = [8, 15, 22, 29, 36]; // Tarih başlıklarının olduğu satırlar
+    const headerRows = [8, 21, 34, 47, 60]; // Tarih başlıklarının olduğu satırlar
 
     headerRows.forEach((rowIndex) => {
-        for (let colIndex = 0; colIndex < data[rowIndex].length; colIndex++) {
-            const dateCell = data[rowIndex][colIndex];
+        for (let colIndex = 1; colIndex <= 11; colIndex += 2) { // Yemek ve kalori sütunlarını dolaş (B, D, F, H, J)
+            const dateCell = data[rowIndex][colIndex - 1]; // Yemek sütunundaki tarih bilgisi
             if (dateCell) {
                 const date =
                     typeof dateCell === "number"
@@ -25,12 +25,18 @@ function parseExcel(filePath) {
                         : dateCell;
 
                 const meals = [];
-                for (let i = 1; i <= 5; i++) {
-                    const meal = data[rowIndex + i] ? data[rowIndex + i][colIndex] : null;
-                    if (meal) {
-                        meals.push(meal);
+                for (let i = 1; i <= 11; i++) { // Sadece 11 satır aşağıya doğru tara
+                    const food = data[rowIndex + i] ? data[rowIndex + i][colIndex - 1] : null; // Yemek bilgisi
+                    const calorie = data[rowIndex + i] ? data[rowIndex + i][colIndex] : null; // Kalori bilgisi
+
+                    if (food) {
+                        meals.push({
+                            name: food,
+                            calorie: calorie || null // Kalori bilgisi yoksa null döndür
+                        });
                     }
                 }
+
                 if (meals.length > 0) {
                     menu.push({ date, meals });
                 }
