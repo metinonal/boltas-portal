@@ -9,52 +9,66 @@
     <meta content="Coderthemes" name="author">
 
     <%- include("partials/css") %>
-    <style>
-        body {
-            background-color: #f9f9f9;
-            font-family: 'Arial', sans-serif;
-        }
-        .meal-card {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 15px;
-            height: 100%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            user-select: none;
-        }
-        .meal-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        .highlight {
-            background-color: #e9ecef; /* Açık gri arka plan */
-        }
-        .date-title {
-            font-weight: bold;
-            font-size: 16px;
-            color: #495057;
-            margin-bottom: 10px;
-        }
-        .meal-item {
-            font-size: 14px;
-            color: #212529;
-            line-height: 1.6;
-        }
-        .no-data {
-            color: #adb5bd;
-            font-style: italic;
-        }
-    </style>
-    
-    
+        <style>
+        
+            .meal-card {
+                background-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                /* Daha yuvarlak bir görünüm */
+                padding: 10px;
+                /* Dolgu alanı azaltıldı */
+                height: 100%;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                text-align: left;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                user-select: none;
+            }
+
+            .meal-card:hover {
+                transform: scale(1.03);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+
+            .highlight {
+                background-color: #f8f9fa;
+                /* Daha açık bir gri arka plan */
+            }
+
+            .date-title {
+                font-weight: bold;
+                font-size: 14px;
+                /* Tarih yazı boyutu küçültüldü */
+                color: #495057;
+                margin-bottom: 8px;
+            }
+
+            .list-group-item {
+                font-size: 13px;
+                /* Yemek isimleri için yazı boyutu küçültüldü */
+                padding: 5px 10px;
+                /* Liste elemanlarının dolgu alanı azaltıldı */
+            }
+
+            .badge {
+                font-size: 12px;
+                /* Kalori bilgisi için yazı boyutu küçültüldü */
+                padding: 2px 6px;
+            }
+
+            .no-data {
+                color: #adb5bd;
+                font-size: 13px;
+                font-style: italic;
+            }
+        </style>
+
+
 
 </head>
 
-<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-leftbar-compact-mode="condensed"
-    data-rightbar-onstart="true">
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-leftbar-compact-mode="condensed" data-rightbar-onstart="true">
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ========== Left Sidebar Start ========== -->
@@ -99,7 +113,7 @@
 
                     <div class="container">
                         <% if (menuData && menuData.length > 0) { %>
-                            <div class="row g-4 non-selectable">
+                            <div class="row g-3 non-selectable"> <!-- Daha kompakt bir görünüm için boşluk azaltıldı -->
                                 <% 
                                     const today = new Date().toISOString().split('T')[0]; // Bugünün tarihi (YYYY-MM-DD formatında)
                                 %>
@@ -124,9 +138,16 @@
                     
                                             <!-- Yemekler -->
                                             <% if (menu.meals && menu.meals.length > 0) { %>
-                                                <% menu.meals.forEach(meal => { %>
-                                                    <div class="meal-item"><%= meal %></div>
-                                                <% }) %>
+                                                <ul class="list-group">
+                                                    <% menu.meals.forEach(meal => { %>
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <span><%= meal.name %></span>
+                                                            <% if (meal.calorie) { %>
+                                                                <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                            <% } %>
+                                                        </li>
+                                                    <% }) %>
+                                                </ul>
                                             <% } else { %>
                                                 <div class="no-data">Yemek Bilgisi Yok</div>
                                             <% } %>
@@ -138,8 +159,9 @@
                             <p class="text-center text-muted">Henüz bir yemek listesi yüklenmedi.</p>
                         <% } %>
                     </div>
-                    
-                    
+
+
+
 
                     <!-- Footer Start -->
                     <%- include("partials/footer") %>
@@ -158,7 +180,7 @@
 
         <!-- Right Sidebar -->
 
-            <%- include("partials/scripts") %>
+        <%- include("partials/scripts") %>
 
 </body>
 
