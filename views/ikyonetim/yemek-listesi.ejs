@@ -9,7 +9,7 @@
     <meta content="Coderthemes" name="author">
 
     <%- include("partials/css") %>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 
 </head>
@@ -24,16 +24,16 @@
             <!-- LOGO -->
             <%- include("partials/logo") %>
 
-            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
 
-                <!--- Sidemenu -->
-                <%- include("partials/sidemenu") %>
-                    <!-- End Sidebar -->
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
 
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
 
-            </div>
-            <!-- Sidebar -left -->
+                </div>
+                <!-- Sidebar -left -->
 
         </div>
         <!-- Left Sidebar End -->
@@ -64,11 +64,14 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/ikyonetim/yemek-listesi" method="POST" enctype="multipart/form-data">
+                                        <form action="/ikyonetim/yemek-listesi" method="POST"
+                                            enctype="multipart/form-data">
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                                    <label for="header" class="form-label">Yemek Listesi (Excel):</label>
-                                                    <input id="yemekDosyasi" type="file" class="form-control"  name="yemekDosyasi" required>
+                                                    <label for="header" class="form-label">Yemek Listesi
+                                                        (Excel):</label>
+                                                    <input id="yemekDosyasi" type="file" class="form-control"
+                                                        name="yemekDosyasi" required>
                                                 </div>
                                             </div>
                                             <button class="btn btn-primary" type="submit">Yükle</button>
@@ -86,13 +89,13 @@
 
                         <!-- end row -->
                     </div>
-                     <!-- container -->
+                    <!-- container -->
 
             </div> <!-- content -->
 
             <!-- Footer Start -->
             <%- include("partials/footer") %>
-            <!-- end Footer -->
+                <!-- end Footer -->
 
         </div>
 
@@ -106,70 +109,80 @@
 
     <%- include("partials/scripts") %>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script>
-        document.getElementById('yemekDosyasi').addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (!file) {
-            alert("Lütfen bir Excel dosyası seçin!");
-            return;
-          }
-    
-          const reader = new FileReader();
-    
-          // Dosya yüklendiğinde çalışacak
-          reader.onload = function(e) {
-            const data = new Uint8Array(e.target.result);
-            const workbook = XLSX.read(data, { type: 'array' });
-    
-            // İlk sayfayı al
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
-    
-            // Sheet'i JSON formatına çevir, tarihleri ve belirli aralığı koruyarak
-            const json = XLSX.utils.sheet_to_json(sheet, {
-              header: 1,
-              raw: false, // Tarih değerlerini düzgün şekilde al
-              cellDates: true // Tarih hücrelerini tarih formatında al
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script>
+            document.getElementById('yemekDosyasi').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                if (!file) {
+                    alert("Lütfen bir Excel dosyası seçin!");
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheetName = workbook.SheetNames[0];
+                    const sheet = workbook.Sheets[sheetName];
+
+                    // Sheet'i JSON formatına çevir
+                    const json = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
+
+                    // B9:L73 aralığını seç
+                    const selectedRows = json.slice(8, 73).map(row => row.slice(1, 12)); // B'den L'ye kadar
+
+                    // Veriyi tabloda göster
+                    displayData(selectedRows);
+                };
+
+                reader.readAsArrayBuffer(file);
             });
-    
-            // Sadece 9. ve 43. satırlar arasındaki verileri seç ve sütunları filtrele
-            const selectedRows = json.slice(8, 43); // Satır aralığı (9. ve 43. dahil)
-            const filteredData = selectedRows.map(row => row.slice(0, 5)); // A'dan F'ye kadar (0-5 sütunları)
-    
-            // Veriyi tabloda göster
-            displayData(filteredData);
-          };
-    
-          reader.readAsArrayBuffer(file);
-        });
-    
-        // Verileri tablo olarak gösterme fonksiyonu
-        function displayData(data) {
-          const outputDiv = document.getElementById('output');
-          outputDiv.innerHTML = ''; // Önceki içeriği temizle
-    
-          const table = document.createElement('table');
-          table.style.borderCollapse = 'collapse';
-          table.style.width = '100%';
-    
-          data.forEach(row => {
-            const tr = document.createElement('tr');
-    
-            row.forEach(cell => {
-              const td = document.createElement('td');
-              td.textContent = cell || ''; // Hücre boşsa boş bırak
-              td.style.border = '1px solid #ddd';
-              td.style.padding = '8px';
-              tr.appendChild(td);
-            });
-    
-            table.appendChild(tr);
-          });
-    
-          outputDiv.appendChild(table);
-        }
-      </script>
+
+            function displayData(data) {
+                const outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = '';
+
+                const table = document.createElement('table');
+                table.style.borderCollapse = 'collapse';
+                table.style.width = '100%';
+
+                // Tablo başlığı oluştur
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                for (let i = 1; i <= 10; i++) {
+                    const th = document.createElement('th');
+                    th.textContent = `Sütun ${i}`;
+                    th.style.border = '1px solid #ddd';
+                    th.style.padding = '8px';
+                    th.style.backgroundColor = '#f8f9fa';
+                    headerRow.appendChild(th);
+                }
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Tablo gövdesini oluştur
+                const tbody = document.createElement('tbody');
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    row.forEach(cell => {
+                        const td = document.createElement('td');
+                        td.textContent = cell || ''; // Hücre boşsa boş bırak
+                        td.style.border = '1px solid #ddd';
+                        td.style.padding = '8px';
+                        tr.appendChild(td);
+                    });
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                outputDiv.appendChild(table);
+            }
+        </script> -->
+
+
+
+
 
 </body>
 
