@@ -84,10 +84,12 @@
                                                             <% if (user.Mobile) { %>
                                                                 <tr>
                                                                     <td>
-                                                                        <img src="uploads/pphotos/<%= user.mail %>.jpg" alt="blog-img"
-                                                                            title="blog-img" class="rounded-circle me-3"
-                                                                            height="48" width="48" style="object-fit: cover;">
-                                                                        <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <img src="uploads/pphotos/<%= fs.existsSync(`public/uploads/pphotos/${user.mail}.png`) ? `${user.mail}.png` : 'default.jpg' %>"
+                                                                            alt="profile-img"
+                                                                            class="rounded-circle me-3" height="48"
+                                                                            width="48" style="object-fit: cover;">
+                                                                        <p
+                                                                            class="m-0 d-inline-block align-middle font-16">
                                                                             <%= user.DisplayName %>
                                                                         </p>
                                                                     </td>

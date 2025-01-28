@@ -6,6 +6,9 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const connectDB = require('./data/db');
+const azureService = require("./services/azureService");
+const cron = require("node-cron");
+
 
 const app = express();
 connectDB();
@@ -58,10 +61,6 @@ app.use(
 // Middleware
 const { sessionTimeoutMiddleware, authMiddleware } = require("./middlewares/authMiddleware");
 
-// Services
-const sharepointService = require('./services/sharepointService');
-console.log('SharePoint servis başlatılıyor...');
-// sharepointService.start();
 
 // ikyonetim rotaları
 const adminRoutes = require("./routes/ikyonetim/adminRoutes");
@@ -100,3 +99,24 @@ https.createServer(options, app).listen(443, (err) => {
     }
     console.log("The HTTPS server is running on https://localhost:443");
 });
+
+
+// Profil fotoğraflarını indir
+async function runTask() {
+    console.log("Profil fotoğrafı indirme işlemi başladı.");
+    try {
+      await azureService.downloadAllProfilePhotos();
+      console.log("Profil fotoğrafı indirme işlemi tamamlandı.");
+    } catch (error) {
+      console.error("Hata oluştu:", error);
+    }
+  }
+  
+  // Her 6 saatte bir çalıştır
+  cron.schedule("0 */6 * * *", () => {
+    runTask();
+  });
+  
+  // Uygulamayı başlat
+  console.log("Uygulama çalışıyor...");
+  runTask(); // Başlangıçta bir kez çalıştır
