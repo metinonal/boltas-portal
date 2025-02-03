@@ -27,10 +27,10 @@ exports.indexPage = async (req, res) => {
                 forexSelling: item.ForexSelling ? item.ForexSelling[0] : 'N/A',
             }));
 
-            try {
-                // Slider verilerini al ve isMain değeri true olanları en üste getir
-                const sliders = await Slider.find().sort({ isMain: -1 });
-                const docs = await Docs.find()
+             try {
+                // Slider verilerini yalnızca count değerine göre azalan sıralama ile al
+                const sliders = await Slider.find().sort({ count: 1 }); // Küçükten büyüğe sıralama
+                const docs = await Docs.find();
 
                 // Ana sayfa görünümüne döviz kurları, bugünün menüsü ve slider verilerini gönder
                 res.render('main/index', { todayMenu, currencies, sliders, docs });
