@@ -158,12 +158,10 @@ data-rightbar-onstart="true">
                             <div class="col-md-6">
                                 <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                     <div class="carousel-inner">
-                                        <% sliders.forEach((slider, index)=> { %>
-                                            <div
-                                                class="carousel-item <%= slider.isMain && index === 0 ? 'active' : '' %>">
+                                        <% sliders.forEach((slider, index) => { %>
+                                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                                                 <a target="_blank" href="https://<%= slider.link %>">
-                                                    <img class="d-block img-fluid" src="<%= slider.imageUrl %>"
-                                                        style="width: 100%;">
+                                                    <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
                                                 </a>
                                                 <div class="carousel-caption"
                                                     style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
@@ -175,7 +173,8 @@ data-rightbar-onstart="true">
                                                     </p>
                                                 </div>
                                             </div>
-                                            <% }); %>
+                                        <% }); %>
+                                        
                                     </div>
                                     <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"

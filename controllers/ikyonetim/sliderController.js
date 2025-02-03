@@ -28,7 +28,7 @@ exports.showUpdateSliderPage = async (req, res) => {
 exports.updateSlider = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, description, link, isActive, isMain } = req.body;
+        const { title, description, link, isActive, count } = req.body;
 
         // Güncellenecek slider'ı bul
         const slider = await Slider.findById(id);
@@ -53,7 +53,7 @@ exports.updateSlider = async (req, res) => {
         slider.description = description;
         slider.link = link;
         slider.isActive = isActive === '1' ? true : false;
-        slider.isMain = isMain === '1' ? true : false;
+        slider.count = parseInt(count, 10); // count değerini tam sayı olarak al
 
         // Güncellemeyi kaydet
         await slider.save();
@@ -85,7 +85,7 @@ exports.sliderAdd = async (req, res) => {
             `);
         }
 
-        const { title, description, link, isActive, isMain } = req.body;
+        const { title, description, link, isActive, count } = req.body;
         const imageUrl = `/uploads/${req.file.filename}`;
 
         // Yeni slider belgesi oluştur
@@ -95,7 +95,7 @@ exports.sliderAdd = async (req, res) => {
             description,
             link,
             isActive: isActive === '1' ? true : false,
-            isMain: isMain === '1' ? true : false, 
+            count: parseInt(count, 10), // count değerini tam sayı olarak al
             createdAt: new Date()
         });
 
@@ -154,8 +154,8 @@ exports.deleteSlider = async (req, res) => {
 
 exports.sliderEditPage = async (req, res) => {
     try {
-        // Slider koleksiyonundan tüm verileri al
-        const sliders = await Slider.find();
+        // Slider koleksiyonundan tüm verileri count değerine göre sıralı al
+        const sliders = await Slider.find().sort({ count: 1 });
 
         // Tarihi dd/mm/yyyy formatına dönüştür
         const formattedSliders = sliders.map(slider => ({
@@ -165,8 +165,7 @@ exports.sliderEditPage = async (req, res) => {
                 month: '2-digit',
                 year: 'numeric'
             }),
-            isActive: slider.isActive ? 1 : 0,
-            isMain: slider.isMain ? 1 : 0
+            isActive: slider.isActive ? 1 : 0
         }));
 
         // Verileri 'ikyonetim/slider-edit' sayfasında render et
