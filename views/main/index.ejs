@@ -88,10 +88,11 @@ data-rightbar-onstart="true">
                                         <div class="menu">
                                             <% if (todayMenu) { %>
                                                 <ul class="list-group list-group-flush">
+                                                    <% let foundSalad = false; %>
+                                                    <% let saladIndex = -1; %>
                                                     <% todayMenu.meals.forEach((meal, index)=> { %>
-                                                        <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
-                                                            <li
-                                                                class="list-group-item d-flex justify-content-between align-items-center">
+                                                        <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                                                 <span class="clickable" data-bs-toggle="collapse"
                                                                     data-bs-target="#dropdown-<%= index %>"
                                                                     aria-expanded="false"
@@ -102,38 +103,36 @@ data-rightbar-onstart="true">
                                                                     <span class="badge bg-primary text-white">
                                                                         <%= meal.calorie %> kcal
                                                                     </span>
-                                                                    <% } %>
+                                                                <% } %>
                                                             </li>
-                                                            <ul class="list-group list-group-flush collapse"
-                                                                id="dropdown-<%= index %>">
-                                                                <% todayMenu.meals.slice(todayMenu.meals.indexOf(meal) +
-                                                                    1).forEach(subMeal=> { %>
-                                                                    <% if (!subMeal.calorie) { %>
-                                                                        <li class="list-group-item">
-                                                                            <span>
-                                                                                <%= subMeal.name %>
-                                                                            </span>
-                                                                        </li>
-                                                                        <% } %>
-                                                                            <% }); %>
-                                                            </ul>
-                                                            <% } else if (meal.calorie) { %>
-                                                                <li
-                                                                    class="list-group-item d-flex justify-content-between align-items-center">
-                                                                    <span>
-                                                                        <%= meal.name %>
-                                                                    </span>
+                                                            <% foundSalad = true; saladIndex = index; %>
+                                                            <ul class="list-group list-group-flush collapse" id="dropdown-<%= index %>">
+                                                        <% } else if (foundSalad) { %>
+                                                            <li class="list-group-item">
+                                                                <span>
+                                                                    <%= meal.name %>
+                                                                </span>
+                                                            </li>
+                                                        <% } else { %>
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                <span>
+                                                                    <%= meal.name %>
+                                                                </span>
+                                                                <% if (meal.calorie) { %>
                                                                     <span class="badge bg-primary text-white">
                                                                         <%= meal.calorie %> kcal
                                                                     </span>
-                                                                </li>
                                                                 <% } %>
-                                                                    <% }) %>
-                                                </ul>
-                                                <% } else { %>
-                                                    <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
-                                                    </p>
+                                                            </li>
+                                                        <% } %>
+                                                    <% }) %>
+                                                    <% if (foundSalad) { %>
+                                                        </ul>
                                                     <% } %>
+                                                </ul>
+                                            <% } else { %>
+                                                <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>
