@@ -2043,8 +2043,8 @@
         "DisplayName":  "Feyyaz İNCİ",
         "mail":  "feyyaz.inci@boltas.com",
         "Mobile":  "+90 530 781 18 88",
-        "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6493"
     },
     {
@@ -2099,8 +2099,8 @@
         "DisplayName":  "Zerrin ALİCİKOĞLU",
         "mail":  "zerrin.alicikoglu@boltas.com",
         "Mobile":  "+90 533 938 39 31",
-        "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6456"
     },
     {
@@ -3155,8 +3155,8 @@
         "DisplayName":  "Deniz PEZÜK",
         "mail":  "deniz.pezuk@boltas.com",
         "Mobile":  "+90 549 479 31 17",
-        "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6510"
     },
     {
@@ -3259,8 +3259,8 @@
         "DisplayName":  "Gökhan ÇAĞAN",
         "mail":  "gokhan.cagan@boltas.com",
         "Mobile":  "+90 541 151 87 39",
-        "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "7422"
     },
     {
@@ -3362,7 +3362,7 @@
     {
         "DisplayName":  "Berkay GÜÇLÜ",
         "mail":  "berkay.guclu@boltas.com",
-        "Mobile":  "+90 530 781 18 88",
+        "Mobile":  null,
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
         "physicalDeliveryOfficeName":  "6524"
@@ -7075,7 +7075,7 @@
         "DisplayName":  "Bihter ÇOBANOĞLU",
         "mail":  "bihter.cobanoglu@boltas.com",
         "Mobile":  "+90 532 773 32 33",
-        "msExchHideFromAddressLists":  true,
+        "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
         "physicalDeliveryOfficeName":  null
     },
@@ -7084,7 +7084,7 @@
         "mail":  "gokmen.bulgu@boltas.com",
         "Mobile":  null,
         "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6434"
     },
     {
@@ -7715,8 +7715,8 @@
         "DisplayName":  "Oana TARAKÇI",
         "mail":  "oana.tarakci@boltas.com",
         "Mobile":  "+90 549 552 39 55",
-        "msExchHideFromAddressLists":  null,
-        "userAccountControl":  512,
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6660"
     },
     {
@@ -7858,6 +7858,30 @@
     {
         "DisplayName":  "İrem CERAN",
         "mail":  "irem.ceran@boltas.com",
+        "Mobile":  null,
+        "msExchHideFromAddressLists":  null,
+        "userAccountControl":  512,
+        "physicalDeliveryOfficeName":  null
+    },
+    {
+        "DisplayName":  "Boltas İletişim",
+        "mail":  "iletisim@boltas.com",
+        "Mobile":  null,
+        "msExchHideFromAddressLists":  null,
+        "userAccountControl":  512,
+        "physicalDeliveryOfficeName":  null
+    },
+    {
+        "DisplayName":  "İlkay FIRAT",
+        "mail":  "ilkay.firat@boltas.com",
+        "Mobile":  "+90 549 552 89 32",
+        "msExchHideFromAddressLists":  null,
+        "userAccountControl":  512,
+        "physicalDeliveryOfficeName":  "7422"
+    },
+    {
+        "DisplayName":  "Mustafa KALE",
+        "mail":  "mustafa.kale@boltas.com",
         "Mobile":  null,
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
