@@ -32,7 +32,6 @@ exports.updateSlider = async (req, res) => {
 
         // Güncellenecek slider'ı bul
         const slider = await Slider.findById(id);
-
         if (!slider) {
             return res.status(404).send("Slider bulunamadı.");
         }
@@ -48,12 +47,18 @@ exports.updateSlider = async (req, res) => {
             slider.imageUrl = `/uploads/${req.file.filename}`;
         }
 
+        // Title ve Description boş olabilir, sadece tanımlıysa güncelle
+        if (title !== undefined) {
+            slider.title = title;
+        }
+        if (description !== undefined) {
+            slider.description = description;
+        }
+
         // Diğer alanları güncelle
-        slider.title = title;
-        slider.description = description;
         slider.link = link;
-        slider.isActive = isActive === '1' ? true : false;
-        slider.count = parseInt(count, 10); // count değerini tam sayı olarak al
+        slider.isActive = isActive === '1' || isActive === true;
+        slider.count = isNaN(parseInt(count, 10)) ? slider.count : parseInt(count, 10);
 
         // Güncellemeyi kaydet
         await slider.save();
