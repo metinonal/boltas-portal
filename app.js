@@ -68,6 +68,7 @@ const yemekRoutes = require("./routes/ikyonetim/yemekRoutes");
 const sliderRoutes = require("./routes/ikyonetim/sliderRoutes");
 const documentRoutes = require("./routes/ikyonetim/documentRoutes");
 const authRoutes = require("./routes/ikyonetim/authRoutes");
+const bilgiBankasiRoutes = require("./routes/ikyonetim/bilgiBankasiRoutes");
 
 // İndex rotaları
 const menuRoutes = require("./routes/main/menuRoutes");
@@ -78,6 +79,7 @@ const phoneRoutes = require("./routes/main/phoneRoutes");
 app.use(sessionTimeoutMiddleware);
 app.use(authRoutes);
 app.use("/ikyonetim", authMiddleware, yemekRoutes);
+app.use("/ikyonetim", authMiddleware, bilgiBankasiRoutes);
 app.use("/ikyonetim", authMiddleware, sliderRoutes);
 app.use("/ikyonetim", authMiddleware, documentRoutes);
 app.use("/ikyonetim", authMiddleware, adminRoutes);

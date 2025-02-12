@@ -1,7 +1,7 @@
 $(document).ready(function() {
     "use strict";
 
-    $("#docs-datatable").DataTable({
+    $("#bilgi-datatable").DataTable({
         language: {
             paginate: {
                 previous: "<i class='mdi mdi-chevron-left'>",
@@ -37,6 +37,8 @@ $(document).ready(function() {
                         '</div>'
                 }
             },
+            { orderable: true },
+            { orderable: true },
             { orderable: true },
             { orderable: true },
             { orderable: true },
