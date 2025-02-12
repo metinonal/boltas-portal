@@ -25,13 +25,19 @@ const upload = multer({ storage });
 exports.getDocs = async (req, res) => {
     try {
         const docs = await Doc.find();
-        res.render('ikyonetim/docs-edit', { docs });
+
+        // isActive özelliğini her dökümana ekle
+        const updatedDocs = docs.map(doc => ({
+            ...doc.toObject(),
+            isActive: doc.isActive ? 1 : 0
+        }));
+
+        res.render('ikyonetim/docs-edit', { docs: updatedDocs });
     } catch (err) {
         console.error("Dökümanlar alınırken hata oluştu:", err);
         res.status(500).send("Dökümanlar alınırken bir hata oluştu.");
     }
 };
-
 // Döküman ekleme sayfasını gösterme
 exports.showAddDocPage = (req, res) => {
     res.render('ikyonetim/docs-add', { error: null });
