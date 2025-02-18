@@ -1,25 +1,60 @@
 const menuController = require("./menuController");
 const axios = require('axios');
 const xml2js = require('xml2js');
-const Slider = require('../../models/Slider'); // Slider modelini içe aktar
-const Docs = require('../../models/Doc'); // Slider modelini içe aktar
+const sql = require('mssql');
+const Slider = require('../../models/Slider');
+const Docs = require('../../models/Doc');
+
+const config = {
+    user: 'userportal',
+    password: 'Portal2025.!',
+    server: '192.168.200.23',
+    database: 'EntegrasyonDB',
+    options: {
+        encrypt: true,
+        trustServerCertificate: true,
+    },
+};
 
 exports.indexPage = async (req, res) => {
     try {
-        // Bugünün menüsünü veri işleyici fonksiyonla al
         const todayMenu = menuController.getTodayMenuData();
 
-        // TCMB döviz kurları API'sine istek yap
+        await sql.connect(config);
+
+
+        // aslı
+
+        
+        const birthdayResult = await sql.query(`
+            DECLARE @tarih DATE = GETDATE();
+            SELECT * 
+            FROM [vHROrganizationFromOrtakIK_Sorwe] 
+            WHERE MONTH(@tarih) = MONTH(DogumTarihi) 
+              AND DAY(@tarih) = DAY(DogumTarihi) 
+              AND YakaRengi = 'Beyaz';
+        `);
+
+
+            // test ortamı
+
+
+        // const birthdayResult = await sql.query(`
+        //     SELECT * 
+        //     FROM [vHROrganizationFromOrtakIK_Sorwe] 
+        //     WHERE SicilNo IN ('1458','2226');
+        // `);
+        
+        const birthdays = birthdayResult.recordset;
+
         const response = await axios.get('https://www.tcmb.gov.tr/kurlar/today.xml');
 
-        // XML verisini JSON'a çevir
         xml2js.parseString(response.data, async (err, result) => {
             if (err) {
                 console.error('XML parse hatası:', err);
                 return res.status(500).send('Veri işlenirken hata oluştu.');
             }
 
-            // Döviz kurlarını çek
             const currencies = result.Tarih_Date.Currency.map((item) => ({
                 currencyCode: item.$.CurrencyCode,
                 currencyName: item.Isim[0],
@@ -27,13 +62,17 @@ exports.indexPage = async (req, res) => {
                 forexSelling: item.ForexSelling ? item.ForexSelling[0] : 'N/A',
             }));
 
-             try {
-                // Slider verilerini yalnızca count değerine göre azalan sıralama ile al
-                const sliders = await Slider.find().sort({ count: 1 }); // Küçükten büyüğe sıralama
+            try {
+                const sliders = await Slider.find().sort({ count: 1 });
                 const docs = await Docs.find();
 
-                // Ana sayfa görünümüne döviz kurları, bugünün menüsü ve slider verilerini gönder
-                res.render('main/index', { todayMenu, currencies, sliders, docs });
+                res.render('main/index', {
+                    todayMenu,
+                    currencies,
+                    sliders,
+                    docs,
+                    birthdays,
+                });
             } catch (sliderError) {
                 console.error('Slider verileri alınırken hata oluştu:', sliderError);
                 res.status(500).send('Slider verileri alınırken bir sorun oluştu.');

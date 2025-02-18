@@ -28,7 +28,8 @@
 
 </head>
 
-<body class="show" data-layout-color="light" data-layout-mode="fluid" data-rightbar-onstart="true" data-leftbar-theme="dark" data-leftbar-compact-mode="condensed">
+<body class="show" data-layout-color="light" data-layout-mode="fluid" data-rightbar-onstart="true"
+    data-leftbar-theme="dark" data-leftbar-compact-mode="condensed">
     <!-- Begin page -->
     <div class="wrapper">
         <!-- ========== Left Sidebar Start ========== -->
@@ -87,54 +88,90 @@
                                         <div class="menu">
                                             <% if (todayMenu) { %>
                                                 <ul class="list-group list-group-flush">
-                                                    <% let foundSalad = false; %>
-                                                    <% let saladIndex = -1; %>
-                                                    <% todayMenu.meals.forEach((meal, index)=> { %>
-                                                        <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
-                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <span class="clickable" data-bs-toggle="collapse"
-                                                                    data-bs-target="#dropdown-<%= index %>"
-                                                                    aria-expanded="false"
-                                                                    aria-controls="dropdown-<%= index %>">
-                                                                    <%= meal.name %>
-                                                                </span>
-                                                                <% if (meal.calorie) { %>
-                                                                    <span class="badge bg-primary text-white">
-                                                                        <%= meal.calorie %> kcal
-                                                                    </span>
-                                                                <% } %>
-                                                            </li>
-                                                            <% foundSalad = true; saladIndex = index; %>
-                                                            <ul class="list-group list-group-flush collapse" id="dropdown-<%= index %>">
-                                                        <% } else if (foundSalad) { %>
-                                                            <li class="list-group-item">
-                                                                <span>
-                                                                    <%= meal.name %>
-                                                                </span>
-                                                            </li>
-                                                        <% } else { %>
-                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <span>
-                                                                    <%= meal.name %>
-                                                                </span>
-                                                                <% if (meal.calorie) { %>
-                                                                    <span class="badge bg-primary text-white">
-                                                                        <%= meal.calorie %> kcal
-                                                                    </span>
-                                                                <% } %>
-                                                            </li>
-                                                        <% } %>
-                                                    <% }) %>
-                                                    <% if (foundSalad) { %>
-                                                        </ul>
-                                                    <% } %>
+                                                    <% let foundSalad=false; %>
+                                                        <% let saladIndex=-1; %>
+                                                            <% todayMenu.meals.forEach((meal, index)=> { %>
+                                                                <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
+                                                                    <li
+                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span class="clickable"
+                                                                            data-bs-toggle="collapse"
+                                                                            data-bs-target="#dropdown-<%= index %>"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="dropdown-<%= index %>">
+                                                                            <%= meal.name %>
+                                                                        </span>
+                                                                        <% if (meal.calorie) { %>
+                                                                            <span class="badge bg-primary text-white">
+                                                                                <%= meal.calorie %> kcal
+                                                                            </span>
+                                                                            <% } %>
+                                                                    </li>
+                                                                    <% foundSalad=true; saladIndex=index; %>
+                                                                        <ul class="list-group list-group-flush collapse"
+                                                                            id="dropdown-<%= index %>">
+                                                                            <% } else if (foundSalad) { %>
+                                                                                <li class="list-group-item">
+                                                                                    <span>
+                                                                                        <%= meal.name %>
+                                                                                    </span>
+                                                                                </li>
+                                                                                <% } else { %>
+                                                                                    <li
+                                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                        <span>
+                                                                                            <%= meal.name %>
+                                                                                        </span>
+                                                                                        <% if (meal.calorie) { %>
+                                                                                            <span
+                                                                                                class="badge bg-primary text-white">
+                                                                                                <%= meal.calorie %> kcal
+                                                                                            </span>
+                                                                                            <% } %>
+                                                                                    </li>
+                                                                                    <% } %>
+                                                                                        <% }) %>
+                                                                                            <% if (foundSalad) { %>
+                                                                        </ul>
+                                                                        <% } %>
                                                 </ul>
-                                            <% } else { %>
-                                                <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
-                                            <% } %>
+                                                <% } else { %>
+                                                    <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
+                                                    </p>
+                                                    <% } %>
                                         </div>
                                     </div>
                                 </div>
+
+                                <% if (birthdays.length > 0) { %>
+                                    <div class="swiper mySwiper" style="width: 100%; height: auto; margin-top: 20px;">
+                                        <div class="swiper-wrapper">
+                                            <% let index = 1; %>
+                                            <% birthdays.forEach(kisi => { %>
+                                                <div class="swiper-slide">
+                                                    <div class="card cta-box text-white" style="background-color: #201750;">
+                                                        <div class="card-body">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="w-100 overflow-hidden">
+                                                                    <h3 class="m-0 fw-normal cta-box-title">
+                                                                        Doğum günün kutlu olsun <b><%= kisi.Adi %> <%= kisi.Soyadi %></b>!
+                                                                    </h3>
+                                                                    <h4>
+                                                                        <%= new Date(kisi.DogumTarihi).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) %>
+                                                                    </h4>
+                                                                </div>
+                                                                <a href="#" id="confettiButton<%= index %>">
+                                                                    <img class="ms-3" src="/uploads/pasta.png" width="100" alt="Pasta">
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <% index++; %>
+                                            <% }); %>
+                                        </div>
+                                    </div>
+                                <% } %>
 
                                 <div class="card mb-3">
                                     <div class="card-header"><strong>Bilgi Bankası</strong></div>
@@ -143,14 +180,16 @@
                                             <li class="list-group-item">
                                                 <div class="row">
                                                     <div class="col-2">
-                                                        <img src="/admin-assets/img/ikportal.png" alt="image" class="img-fluid avatar-s">
+                                                        <img src="/admin-assets/img/ikportal.png" alt="image"
+                                                            class="img-fluid avatar-s">
                                                     </div>
                                                     <div class="col-10">
-                                                        <a href="https://ikportal.boltas.com/" target="_blank">İK Portal</a><br>
+                                                        <a href="https://ikportal.boltas.com/" target="_blank">İK
+                                                            Portal</a><br>
                                                         <small>İnsan Kaynakları</small>
                                                     </div>
                                                 </div>
-                                                
+
                                             </li>
                                         </div>
 
@@ -158,10 +197,12 @@
                                             <li class="list-group-item">
                                                 <div class="row">
                                                     <div class="col-2">
-                                                        <img src="/admin-assets/img/logo-kare.png" alt="image" class="img-fluid avatar-s">
+                                                        <img src="/admin-assets/img/logo-kare.png" alt="image"
+                                                            class="img-fluid avatar-s">
                                                     </div>
                                                     <div class="col-10">
-                                                        <a href="https://flow.boltas.com/" target="_blank">Flow(Eba)</a><br>
+                                                        <a href="https://flow.boltas.com/"
+                                                            target="_blank">Flow(Eba)</a><br>
                                                         <small>Bilgi Teknolojileri</small>
                                                     </div>
                                                 </div>
@@ -171,7 +212,8 @@
                                             <li class="list-group-item">
                                                 <div class="row">
                                                     <div class="col-2">
-                                                        <img src="/admin-assets/img/safeq.png" alt="image" class="img-fluid avatar-s">
+                                                        <img src="/admin-assets/img/safeq.png" alt="image"
+                                                            class="img-fluid avatar-s">
                                                     </div>
                                                     <div class="col-10">
                                                         <a href="http://192.168.200.50/" target="_blank">SafeQ</a><br>
@@ -182,30 +224,52 @@
                                         </div>
                                     </ul>
                                 </div>
+
+
+                                <!-- <div class="card cta-box text-white" style="background-color: #201750;">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="w-100 overflow-hidden">
+                                                <h3 class="m-0 fw-normal cta-box-title">Doğum günün kutlu olsun
+                                                    <b>Metin!</b>&nbsp<i class="mdi mdi-arrow-right-bold-outline"></i>
+                                                </h3>
+                                            </div>
+                                            <a href="#" id="confettiButton">
+                                                <img class="ms-3" src="/uploads/pasta.png" width="120"
+                                                    alt="Generic placeholder image">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div> -->
                             </div>
                             <div class="col-md-6">
                                 <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                     <div class="carousel-inner">
-                                        <% sliders.forEach((slider, index) => { %>
+                                        <% sliders.forEach((slider, index)=> { %>
                                             <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                                                 <a target="_blank" href="https://<%= slider.link %>">
-                                                    <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
+                                                    <img class="d-block img-fluid" src="<%= slider.imageUrl %>"
+                                                        style="width: 100%;">
                                                 </a>
                                                 <% if (slider.title || slider.description) { %>
                                                     <div class="carousel-caption"
-                                                         style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
+                                                        style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
                                                         <% if (slider.title) { %>
-                                                            <h5><%= slider.title %></h5>
-                                                        <% } %>
-                                                        
-                                                        <% if (slider.description) { %>
-                                                            <p><%= slider.description %></p>
-                                                        <% } %>
+                                                            <h5>
+                                                                <%= slider.title %>
+                                                            </h5>
+                                                            <% } %>
+
+                                                                <% if (slider.description) { %>
+                                                                    <p>
+                                                                        <%= slider.description %>
+                                                                    </p>
+                                                                    <% } %>
                                                     </div>
-                                                <% } %>
+                                                    <% } %>
                                             </div>
-                                        <% }); %>
-                                        
+                                            <% }); %>
+
                                     </div>
                                     <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
                                         <span class="carousel-control-prev-icon" aria-hidden="true"
@@ -243,6 +307,18 @@
 
                             <!-- Yemek Listesi ve Hava Durumu -->
                             <div class="col-md-3">
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <strong>Açık Kapı Görüşmeleri</strong>
+                                    </div>
+                                    <div class="card-body" style="text-align: center;">
+                                        <a
+                                            href="https://outlook.office.com/bookwithme/user/9a76039895594f6b946a7fe4b1abe858%40boltas.com/meetingtype/4vnppCk_7EWHC89vTk1a9w2?anonymous">
+                                            <img src="/uploads/acik-kapi.png" width="170">
+                                        </a>
+                                    </div>
+                                </div>
+
                                 <div class="card mb-3 ">
                                     <div class="card-header"><strong>Hava Durumu</strong></div>
                                     <div class="card-body">
@@ -323,6 +399,8 @@
 
 
     <%- include("partials/scripts") %>
+
+        
 
         <script>
             // Sayfa yüklendiğinde seçilen şehri geri yükle
