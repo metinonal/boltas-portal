@@ -80,6 +80,6 @@ exports.indexPage = async (req, res) => {
         });
     } catch (err) {
         console.error('API çağrısı sırasında hata oluştu:', err);
-        res.status(500).send('Ana sayfada bir sorun var.');
+        res.status(500).send('Veritabanı bağlantısı zaman aşımına uğradı.');
     }
 };
