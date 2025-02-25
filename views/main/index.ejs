@@ -143,90 +143,97 @@
                                     </div>
                                 </div>
 
-                                <% if (birthdays.length > 0) { %>
+                                <% if (birthdays.length> 0) { %>
                                     <div class="swiper mySwiper" style="width: 100%; height: auto; margin-top: 20px;">
                                         <div class="swiper-wrapper">
-                                            <% let index = 1; %>
-                                            <% birthdays.forEach(kisi => { %>
-                                                <div class="swiper-slide">
-                                                    <div class="card cta-box text-white" style="background-color: #201750;">
-                                                        <div class="card-body">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="w-100 overflow-hidden">
-                                                                    <h3 class="m-0 fw-normal cta-box-title">
-                                                                        Doğum günün kutlu olsun <b><%= kisi.Adi %> <%= kisi.Soyadi %></b>!
-                                                                    </h3>
-                                                                    <h4>
-                                                                        <%= new Date(kisi.DogumTarihi).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) %>
-                                                                    </h4>
+                                            <% let index=1; %>
+                                                <% birthdays.forEach(kisi=> { %>
+                                                    <div class="swiper-slide">
+                                                        <div class="card cta-box text-white"
+                                                            style="background-color: #201750;">
+                                                            <div class="card-body">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="w-100 overflow-hidden">
+                                                                        <h3 class="m-0 fw-normal cta-box-title">
+                                                                            Doğum günün kutlu olsun <b>
+                                                                                <%= kisi.Adi %>
+                                                                                    <%= kisi.Soyadi %>
+                                                                            </b>!
+                                                                        </h3>
+                                                                        <h4>
+                                                                            <%= new Date(kisi.DogumTarihi).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) %>
+                                                                        </h4>
+                                                                    </div>
+                                                                    <a href="#" id="confettiButton<%= index %>" onclick="handleButtonClick(this)">
+                                                                        <img class="ms-3" src="/uploads/pasta.png"
+                                                                            width="100" alt="Pasta">
+                                                                    </a>
                                                                 </div>
-                                                                <a href="#" id="confettiButton<%= index %>">
-                                                                    <img class="ms-3" src="/uploads/pasta.png" width="100" alt="Pasta">
-                                                                </a>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <% index++; %>
-                                            <% }); %>
+                                                    <% index++; %>
+                                                        <% }); %>
                                         </div>
                                     </div>
-                                <% } %>
+                                    <% } %>
 
-                                <div class="card mb-3">
-                                    <div class="card-header"><strong>Bilgi Bankası</strong></div>
-                                    <ul class="list-group list-group-flush">
-                                        <div class="col-12">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-2">
-                                                        <img src="/admin-assets/img/ikportal.png" alt="image"
-                                                            class="img-fluid avatar-s">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <a href="https://ikportal.boltas.com/" target="_blank">İK
-                                                            Portal</a><br>
-                                                        <small>İnsan Kaynakları</small>
-                                                    </div>
+                                        <div class="card mb-3">
+                                            <div class="card-header"><strong>Bilgi Bankası</strong></div>
+                                            <ul class="list-group list-group-flush">
+                                                <div class="col-12">
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <img src="/admin-assets/img/ikportal.png" alt="image"
+                                                                    class="img-fluid avatar-s">
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <a href="https://ikportal.boltas.com/"
+                                                                    target="_blank">İK
+                                                                    Portal</a><br>
+                                                                <small>İnsan Kaynakları</small>
+                                                            </div>
+                                                        </div>
+
+                                                    </li>
                                                 </div>
 
-                                            </li>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-2">
-                                                        <img src="/admin-assets/img/logo-kare.png" alt="image"
-                                                            class="img-fluid avatar-s">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <a href="https://flow.boltas.com/"
-                                                            target="_blank">Flow(Eba)</a><br>
-                                                        <small>Bilgi Teknolojileri</small>
-                                                    </div>
+                                                <div class="col-12">
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <img src="/admin-assets/img/logo-kare.png" alt="image"
+                                                                    class="img-fluid avatar-s">
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <a href="https://flow.boltas.com/"
+                                                                    target="_blank">Flow(Eba)</a><br>
+                                                                <small>Bilgi Teknolojileri</small>
+                                                            </div>
+                                                        </div>
+                                                    </li>
                                                 </div>
-                                            </li>
-                                        </div>
-                                        <div class="col-12">
-                                            <li class="list-group-item">
-                                                <div class="row">
-                                                    <div class="col-2">
-                                                        <img src="/admin-assets/img/safeq.png" alt="image"
-                                                            class="img-fluid avatar-s">
-                                                    </div>
-                                                    <div class="col-10">
-                                                        <a href="http://192.168.200.50/" target="_blank">SafeQ</a><br>
-                                                        <small>Yazıcı PIN</small>
-                                                    </div>
+                                                <div class="col-12">
+                                                    <li class="list-group-item">
+                                                        <div class="row">
+                                                            <div class="col-2">
+                                                                <img src="/admin-assets/img/safeq.png" alt="image"
+                                                                    class="img-fluid avatar-s">
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <a href="http://192.168.200.50/"
+                                                                    target="_blank">SafeQ</a><br>
+                                                                <small>Yazıcı PIN</small>
+                                                            </div>
+                                                        </div>
+                                                    </li>
                                                 </div>
-                                            </li>
+                                            </ul>
                                         </div>
-                                    </ul>
-                                </div>
 
 
-                                <!-- <div class="card cta-box text-white" style="background-color: #201750;">
+                                        <!-- <div class="card cta-box text-white" style="background-color: #201750;">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="w-100 overflow-hidden">
@@ -286,9 +293,8 @@
                                 <div class="card mb-3 mt-3">
                                     <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
                                     <div class="card-body">
-                                        <ul class="list-group list-group-flush">
+                                        <!-- <ul class="list-group list-group-flush">
                                             <% const activeDocs=docs.filter(doc=> doc.isActive); %>
-                                                <!-- Aktif dokümanları filtrele -->
                                                 <% activeDocs.forEach((doc)=> { %>
                                                     <li class="list-group-item">
                                                         <%= doc.docName %>
@@ -298,6 +304,43 @@
                                                             </span>
                                                     </li>
                                                     <% }); %>
+                                        </ul> -->
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                Organizasyon Şeması
+                                                    <span class="float-end">
+                                                        <a href="https://boltas.sharepoint.com/:u:/g/Dokumanlar/EYGfZOBD8HZEhkYW2AGrfVgBXCynLgU9K_9_WR7toaNtwQ"
+                                                            target="_blank">Tıklayınız...</a>
+                                                    </span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Antetli Kağıt
+                                                    <span class="float-end">
+                                                        <a href="https://boltas.sharepoint.com/:w:/g/Dokumanlar/EQcIL_ilmfRGnG0DQI6z3QQBkUGOBHy-nfdfM8tLPtDtyg"
+                                                            target="_blank">Tıklayınız...</a>
+                                                    </span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Öneri Formu
+                                                    <span class="float-end">
+                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7BD09EB508-9D04-40CA-91B4-A00E85F63D28%7D&file=%C3%96neri%20Formu%20-%20%C4%B0K.FR.004.docx&action=default&mobileredirect=true"
+                                                            target="_blank">Tıklayınız...</a>
+                                                    </span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                İzin Talep Formu
+                                                    <span class="float-end">
+                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B35B5046E-4249-4972-A8E0-EE5E3573D80B%7D&file=%C4%B0zin%20Talep%20Formu%20-%20%C4%B0K.FR.006.docx&action=default&mobileredirect=true"
+                                                            target="_blank">Tıklayınız...</a>
+                                                    </span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                Toplantı Tutanağı
+                                                    <span class="float-end">
+                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/WopiFrame.aspx?sourcedoc=%7BBF352D2F-6525-4731-ADC3-CE104D1469F8%7D&file=Toplant%C4%B1%20Tutana%C4%9F%C4%B1%20%20-%20KY.FR.002.rtf&action=default"
+                                                            target="_blank">Tıklayınız...</a>
+                                                    </span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -400,7 +443,7 @@
 
     <%- include("partials/scripts") %>
 
-        
+
 
         <script>
             // Sayfa yüklendiğinde seçilen şehri geri yükle

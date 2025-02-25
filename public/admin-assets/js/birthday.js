@@ -158,3 +158,16 @@ document.getElementById('confettiButton4').addEventListener('click', function (e
         startVelocity: 45,
     });
 });
+
+
+function handleButtonClick(button) {
+    // Butonu devre dışı bırak
+    button.style.pointerEvents = "none";
+    button.style.opacity = "0.5"; // Görsel olarak da belli olması için
+
+    // 3 saniye sonra tekrar etkinleştir
+    setTimeout(() => {
+        button.style.pointerEvents = "auto";
+        button.style.opacity = "1";
+    }, 3000);
+}

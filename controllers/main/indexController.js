@@ -35,7 +35,6 @@ exports.indexPage = async (req, res) => {
               AND YakaRengi = 'Beyaz';
         `);
 
-
             // test ortamı
 
 
