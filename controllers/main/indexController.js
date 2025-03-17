@@ -22,30 +22,39 @@ exports.indexPage = async (req, res) => {
 
         await sql.connect(config);
 
-
-        // aslı
-
-        
+        // ✅ Doğum günü verisini çek
         const birthdayResult = await sql.query(`
             DECLARE @tarih DATE = GETDATE();
-            SELECT * 
-            FROM [vHROrganizationFromOrtakIK_Sorwe] 
-            WHERE MONTH(@tarih) = MONTH(DogumTarihi) 
-              AND DAY(@tarih) = DAY(DogumTarihi) 
-              AND YakaRengi = 'Beyaz';
+            SELECT *
+            FROM [vHROrganizationFromOrtakIK_ALL]
+            WHERE MONTH(@tarih) = MONTH(DogumTarihi)
+              AND DAY(@tarih) = DAY(DogumTarihi)
+			  AND CEMP_ENDDATE is null;
         `);
 
-            // test ortamı
-
-
-        // const birthdayResult = await sql.query(`
-        //     SELECT * 
-        //     FROM [vHROrganizationFromOrtakIK_Sorwe] 
-        //     WHERE SicilNo IN ('1458','2226');
-        // `);
-        
         const birthdays = birthdayResult.recordset;
 
+        // ✅ Son 7 gün içinde işe girenleri çek
+        const newHiresResult = await sql.query(`
+            SELECT * 
+            FROM [vHROrganizationFromOrtakIK_ALL]
+            WHERE IsYeriGirisTarihi >= DATEADD(DAY, -7, GETDATE())
+              AND IsYeriGirisTarihi <= GETDATE();
+        `);
+
+        const newHires = newHiresResult.recordset;
+
+        // ✅ Son 7 gün içinde işten ayrılanları çek
+        const leaversResult = await sql.query(`
+            SELECT * 
+            FROM [vHROrganizationFromOrtakIK_ALL]
+            WHERE CEMP_ENDDATE >= DATEADD(DAY, -7, GETDATE())
+              AND CEMP_ENDDATE <= GETDATE();
+        `);
+
+        const leavers = leaversResult.recordset;
+
+        // ✅ Döviz bilgilerini çek
         const response = await axios.get('https://www.tcmb.gov.tr/kurlar/today.xml');
 
         xml2js.parseString(response.data, async (err, result) => {
@@ -65,12 +74,15 @@ exports.indexPage = async (req, res) => {
                 const sliders = await Slider.find().sort({ count: 1 });
                 const docs = await Docs.find();
 
+                // ✅ Verileri index.ejs sayfasına gönder
                 res.render('main/index', {
                     todayMenu,
                     currencies,
                     sliders,
                     docs,
                     birthdays,
+                    newHires, // Son 7 gün içinde işe girenler
+                    leavers,  // Son 7 gün içinde işten ayrılanlar
                 });
             } catch (sliderError) {
                 console.error('Slider verileri alınırken hata oluştu:', sliderError);
@@ -82,3 +94,4 @@ exports.indexPage = async (req, res) => {
         res.status(500).send('Veritabanı bağlantısı zaman aşımına uğradı.');
     }
 };
+
