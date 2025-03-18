@@ -211,7 +211,7 @@
                                                     <li class="list-group-item">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="/admin-assets/img/ikportal.png" alt="image"
+                                                                <img class="bilgi-bankasi-logo" src="/admin-assets/img/ikportal.png" alt="image"
                                                                     class="img-fluid avatar-s">
                                                             </div>
                                                             <div class="col-10">
@@ -229,7 +229,7 @@
                                                     <li class="list-group-item">
                                                         <div class="row">
                                                             <div class="col-2">
-                                                                <img src="/admin-assets/img/logo-kare.png" alt="image"
+                                                                <img  src="/admin-assets/img/logo-kare.png" alt="image"
                                                                     class="img-fluid avatar-s">
                                                             </div>
                                                             <div class="col-10">
@@ -401,8 +401,8 @@
                                                                 </b> - 
                                                                 <%= person.Unvan %> -
                                                                 <%= new
-                                                                    Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR',
-                                                                    { day: 'numeric' , month: 'long' }) %> 
+                                                                    Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
+                                                                    { day: 'numeric' , month: 'long' }) %>
                                                             </li>
                                                             <% }); %>
                                                     </ul>
@@ -440,17 +440,30 @@
 
                             <!-- Yemek Listesi ve Hava Durumu -->
                             <div class="col-lg-3 col-md-12 col-sm-12">
-                                <div class="card mb-3">
-                                    <div class="card-header">
+                                <div class="card mb-3 shadow-sm">
+                                    <div class="card-header bg-primary text-white text-center">
                                         <strong>Açık Kapı Görüşmeleri</strong>
                                     </div>
-                                    <div class="card-body" style="text-align: center;">
-                                        <a
-                                            href="https://outlook.office.com/bookwithme/user/9a76039895594f6b946a7fe4b1abe858%40boltas.com/meetingtype/4vnppCk_7EWHC89vTk1a9w2?anonymous">
-                                            <img src="/uploads/acik-kapi.png" width="170">
-                                        </a>
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <!-- Açıklama Kısmı -->
+                                            <div class="col-md-7">
+                                                <p class="card-text">
+                                                    Açık Kapı görüşmeleri ile birebir toplantı planlayabilirsiniz. Randevu almak için aşağıdaki bağlantıyı kullanın.
+                                                </p>
+                                                <a target="_blank" href="https://outlook.office.com/bookwithme/user/9a76039895594f6b946a7fe4b1abe858%40boltas.com/meetingtype/4vnppCk_7EWHC89vTk1a9w2?anonymous" class="btn btn-primary">
+                                                    Randevu Al
+                                                </a>
+                                            </div>
+                                            <!-- Görsel Kısmı -->
+                                            <div class="col-md-5 text-center">
+                                                    <img src="/uploads/acik-kapi.png" class="img-fluid" width="160" alt="Açık Kapı">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                
 
                                 <div class="card mb-3 ">
                                     <div class="card-header"><strong>Hava Durumu</strong></div>
