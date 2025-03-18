@@ -85,61 +85,84 @@
                                         </a>
                                     </div>
                                     <div class="card-body">
-                                        <div class="menu">
-                                            <% if (todayMenu) { %>
-                                                <ul class="list-group list-group-flush">
-                                                    <% let foundSalad=false; %>
-                                                        <% let saladIndex=-1; %>
-                                                            <% todayMenu.meals.forEach((meal, index)=> { %>
-                                                                <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
-                                                                    <li
-                                                                        class="list-group-item d-flex justify-content-between align-items-center">
-                                                                        <span class="clickable"
-                                                                            data-bs-toggle="collapse"
-                                                                            data-bs-target="#dropdown-<%= index %>"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="dropdown-<%= index %>">
-                                                                            <%= meal.name %>
-                                                                        </span>
-                                                                        <% if (meal.calorie) { %>
-                                                                            <span class="badge bg-primary text-white">
-                                                                                <%= meal.calorie %> kcal
+                                        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                                            <li class="nav-item">
+                                                <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
+                                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">İstanbul</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
+                                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Dilovası</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div class="tab-pane show active menu" id="istanbul">
+                                                <% if (todayMenu) { %>
+                                                    <ul class="list-group list-group-flush">
+                                                        <% let foundSalad=false; %>
+                                                            <% let saladIndex=-1; %>
+                                                                <% todayMenu.meals.forEach((meal, index)=> { %>
+                                                                    <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
+                                                                        <li
+                                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                                            <span class="clickable"
+                                                                                data-bs-toggle="collapse"
+                                                                                data-bs-target="#dropdown-<%= index %>"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="dropdown-<%= index %>">
+                                                                                <%= meal.name %>
                                                                             </span>
-                                                                            <% } %>
-                                                                    </li>
-                                                                    <% foundSalad=true; saladIndex=index; %>
-                                                                        <ul class="list-group list-group-flush collapse"
-                                                                            id="dropdown-<%= index %>">
-                                                                            <% } else if (foundSalad) { %>
-                                                                                <li class="list-group-item">
-                                                                                    <span>
-                                                                                        <%= meal.name %>
-                                                                                    </span>
-                                                                                </li>
-                                                                                <% } else { %>
-                                                                                    <li
-                                                                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                                                            <% if (meal.calorie) { %>
+                                                                                <span class="badge bg-primary text-white">
+                                                                                    <%= meal.calorie %> kcal
+                                                                                </span>
+                                                                                <% } %>
+                                                                        </li>
+                                                                        <% foundSalad=true; saladIndex=index; %>
+                                                                            <ul class="list-group list-group-flush collapse"
+                                                                                id="dropdown-<%= index %>">
+                                                                                <% } else if (foundSalad) { %>
+                                                                                    <li class="list-group-item">
                                                                                         <span>
                                                                                             <%= meal.name %>
                                                                                         </span>
-                                                                                        <% if (meal.calorie) { %>
-                                                                                            <span
-                                                                                                class="badge bg-primary text-white">
-                                                                                                <%= meal.calorie %> kcal
-                                                                                            </span>
-                                                                                            <% } %>
                                                                                     </li>
-                                                                                    <% } %>
-                                                                                        <% }) %>
-                                                                                            <% if (foundSalad) { %>
-                                                                        </ul>
-                                                                        <% } %>
-                                                </ul>
-                                                <% } else { %>
-                                                    <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
-                                                    </p>
-                                                    <% } %>
+                                                                                    <% } else { %>
+                                                                                        <li
+                                                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                            <span>
+                                                                                                <%= meal.name %>
+                                                                                            </span>
+                                                                                            <% if (meal.calorie) { %>
+                                                                                                <span
+                                                                                                    class="badge bg-primary text-white">
+                                                                                                    <%= meal.calorie %> kcal
+                                                                                                </span>
+                                                                                                <% } %>
+                                                                                        </li>
+                                                                                        <% } %>
+                                                                                            <% }) %>
+                                                                                                <% if (foundSalad) { %>
+                                                                            </ul>
+                                                                            <% } %>
+                                                    </ul>
+                                                    <% } else { %>
+                                                        <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
+                                                        </p>
+                                                        <% } %>
+                                            </div>
+
+                                            <div class="tab-pane" id="dilovasi">
+                                                <p class='text-danger' style="text-align: center;">Yakında eklenecek.</p>
+                                            </div>
                                         </div>
+
+                                        
                                     </div>
                                 </div>
 
@@ -375,10 +398,11 @@
                                                                 <b>
                                                                     <%= person.Adi %>
                                                                         <%= person.Soyadi %>
-                                                                </b> -
+                                                                </b> - 
+                                                                <%= person.Unvan %> -
                                                                 <%= new
-                                                                    Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
-                                                                    { day: 'numeric' , month: 'long' }) %>
+                                                                    Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR',
+                                                                    { day: 'numeric' , month: 'long' }) %> 
                                                             </li>
                                                             <% }); %>
                                                     </ul>
@@ -397,10 +421,11 @@
                                                                         <b>
                                                                             <%= person.Adi %>
                                                                                 <%= person.Soyadi %>
-                                                                        </b> -
+                                                                        </b> - 
+                                                                        <%= person.Unvan %> -
                                                                         <%= new
                                                                             Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR',
-                                                                            { day: 'numeric' , month: 'long' }) %>
+                                                                            { day: 'numeric' , month: 'long' }) %> 
                                                                     </li>
                                                                     <% }); %>
                                                             </ul>
