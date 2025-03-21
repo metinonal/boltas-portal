@@ -16,11 +16,32 @@ const config = {
     },
 };
 
+const connectToDatabase = async () => {
+    let connected = false;
+    const maxRetries = 50; // Maksimum deneme sayısı
+    let attempt = 0;
+
+    while (!connected && attempt < maxRetries) {
+        try {
+            await sql.connect(config);
+            connected = true;
+        } catch (error) {
+            attempt++;
+            console.log(`Bağlantı denemesi ${attempt} başarısız. Yeniden deneniyor...`);
+            if (attempt === maxRetries) {
+                throw new Error('Veritabanı bağlantısı sağlanamadı.');
+            }
+            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 saniye bekle
+        }
+    }
+};
+
 exports.indexPage = async (req, res) => {
     try {
         const todayMenu = menuController.getTodayMenuData();
 
-        await sql.connect(config);
+        // Veritabanına bağlan
+        await connectToDatabase();
 
         // ✅ Doğum günü verisini çek
         const birthdayResult = await sql.query(`
@@ -29,7 +50,7 @@ exports.indexPage = async (req, res) => {
             FROM [vHROrganizationFromOrtakIK_ALL]
             WHERE MONTH(@tarih) = MONTH(DogumTarihi)
               AND DAY(@tarih) = DAY(DogumTarihi)
-			  AND CEMP_ENDDATE is null;
+              AND CEMP_ENDDATE is null;
         `);
 
         const birthdays = birthdayResult.recordset;
@@ -94,4 +115,3 @@ exports.indexPage = async (req, res) => {
         res.status(500).send('Veritabanı bağlantısı zaman aşımına uğradı.');
     }
 };
-

@@ -502,7 +502,7 @@
                                                     <% if (['USD', 'EUR' , 'GBP' ].includes(currency.currencyCode)) { %>
                                                         <tr>
                                                             <td>
-                                                                <%= currency.currencyCode %>
+                                                                <i class="uil uil-<%= currency.currencyCode %>" style="color: #759e6f;"></i>&nbsp;&nbsp;<%= currency.currencyCode %>
                                                             </td>
                                                             <td>
                                                                 <%= currency.forexBuying %>
