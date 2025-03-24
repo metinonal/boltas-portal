@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+    <html lang="tr">
 
-<head>
-    <meta charset="utf-8">
-    <title>Ana Sayfa | Boltas Portal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
-    <meta content="Coderthemes" name="author">
+    <head>
+        <meta charset="utf-8">
+        <title>Ana Sayfa | Boltas Portal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+        <meta content="Coderthemes" name="author">
 
-    <%- include("partials/css") %>
+        <%- include("partials/css") %>
 
         <style>
             .clickable {
@@ -26,44 +26,27 @@
             }
         </style>
 
-</head>
+    </head>
 
-<body class="show" data-layout-color="light" data-layout-mode="fluid" data-rightbar-onstart="true"
-    data-leftbar-theme="dark" data-leftbar-compact-mode="condensed">
-    <!-- Begin page -->
-    <div class="wrapper">
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="leftside-menu">
+    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+        <!-- Begin page -->
+        <div class="wrapper">
 
-            <!-- LOGO -->
-            <%- include("partials/logo") %>
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
 
-                <div class="h-100" id="leftside-menu-container" data-simplebar="">
-
-                    <!--- Sidemenu -->
-                    <%- include("partials/sidemenu") %>
-                        <!-- End Sidebar -->
-
-                        <div class="clearfix"></div>
-
-                </div>
-                <!-- Sidebar -left -->
-
-        </div>
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start Page Content here -->
-        <!-- ============================================================== -->
-
-        <div class="content-page">
-            <div class="content">
-                <!-- Topbar Start -->
-                <%- include("partials/topbar") %>
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    <%- include("partials/topbar") %>
                     <!-- end Topbar -->
 
+                    <%- include("partials/topnav") %>
+
+                    
                     <!-- Start Content-->
-                    <div class="container-fluid" style="padding: 0px 40px 0px 40px;">
+                    <div class="container-fluid">
 
                         <!-- start page title -->
                         <!-- <div class="row">
@@ -88,14 +71,15 @@
                                         <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                             <li class="nav-item">
                                                 <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                    <!-- <i class="mdi mdi-home-variant d-md-none d-block"></i> -->
                                                     <span class="d-none d-md-block">İstanbul</span>
+                                                    <span class="d-md-none d-block">İstanbul</span>
                                                 </a>
                                             </li>
                                             <li class="nav-item">
                                                 <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
                                                     <span class="d-none d-md-block">Dilovası</span>
+                                                    <span class="d-md-none d-block">Dilovası</span>
                                                 </a>
                                             </li>
                                         </ul>
@@ -525,69 +509,26 @@
                     </div>
                     <!-- container -->
 
-            </div> <!-- content -->
+                </div>
+                <!-- content -->
 
-            <!-- Footer Start -->
-            <%- include("partials/footer") %>
+                <!-- Footer Start -->
+                <%- include("partials/footer") %>
                 <!-- end Footer -->
 
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
         </div>
+        <!-- END wrapper -->
 
-        <!-- ============================================================== -->
-        <!-- End Page content -->
-        <!-- ============================================================== -->
+       
 
+        <%- include("partials/scripts") %>
 
-    </div>
-    <!-- END wrapper -->
-
-
-    <%- include("partials/scripts") %>
-
-
-
-        <script>
-            // Sayfa yüklendiğinde seçilen şehri geri yükle
-            document.addEventListener("DOMContentLoaded", () => {
-                const citySelect = document.getElementById("citySelect");
-                const savedCity = getCookie("selectedCity");
-
-                if (savedCity) {
-                    citySelect.value = savedCity;
-                }
-            });
-
-            // Şehir seçimi değiştiğinde çereze kaydet
-            document.getElementById("citySelect").addEventListener("change", (e) => {
-                const selectedCity = e.target.value;
-                if (selectedCity) {
-                    setCookie("selectedCity", selectedCity, 30); // 30 gün boyunca geçerli olacak
-                }
-            });
-
-            // Çerez (cookie) oluşturma fonksiyonu
-            function setCookie(name, value, days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                const expires = "expires=" + date.toUTCString();
-                document.cookie = `${name}=${value}; ${expires}; path=/`;
-            }
-
-            // Çerez okuma fonksiyonu
-            function getCookie(name) {
-                const decodedCookie = decodeURIComponent(document.cookie);
-                const cookiesArray = decodedCookie.split(';');
-                for (let i = 0; i < cookiesArray.length; i++) {
-                    let cookie = cookiesArray[i].trim();
-                    if (cookie.indexOf(name + "=") == 0) {
-                        return cookie.substring(name.length + 1);
-                    }
-                }
-                return "";
-            }
-        </script>
-
-
-</body>
-
+    </body>
 </html>

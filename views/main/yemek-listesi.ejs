@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+    <html lang="tr">
 
-<head>
-    <meta charset="utf-8">
-    <title>Yemek Listesi | Boltas Portal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
-    <meta content="Coderthemes" name="author">
+    <head>
+        <meta charset="utf-8">
+        <title>Yemek Listesi | Boltas Portal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+        <meta content="Coderthemes" name="author">
 
-    <%- include("partials/css") %>
+        <%- include("partials/css") %>
+
         <style>
             
             .meal-card {
@@ -63,45 +64,25 @@
             }
         </style>
 
+    </head>
 
+    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+        <!-- Begin page -->
+        <div class="wrapper">
 
-</head>
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
 
-<body class="show" data-layout-color="light" data-layout-mode="fluid" data-rightbar-onstart="true" data-leftbar-theme="dark" data-leftbar-compact-mode="condensed">
-    <!-- Begin page -->
-    <div class="wrapper">
-        <!-- ========== Left Sidebar Start ========== -->
-        <div class="leftside-menu">
-
-            <!-- LOGO -->
-            <%- include("partials/logo") %>
-
-                <div class="h-100" id="leftside-menu-container" data-simplebar="">
-
-                    <!--- Sidemenu -->
-                    <%- include("partials/sidemenu") %>
-                        <!-- End Sidebar -->
-
-                        <div class="clearfix"></div>
-
-                </div>
-                <!-- Sidebar -left -->
-
-        </div>
-        <!-- Left Sidebar End -->
-
-        <!-- ============================================================== -->
-        <!-- Start Page Content here -->
-        <!-- ============================================================== -->
-
-        <div class="content-page">
-            <div class="content">
-                <!-- Topbar Start -->
-                <%- include("partials/topbar") %>
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    <%- include("partials/topbar") %>
                     <!-- end Topbar -->
 
-                    <!-- Start Content-->
+                    <%- include("partials/topnav") %>
 
+                    
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box" style="text-align: center;">
@@ -110,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div class="container">
+                    <div class="container-fluid">
                         <% if (menuData && menuData.length > 0) { %>
                             <div class="row g-3 non-selectable">
                                 <% 
@@ -176,13 +157,14 @@
                             <p class="text-center text-muted">Henüz bir yemek listesi yüklenmedi.</p>
                         <% } %>
                     </div>
+                    <!-- container -->
 
+                </div>
+                <!-- content -->
 
-
-
-                    <!-- Footer Start -->
-                    <%- include("partials/footer") %>
-                        <!-- end Footer -->
+                <!-- Footer Start -->
+                <%- include("partials/footer") %>
+                <!-- end Footer -->
 
             </div>
 
@@ -194,11 +176,9 @@
         </div>
         <!-- END wrapper -->
 
-
-        <!-- Right Sidebar -->
+       
 
         <%- include("partials/scripts") %>
 
-</body>
-
+    </body>
 </html>
