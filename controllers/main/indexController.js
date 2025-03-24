@@ -69,9 +69,10 @@ exports.indexPage = async (req, res) => {
         const leaversResult = await sql.query(`
             SELECT * 
             FROM [vHROrganizationFromOrtakIK_ALL]
-            WHERE CEMP_ENDDATE >= DATEADD(DAY, -7, GETDATE())
-              AND CEMP_ENDDATE <= GETDATE();
+            WHERE CEMP_ENDDATE >= DATEADD(DAY, -8, CAST(GETDATE() AS DATE))
+              AND CEMP_ENDDATE < DATEADD(DAY, -1, CAST(GETDATE() AS DATE));
         `);
+        
 
         const leavers = leaversResult.recordset;
 
