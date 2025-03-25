@@ -68,12 +68,12 @@ async function downloadProfilePhoto(userId, email, token) {
     });
 
     fs.writeFileSync(filePath, response.data);
-    console.log(`Profil fotoğrafı kaydedildi: ${fileName}`);
+    // console.log(`Profil fotoğrafı kaydedildi: ${fileName}`);
   } catch (error) {
     if (error.response && error.response.status === 404) {
-      console.log(`Profil fotoğrafı bulunamadı (${email}).`);
+      // console.log(`Profil fotoğrafı bulunamadı (${email}).`);
     } else {
-      console.error(`Profil fotoğrafı indirilemedi (${email}):`, error.message);
+      // console.error(`Profil fotoğrafı indirilemedi (${email}):`, error.message);
     }
   }
 }
@@ -91,7 +91,7 @@ async function downloadAllProfilePhotos() {
 
   for (const user of users) {
     if (user.email) {
-      console.log(`Profil fotoğrafı indiriliyor: ${user.email}`);
+      // console.log(`Profil fotoğrafı indiriliyor: ${user.email}`);
       await downloadProfilePhoto(user.id, user.email, token);
     } else {
       console.log(`E-posta bulunamadı: ${user.id}`);

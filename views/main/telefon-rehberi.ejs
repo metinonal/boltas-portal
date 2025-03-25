@@ -1,139 +1,170 @@
 <!DOCTYPE html>
-    <html lang="tr">
+<html lang="tr">
 
-    <head>
-        <meta charset="utf-8">
-        <title>Telefon Rehberi | Boltas Portal</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
-        <meta content="boltas" name="author">
+<head>
+    <meta charset="utf-8">
+    <title>Telefon Rehberi | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="boltas" name="author">
 
-        <%- include("partials/css") %>
+    <%- include("partials/css") %>
 
-    </head>
+</head>
 
-    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
-        <!-- Begin page -->
-        <div class="wrapper">
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
 
-            <!-- ============================================================== -->
-            <!-- Start Page Content here -->
-            <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
 
-            <div class="content-page">
-                <div class="content">
-                    <!-- Topbar Start -->
-                    <%- include("partials/topbar") %>
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
                     <!-- end Topbar -->
 
                     <%- include("partials/topnav") %>
 
-                    
-                    <!-- Start Content-->
-                    <div class="container-fluid">
 
-                        <!-- start page title -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box">
-                                    <h4 class="page-title">Telefon Rehberi</h4>
+                        <!-- Start Content-->
+                        <div class="container-fluid">
+
+                            <!-- start page title -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="page-title-box">
+                                        <h4 class="page-title">Telefon Rehberi</h4>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- end page title -->
+                            <!-- end page title -->
 
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-
-                                        <div class="table-responsive">
-                                            <table class="table table-centered w-100 dt-responsive nowrap"
-                                                id="phone-datatable">
-                                                <thead class="table-light">
-                                                    <tr>
-                                                        <th>Ad Soyad</th>
-                                                        <th class="all">E-Posta</th>
-                                                        <th>Telefon Numarası</th>
-                                                        <th>Dahili Numarası</th>
-                                                        <th style="width: 85px;">Aksiyon</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <% if (users && users.length> 0) { %>
-                                                        <% users.sort((a, b)=>
-                                                            a.DisplayName.localeCompare(b.DisplayName)).forEach(user =>
-                                                            { %>
-                                                            <% if (user.Mobile) { %>
-                                                                <tr>
-                                                                    <td>
-                                                                        <img src="uploads/pphotos/<%= fs.existsSync(`public/uploads/pphotos/${user.mail}.png`) ? `${user.mail}.png` : 'default.jpg' %>"
-                                                                            alt="profile-img"
-                                                                            class="rounded-circle me-3" height="48"
-                                                                            width="48" style="object-fit: cover;">
-                                                                        <p
-                                                                            class="m-0 d-inline-block align-middle font-16">
-                                                                            <%= user.DisplayName %>
-                                                                        </p>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= user.mail %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= user.Mobile %>
-                                                                    </td>
-                                                                    <td>
-                                                                        <%= user.physicalDeliveryOfficeName %>
-                                                                    </td>
-                                                                    <td class="table-action" style="width: 10%;">
-                                                                        <a href="https://wa.me/<%= user.Mobile.replace(/\s+/g, '') %>"
-                                                                            target="_blank" class="action-icon">
-                                                                            <i class="mdi mdi-whatsapp"></i>
-                                                                        </a>
-                                                                        <a href="tel:<%= user.Mobile.replace(/\s+/g, '') %>"
-                                                                            target="_blank" class="action-icon">
-                                                                            <i class="mdi mdi-phone"></i>
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <!-- VCF Butonu -->
+                                        <div class="row mb-2">
+                                            <div class="col-12 text-sm-end">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vcfModal">
+                                                    VCF Gönder
+                                                </button>
+                                            </div>
+                                        </div>
+                            
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-centered w-100 dt-responsive nowrap" id="phone-datatable">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Ad Soyad</th>
+                                                            <th class="all">E-Posta</th>
+                                                            <th>Telefon Numarası</th>
+                                                            <th>Dahili Numarası</th>
+                                                            <th style="width: 85px;">Aksiyon</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if (users && users.length > 0) { %>
+                                                            <% users
+                                                                .sort((a, b) => a.DisplayName.localeCompare(b.DisplayName))
+                                                                .forEach(user => { %>
+                                                                <% if (user.Mobile) { %>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img src="uploads/pphotos/<%= fs.existsSync(`public/uploads/pphotos/${user.mail}.png`) ? `${user.mail}.png` : 'default.jpg' %>"
+                                                                                alt="profile-img"
+                                                                                class="rounded-circle me-3"
+                                                                                height="48"
+                                                                                width="48"
+                                                                                style="object-fit: cover;">
+                                                                            <p class="m-0 d-inline-block align-middle font-16">
+                                                                                <%= user.DisplayName %>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td><%= user.mail %></td>
+                                                                        <td><%= user.Mobile %></td>
+                                                                        <td><%= user.physicalDeliveryOfficeName %></td>
+                                                                        <td class="table-action" style="width: 10%;">
+                                                                            <a href="https://wa.me/<%= user.Mobile.replace(/\s+/g, '') %>"
+                                                                                target="_blank" class="action-icon">
+                                                                                <i class="mdi mdi-whatsapp"></i>
+                                                                            </a>
+                                                                            <a href="tel:<%= user.Mobile.replace(/\s+/g, '') %>"
+                                                                                target="_blank" class="action-icon">
+                                                                                <i class="mdi mdi-phone"></i>
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
                                                                 <% } %>
-                                                                    <% }); %>
-                                                                        <% } else { %>
-                                                                            <tr>
-                                                                                <td colspan="3">Kayıt bulunamadı.</td>
-                                                                            </tr>
-                                                                            <% } %>
-                                                </tbody>
-                                            </table>
+                                                            <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="5">Kayıt bulunamadı.</td>
+                                                            </tr>
+                                                        <% } %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="vcfModal" tabindex="-1" aria-labelledby="vcfModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <form id="vcfForm" method="POST" action="/send-vcf">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="vcfModalLabel">VCF Gönder</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Kapat"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="input-group">
+                                                    <input type="text" name="emailPrefix" class="form-control"
+                                                        placeholder="E-posta ön eki (örn: mehmet)" required />
+                                                    <span class="input-group-text">@boltas.com</span>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Gönder</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
                         </div>
-
-                    </div>
-                    <!-- container -->
-
-                </div>
-                <!-- content -->
-
-                <!-- Footer Start -->
-                <%- include("partials/footer") %>
-                <!-- end Footer -->
+                        <!-- container -->
 
             </div>
+            <!-- content -->
 
-            <!-- ============================================================== -->
-            <!-- End Page content -->
-            <!-- ============================================================== -->
-
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+                <!-- end Footer -->
 
         </div>
-        <!-- END wrapper -->
 
-       
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
 
-        <%- include("partials/scripts") %>
 
-    </body>
+    </div>
+    <!-- END wrapper -->
+
+
+
+    <%- include("partials/scripts") %>
+
+</body>
+
 </html>
