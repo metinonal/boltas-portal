@@ -8,6 +8,7 @@ const session = require("express-session");
 const connectDB = require('./data/db');
 const azureService = require("./services/azureService");
 const cron = require("node-cron");
+const { exportADUsers } = require('./services/exportADUserService');
 
 
 const app = express();
@@ -117,6 +118,11 @@ async function runTask() {
   // Her 6 saatte bir çalıştır
   cron.schedule("0 */6 * * *", () => {
     runTask();
+  });
+
+  cron.schedule('0 3 * * *', () => {
+    console.log("Günlük AD verisi çekiliyor...");
+    exportADUsers();
   });
   
   // Uygulamayı başlat
