@@ -112,10 +112,55 @@ END:VCARD`;
             const Mail_Kime = `${emailPrefix}@boltas.com`;
             const Mail_Baslik = 'Telefon Rehberi Dosyanız';
             const Mail_Icerik = `
-                <p>Merhaba,</p>
-                <p>Telefon rehberinize ait .vcf dosyası sistemde oluşturulmuştur.</p>
-                <p>Lütfen <strong>portaldaki telefon rehberi</strong> sekmesinden dosyayı indiriniz.</p>
-                <p>İyi çalışmalar.</p>
+                <div class="p-4 bg-light rounded-3">
+                    <h5 class="mb-3 text-primary">📌 Outlook Uygulamasında VCF Dosyasını
+                        Açma ve Rehbere Ekleme</h5>
+
+                    <ol class="ps-3 lh-lg">
+                        <li class="mb-3">
+                            <strong>VCF dosyasını e-posta ile gönderin:</strong><br />
+                            Yukarıdaki forma e-posta ön ekinizi yazın ve aşağıdaki
+                            <strong>Gönder</strong> butonuna tıklayın.<br />
+                        </li>
+
+                        <li class="mb-3">
+                            <strong>Outlook uygulamasında e-postayı açın:</strong><br />
+                            Outlook mobil uygulamanızda gelen e-postayı kontrol
+                            edin.<br />
+                            <div class="col"
+                                style="align-items: center; justify-content: center; text-align: center;">
+                                <img src="https://www.boltas.com/IRP/VCF_REHBER/resim1.jpg"
+                                    alt="" srcset="">
+                            </div>
+                        </li>
+
+                        <li class="mb-3">
+                            <strong>VCF dosyasına dokunun:</strong><br />
+                            Dosyaya dokunarak konumu <strong>Cihaz</strong> olarak
+                            seçin.<br />
+                            <div class="col"
+                                style="align-items: center; justify-content: center; text-align: center;">
+                                <img src="https://www.boltas.com/IRP/VCF_REHBER/resim2.jpg"
+                                    alt="" srcset="">
+                            </div>
+                        </li>
+
+                        <li class="mb-3">
+                            <strong>Kişiyi rehbere kaydedin:</strong><br />
+                            Açılan kartta <strong>Kişileri Kaydet</strong> seçeneğini
+                            seçin.<br />
+                            <div class="col" style="align-items: center; justify-content: center; text-align: center;">
+                                <img src="https://www.boltas.com/IRP/VCF_REHBER/resim3.jpg"
+                                alt="" srcset="">
+                            </div>
+                        </li>
+
+                        <li class="mb-3">
+                            <strong>Kontrol edin:</strong><br />
+                            Artık kişi, rehberinizde kayıtlıdır.<br />
+                        </li>
+                                                    </ol>
+                                                </div>
             `;
 
 
@@ -134,8 +179,8 @@ END:VCARD`;
                     }
                 }
             );
-            
-            console.log("VCF dosyası,", Mail_Kime, "adresine gönderildi.");                        
+
+            console.log("VCF dosyası,", Mail_Kime, "adresine gönderildi.");
 
             res.redirect('/telefon-rehberi');
         } catch (err) {

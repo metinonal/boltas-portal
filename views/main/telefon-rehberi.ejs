@@ -46,18 +46,18 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
-                                        <!-- VCF Butonu -->
-                                        <div class="row mb-2">
-                                            <div class="col-12 text-sm-end">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#vcfModal">
-                                                    VCF Gönder
-                                                </button>
-                                            </div>
-                                        </div>
-                            
                                         <div class="card-body">
+                                            <div class="row mb-2">
+                                                <div class="col-12 text-sm-end">
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                        data-bs-target="#vcfModal">
+                                                        Telefon Rehberine Ekle
+                                                    </button>
+                                                </div>
+                                            </div>
                                             <div class="table-responsive">
-                                                <table class="table table-centered w-100 dt-responsive nowrap" id="phone-datatable">
+                                                <table class="table table-centered w-100 dt-responsive nowrap"
+                                                    id="phone-datatable">
                                                     <thead class="table-light">
                                                         <tr>
                                                             <th>Ad Soyad</th>
@@ -68,26 +68,31 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <% if (users && users.length > 0) { %>
-                                                            <% users
-                                                                .sort((a, b) => a.DisplayName.localeCompare(b.DisplayName))
+                                                        <% if (users && users.length> 0) { %>
+                                                            <% users .sort((a, b)=>
+                                                                a.DisplayName.localeCompare(b.DisplayName))
                                                                 .forEach(user => { %>
                                                                 <% if (user.Mobile) { %>
                                                                     <tr>
                                                                         <td>
                                                                             <img src="uploads/pphotos/<%= fs.existsSync(`public/uploads/pphotos/${user.mail}.png`) ? `${user.mail}.png` : 'default.jpg' %>"
                                                                                 alt="profile-img"
-                                                                                class="rounded-circle me-3"
-                                                                                height="48"
-                                                                                width="48"
-                                                                                style="object-fit: cover;">
-                                                                            <p class="m-0 d-inline-block align-middle font-16">
+                                                                                class="rounded-circle me-3" height="48"
+                                                                                width="48" style="object-fit: cover;">
+                                                                            <p
+                                                                                class="m-0 d-inline-block align-middle font-16">
                                                                                 <%= user.DisplayName %>
                                                                             </p>
                                                                         </td>
-                                                                        <td><%= user.mail %></td>
-                                                                        <td><%= user.Mobile %></td>
-                                                                        <td><%= user.physicalDeliveryOfficeName %></td>
+                                                                        <td>
+                                                                            <%= user.mail %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= user.Mobile %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= user.physicalDeliveryOfficeName %>
+                                                                        </td>
                                                                         <td class="table-action" style="width: 10%;">
                                                                             <a href="https://wa.me/<%= user.Mobile.replace(/\s+/g, '') %>"
                                                                                 target="_blank" class="action-icon">
@@ -99,13 +104,14 @@
                                                                             </a>
                                                                         </td>
                                                                     </tr>
-                                                                <% } %>
-                                                            <% }); %>
-                                                        <% } else { %>
-                                                            <tr>
-                                                                <td colspan="5">Kayıt bulunamadı.</td>
-                                                            </tr>
-                                                        <% } %>
+                                                                    <% } %>
+                                                                        <% }); %>
+                                                                            <% } else { %>
+                                                                                <tr>
+                                                                                    <td colspan="5">Kayıt bulunamadı.
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <% } %>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -113,33 +119,97 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <!-- Modal -->
                             <div class="modal fade" id="vcfModal" tabindex="-1" aria-labelledby="vcfModalLabel"
                                 aria-hidden="true">
-                                <div class="modal-dialog">
+                                <div class="modal-dialog modal-xl">
                                     <form id="vcfForm" method="POST" action="/send-vcf">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="vcfModalLabel">VCF Gönder</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Kapat"></button>
+                                        <div class="modal-content shadow-lg rounded-4">
+                                            <div class="modal-header bg-primary text-white rounded-top-4">
+                                                <h5 class="modal-title w-100 text-center" id="vcfModalLabel">📇 Telefon
+                                                    Rehberine Kişi Ekle</h5>
+                                                <button type="button" class="btn-close btn-close-white"
+                                                    data-bs-dismiss="modal" aria-label="Kapat"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="input-group">
-                                                    <input type="text" name="emailPrefix" class="form-control"
-                                                        placeholder="E-posta ön eki (örn: mehmet)" required />
-                                                    <span class="input-group-text">@boltas.com</span>
+                                                <!-- E-posta Giriş -->
+                                                <div class="d-flex justify-content-center mb-4">
+                                                    <div class="input-group" style="width: 35% !important;">
+                                                        <input type="text" name="emailPrefix"
+                                                            class="form-control form-control-sm text-center rounded-start"
+                                                            placeholder="E-posta ön eki" required />
+                                                        <span
+                                                            class="input-group-text bg-light border-start-0">@boltas.com</span>
+                                                        <button class="btn btn-primary" type="submit">Gönder</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Dökümantasyon -->
+                                                <div class="p-4 bg-light rounded-3">
+                                                    <h5 class="mb-3 text-primary">📌 Outlook Uygulamasında VCF Dosyasını
+                                                        Açma ve Rehbere Ekleme</h5>
+
+                                                    <ol class="ps-3 lh-lg">
+                                                        <li class="mb-3">
+                                                            <strong>VCF dosyasını e-posta ile gönderin:</strong><br />
+                                                            Yukarıdaki forma e-posta ön ekinizi yazın ve aşağıdaki
+                                                            <strong>Gönder</strong> butonuna tıklayın.<br />
+                                                        </li>
+
+                                                        <li class="mb-3">
+                                                            <strong>Outlook uygulamasında e-postayı açın:</strong><br />
+                                                            Outlook mobil uygulamanızda gelen e-postayı kontrol
+                                                            edin.<br />
+                                                            <div class="col"
+                                                                style="align-items: center; justify-content: center; text-align: center;">
+                                                                <img src="admin-assets/img/telefon-rehberi-adim-1.png"
+                                                                    alt="" srcset="">
+                                                            </div>
+                                                        </li>
+
+                                                        <li class="mb-3">
+                                                            <strong>VCF dosyasına dokunun:</strong><br />
+                                                            Dosyaya dokunarak konumu <strong>Cihaz</strong> olarak
+                                                            seçin.<br />
+                                                            <div class="col"
+                                                                style="align-items: center; justify-content: center; text-align: center;">
+                                                                <img src="admin-assets/img/telefon-rehberi-adim-2.png"
+                                                                    alt="" srcset="">
+                                                            </div>
+                                                        </li>
+
+                                                        <li class="mb-3">
+                                                            <strong>Kişiyi rehbere kaydedin:</strong><br />
+                                                            Açılan kartta <strong>Kişileri Kaydet</strong> seçeneğini
+                                                            seçin.<br />
+                                                            <div class="col" style="align-items: center; justify-content: center; text-align: center;">
+                                                                <img src="admin-assets/img/telefon-rehberi-adim-3.png"
+                                                                alt="" srcset="">
+                                                            </div>
+                                                        </li>
+
+                                                        <li class="mb-3">
+                                                            <strong>Kontrol edin:</strong><br />
+                                                            Artık kişi, rehberinizde kayıtlıdır.<br />
+                                                        </li>
+                                                    </ol>
                                                 </div>
                                             </div>
+
+                                            <!-- Gönder Butonu -->
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-success">Gönder</button>
+                                                <button class="btn btn-primary w-100 rounded-3 fw-bold py-2"
+                                                    data-bs-dismiss="modal" aria-label="Kapat">
+                                                    ✅ Adımları Başarıyla Tamamladın
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
+
 
                         </div>
                         <!-- container -->
