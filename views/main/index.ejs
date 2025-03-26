@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-    <html lang="tr">
+<html lang="tr">
 
-    <head>
-        <meta charset="utf-8">
-        <title>Ana Sayfa | Boltas Portal</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
-        <meta content="Coderthemes" name="author">
+<head>
+    <meta charset="utf-8">
+    <title>Ana Sayfa | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
 
-        <%- include("partials/css") %>
+    <%- include("partials/css") %>
 
         <style>
             .clickable {
@@ -26,239 +26,278 @@
             }
         </style>
 
-    </head>
+</head>
 
-    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
-        <!-- Begin page -->
-        <div class="wrapper">
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
 
-            <!-- ============================================================== -->
-            <!-- Start Page Content here -->
-            <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
 
-            <div class="content-page">
-                <div class="content">
-                    <!-- Topbar Start -->
-                    <%- include("partials/topbar") %>
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
                     <!-- end Topbar -->
 
                     <%- include("partials/topnav") %>
 
-                    
-                    <!-- Start Content-->
-                    <div class="container-fluid">
 
-                        <!-- start page title -->
-                        <!-- <div class="row">
+                        <!-- Start Content-->
+                        <div class="container-fluid">
+
+                            <!-- start page title -->
+                            <!-- <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <h4 class="page-title">Boltas Portal</h4>
                                 </div>
                             </div>
                         </div> -->
-                        <!-- end page title -->
+                            <!-- end page title -->
 
-                        <div class="row mb-3 mt-3">
-                            <div class="col-lg-3 col-md-12 col-sm-12">
-                                <div class="card mb-3">
-                                    <div class="card-header d-flex justify-content-between align-items-center">
-                                        <span><strong>Günün Yemek Listesi</strong></span>
-                                        <a href="/yemek-listesi" class=" text-decoration-none small" target="_blank">
-                                            Tümünü Gör
-                                        </a>
-                                    </div>
-                                    <div class="card-body">
-                                        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
-                                            <li class="nav-item">
-                                                <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
-                                                    <!-- <i class="mdi mdi-home-variant d-md-none d-block"></i> -->
-                                                    <span class="d-none d-md-block">İstanbul</span>
-                                                    <span class="d-md-none d-block">İstanbul</span>
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
-                                                    <span class="d-none d-md-block">Dilovası</span>
-                                                    <span class="d-md-none d-block">Dilovası</span>
-                                                </a>
-                                            </li>
-                                        </ul>
+                            <div class="row mb-3 mt-3">
+                                <div class="col-lg-3 col-md-12 col-sm-12">
+                                    <div class="card mb-3">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span><strong>Günün Yemek Listesi</strong></span>
+                                            <a href="/yemek-listesi" class=" text-decoration-none small"
+                                                target="_blank">
+                                                Tümünü Gör
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                                                <li class="nav-item">
+                                                    <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true"
+                                                        class="nav-link rounded-0 active">
+                                                        <!-- <i class="mdi mdi-home-variant d-md-none d-block"></i> -->
+                                                        <span class="d-none d-md-block">İstanbul</span>
+                                                        <span class="d-md-none d-block">İstanbul</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false"
+                                                        class="nav-link rounded-0">
+                                                        <span class="d-none d-md-block">Dilovası</span>
+                                                        <span class="d-md-none d-block">Dilovası</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
 
-                                        <div class="tab-content">
-                                            <div class="tab-pane show active menu" id="istanbul">
-                                                <% if (todayMenu) { %>
-                                                    <ul class="list-group list-group-flush">
-                                                        <% let foundSalad=false; %>
-                                                            <% let saladIndex=-1; %>
-                                                                <% todayMenu.meals.forEach((meal, index)=> { %>
-                                                                    <% if (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ" ) { %>
-                                                                        <li
-                                                                            class="list-group-item d-flex justify-content-between align-items-center">
-                                                                            <span class="clickable"
-                                                                                data-bs-toggle="collapse"
-                                                                                data-bs-target="#dropdown-<%= index %>"
-                                                                                aria-expanded="false"
-                                                                                aria-controls="dropdown-<%= index %>">
-                                                                                <%= meal.name %>
-                                                                            </span>
-                                                                            <% if (meal.calorie) { %>
-                                                                                <span class="badge bg-primary text-white">
-                                                                                    <%= meal.calorie %> kcal
+                                            <div class="tab-content">
+                                                <div class="tab-pane show active menu" id="istanbul">
+                                                    <% if (todayMenu) { %>
+                                                        <ul class="list-group list-group-flush">
+                                                            <% let foundSalad=false; %>
+                                                                <% let saladIndex=-1; %>
+                                                                    <% todayMenu.meals.forEach((meal, index)=> { %>
+                                                                        <% if
+                                                                            (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ"
+                                                                            ) { %>
+                                                                            <li
+                                                                                class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                <span class="clickable"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#dropdown-<%= index %>"
+                                                                                    aria-expanded="false"
+                                                                                    aria-controls="dropdown-<%= index %>">
+                                                                                    <%= meal.name %>
                                                                                 </span>
-                                                                                <% } %>
-                                                                        </li>
-                                                                        <% foundSalad=true; saladIndex=index; %>
-                                                                            <ul class="list-group list-group-flush collapse"
-                                                                                id="dropdown-<%= index %>">
-                                                                                <% } else if (foundSalad) { %>
-                                                                                    <li class="list-group-item">
-                                                                                        <span>
-                                                                                            <%= meal.name %>
-                                                                                        </span>
-                                                                                    </li>
-                                                                                    <% } else { %>
-                                                                                        <li
-                                                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                <% if (meal.calorie) { %>
+                                                                                    <span
+                                                                                        class="badge bg-primary text-white">
+                                                                                        <%= meal.calorie %> kcal
+                                                                                    </span>
+                                                                                    <% } %>
+                                                                            </li>
+                                                                            <% foundSalad=true; saladIndex=index; %>
+                                                                                <ul class="list-group list-group-flush collapse"
+                                                                                    id="dropdown-<%= index %>">
+                                                                                    <% } else if (foundSalad) { %>
+                                                                                        <li class="list-group-item">
                                                                                             <span>
                                                                                                 <%= meal.name %>
                                                                                             </span>
-                                                                                            <% if (meal.calorie) { %>
-                                                                                                <span
-                                                                                                    class="badge bg-primary text-white">
-                                                                                                    <%= meal.calorie %> kcal
-                                                                                                </span>
-                                                                                                <% } %>
                                                                                         </li>
-                                                                                        <% } %>
-                                                                                            <% }) %>
-                                                                                                <% if (foundSalad) { %>
-                                                                            </ul>
-                                                                            <% } %>
-                                                    </ul>
-                                                    <% } else { %>
-                                                        <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.
-                                                        </p>
-                                                        <% } %>
+                                                                                        <% } else { %>
+                                                                                            <li
+                                                                                                class="list-group-item d-flex justify-content-between align-items-center">
+                                                                                                <span>
+                                                                                                    <%= meal.name %>
+                                                                                                </span>
+                                                                                                <% if (meal.calorie) {
+                                                                                                    %>
+                                                                                                    <span
+                                                                                                        class="badge bg-primary text-white">
+                                                                                                        <%= meal.calorie
+                                                                                                            %> kcal
+                                                                                                    </span>
+                                                                                                    <% } %>
+                                                                                            </li>
+                                                                                            <% } %>
+                                                                                                <% }) %>
+                                                                                                    <% if (foundSalad) {
+                                                                                                        %>
+                                                                                </ul>
+                                                                                <% } %>
+                                                        </ul>
+                                                        <% } else { %>
+                                                            <p class="text-muted text-center mt-3">Bugün için yemek
+                                                                bulunamadı.
+                                                            </p>
+                                                            <% } %>
+                                                </div>
+
+                                                <div class="tab-pane" id="dilovasi">
+                                                    <p class='text-danger' style="text-align: center;">Yakında
+                                                        eklenecek.</p>
+                                                </div>
                                             </div>
 
-                                            <div class="tab-pane" id="dilovasi">
-                                                <p class='text-danger' style="text-align: center;">Yakında eklenecek.</p>
-                                            </div>
+
                                         </div>
-
-                                        
                                     </div>
-                                </div>
 
-                                <% if (birthdays.length> 0) { %>
-                                    <div class="swiper mySwiper" style="width: 100%; height: auto; margin-top: 20px;">
-                                        <div class="swiper-wrapper">
-                                            <% let index=1; %>
-                                                <% birthdays.forEach(kisi=> { %>
-                                                    <div class="swiper-slide">
-                                                        <div class="card cta-box text-white"
-                                                            style="background-color: #201750;">
-                                                            <div class="card-body">
-                                                                <div class="d-flex align-items-center">
-                                                                    <div class="w-100 overflow-hidden">
-                                                                        <h3 class="m-0 fw-normal cta-box-title">
-                                                                            Doğum Günün Kutlu Olsun <b><br>
-                                                                                <%= kisi.Adi %>
-                                                                                    <%= kisi.Soyadi %>
-                                                                            </b>!
-                                                                        </h3>
-                                                                        <h4>
-                                                                            <%= new
-                                                                                Date(kisi.DogumTarihi).toLocaleDateString('tr-TR',
-                                                                                { day: 'numeric' , month: 'long' }) %>
-                                                                        </h4>
+                                    <% if (birthdays.length> 0) { %>
+                                        <div class="swiper mySwiper"
+                                            style="width: 100%; height: auto; margin-top: 20px;">
+                                            <div class="swiper-wrapper">
+                                                <% let index=1; %>
+                                                    <% birthdays.forEach(kisi=> { %>
+                                                        <div class="swiper-slide">
+                                                            <div class="card cta-box text-white"
+                                                                style="background-color: #201750;">
+                                                                <div class="card-body">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <div class="w-100 overflow-hidden">
+                                                                            <h3 class="m-0 fw-normal cta-box-title">
+                                                                                Doğum Günün Kutlu Olsun <b><br>
+                                                                                    <%= kisi.Adi %>
+                                                                                        <%= kisi.Soyadi %>
+                                                                                </b>!
+                                                                            </h3>
+                                                                            <h4>
+                                                                                <%= new
+                                                                                    Date(kisi.DogumTarihi).toLocaleDateString('tr-TR',
+                                                                                    { day: 'numeric' , month: 'long' })
+                                                                                    %>
+                                                                            </h4>
+                                                                        </div>
+                                                                        <a href="#" id="confettiButton<%= index %>"
+                                                                            onclick="handleButtonClick(this)">
+                                                                            <img class="ms-3" src="/uploads/pasta.png"
+                                                                                width="100" alt="Pasta">
+                                                                        </a>
                                                                     </div>
-                                                                    <a href="#" id="confettiButton<%= index %>"
-                                                                        onclick="handleButtonClick(this)">
-                                                                        <img class="ms-3" src="/uploads/pasta.png"
-                                                                            width="100" alt="Pasta">
-                                                                    </a>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <% index++; %>
+                                                            <% }); %>
+                                            </div>
+                                        </div>
+                                        <% } %>
+
+                                            <% if (newHires.length> 0) {
+                                                const sortedNewHires = newHires.sort((a, b) => new
+                                                Date(b.IsYeriGirisTarihi) - new Date(a.IsYeriGirisTarihi));
+                                                %>
+                                                <div class="card shadow-sm border-0 mb-3">
+                                                    <div class="card-header"><strong>Bu Hafta Başlayanlar</strong></div>
+                                                    <div class="card-body"
+                                                        style="overflow-y: scroll; max-height: 200px;">
+                                                        <ul class="list-group list-group-flush">
+                                                            <% sortedNewHires.forEach(person=> { %>
+                                                                <li class="list-group-item d-flex align-items-start">
+                                                                    <i
+                                                                        class="mdi mdi-account-plus text-success me-3 mt-1"></i>
+                                                                    <div>
+                                                                        <div><strong>
+                                                                                <%= person.Adi %>
+                                                                                    <%= person.Soyadi %>
+                                                                            </strong></div>
+                                                                        <div class="text-muted">
+                                                                            <%= person.Unvan %>
+                                                                        </div>
+                                                                        <div class="small text-secondary">
+                                                                            Başlama Tarihi:
+                                                                            <%= new
+                                                                                Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
+                                                                                { day: 'numeric' , month: 'long' }) %>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <% }); %>
+                                                        </ul>
                                                     </div>
-                                                    <% index++; %>
-                                                        <% }); %>
-                                        </div>
-                                    </div>
-                                    <% } %>
-
-                                        <div class="card mb-3">
-                                            <div class="card-header"><strong>Bilgi Bankası</strong></div>
-                                            <ul class="list-group list-group-flush">
-                                                <div class="col-12">
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <img class="bilgi-bankasi-logo" src="/admin-assets/img/ikportal.png" alt="image"
-                                                                    class="img-fluid avatar-s">
-                                                            </div>
-                                                            <div class="col-10">
-                                                                <a href="https://ikportal.boltas.com/"
-                                                                    target="_blank">İK
-                                                                    Portal</a><br>
-                                                                <small>İnsan Kaynakları</small>
-                                                            </div>
-                                                        </div>
-
-                                                    </li>
                                                 </div>
-
-                                                <div class="col-12">
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <img  src="/admin-assets/img/logo-kare.png" alt="image"
-                                                                    class="img-fluid avatar-s">
-                                                            </div>
-                                                            <div class="col-10">
-                                                                <a href="https://flow.boltas.com/"
-                                                                    target="_blank">Flow(Eba)</a><br>
-                                                                <small>Bilgi Teknolojileri</small>
-                                                            </div>
+                                                <% } else { %>
+                                                    <div class="card shadow-sm border-0 mb-4">
+                                                        <div class="card-header"><strong>Bu Hafta Başlayanlar</strong>
                                                         </div>
-                                                    </li>
-                                                </div>
-                                                <div class="col-12">
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <img src="/admin-assets/img/akademi.png" alt="image"
-                                                                    class="img-fluid avatar-s">
-                                                            </div>
-                                                            <div class="col-10">
-                                                                <a href="https://akademi.boltas.com/"
-                                                                    target="_blank">Boltas Akademi</a><br>
-                                                                <small>Eğitim</small>
-                                                            </div>
+                                                        <div class="card-body">
+                                                            
                                                         </div>
-                                                    </li>
-                                                </div>
-                                                <div class="col-12">
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-2">
-                                                                <img src="/admin-assets/img/safeq.png" alt="image"
-                                                                    class="img-fluid avatar-s">
-                                                            </div>
-                                                            <div class="col-10">
-                                                                <a href="http://192.168.200.50/"
-                                                                    target="_blank">SafeQ</a><br>
-                                                                <small>Yazıcı PIN</small>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </div>
-                                            </ul>
-                                        </div>
+                                                    </div>
+                                                    <% } %>
 
 
-                                        <!-- <div class="card cta-box text-white" style="background-color: #201750;">
+
+                                                        <% if (leavers.length> 0) {
+                                                            const sortedLeavers = leavers.sort((a, b) => new
+                                                            Date(b.CEMP_ENDDATE) - new Date(a.CEMP_ENDDATE));
+                                                            %>
+                                                            <div class="card shadow-sm border-0 mb-3">
+                                                                <div class="card-header"><strong>Şirketimizden
+                                                                        Ayrılanlar</strong></div>
+                                                                <div class="card-body"
+                                                                    style="overflow-y: scroll; max-height: 200px;">
+                                                                    <ul class="list-group list-group-flush">
+                                                                        <% sortedLeavers.forEach(person=> { %>
+                                                                            <li
+                                                                                class="list-group-item d-flex align-items-start">
+                                                                                <i
+                                                                                    class="mdi mdi-account text-danger me-3 mt-1"></i>
+                                                                                <div>
+                                                                                    <div><strong>
+                                                                                            <%= person.Adi %>
+                                                                                                <%= person.Soyadi %>
+                                                                                        </strong></div>
+                                                                                    <div class="text-muted">
+                                                                                        <%= person.Unvan %>
+                                                                                    </div>
+                                                                                    <div class="small text-secondary">
+                                                                                        Ayrılma Tarihi:
+                                                                                        <%= new
+                                                                                            Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR',
+                                                                                            { day: 'numeric' ,
+                                                                                            month: 'long' }) %>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <% }); %>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <% } else { %>
+                                                                <div class="card shadow-sm border-0 mb-4">
+                                                                    <div class="card-header"><strong>Şirketimizden
+                                                                            Ayrılanlar</strong></div>
+                                                                    <div class="card-body">
+                                                                        <div class="text-danger fw-bold">Bu hafta
+                                                                            şirketimizden ayrılan personel
+                                                                            bulunmamaktadır.</div>
+                                                                    </div>
+                                                                </div>
+                                                                <% } %>
+
+
+
+                                                                    <!-- <div class="card cta-box text-white" style="background-color: #201750;">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
                                             <div class="w-100 overflow-hidden">
@@ -273,53 +312,127 @@
                                         </div>
                                     </div>
                                 </div> -->
-                            </div>
-                            <div class="col-lg-6 col-md-12 col-sm-12">
-                                <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        <% sliders.forEach((slider, index)=> { %>
-                                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                                <a target="_blank" href="https://<%= slider.link %>">
-                                                    <img class="d-block img-fluid" src="<%= slider.imageUrl %>"
-                                                        style="width: 100%;">
-                                                </a>
-                                                <% if (slider.title || slider.description) { %>
-                                                    <div class="carousel-caption"
-                                                        style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
-                                                        <% if (slider.title) { %>
-                                                            <h5>
-                                                                <%= slider.title %>
-                                                            </h5>
-                                                            <% } %>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12">
+                                    <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <% sliders.forEach((slider, index)=> { %>
+                                                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                                    <a target="_blank" href="https://<%= slider.link %>">
+                                                        <img class="d-block img-fluid" src="<%= slider.imageUrl %>"
+                                                            style="width: 100%;">
+                                                    </a>
+                                                    <% if (slider.title || slider.description) { %>
+                                                        <div class="carousel-caption"
+                                                            style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
+                                                            <% if (slider.title) { %>
+                                                                <h5>
+                                                                    <%= slider.title %>
+                                                                </h5>
+                                                                <% } %>
 
-                                                                <% if (slider.description) { %>
-                                                                    <p>
-                                                                        <%= slider.description %>
-                                                                    </p>
-                                                                    <% } %>
-                                                    </div>
-                                                    <% } %>
-                                            </div>
-                                            <% }); %>
+                                                                    <% if (slider.description) { %>
+                                                                        <p>
+                                                                            <%= slider.description %>
+                                                                        </p>
+                                                                        <% } %>
+                                                        </div>
+                                                        <% } %>
+                                                </div>
+                                                <% }); %>
+
+                                        </div>
+                                        <a class="carousel-control-prev" href="#slider" role="button"
+                                            data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"
+                                                style="color: black;"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#slider" role="button"
+                                            data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </a>
+
 
                                     </div>
-                                    <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"
-                                            style="color: black;"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#slider" role="button" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </a>
+                                    <div class="row">
+                                        <div class="col-lg-5 mt-3">
+                                            <div class="card mb-3">
+                                                <div class="card-header"><strong>Bilgi Bankası</strong></div>
+                                                <ul class="list-group list-group-flush">
+                                                    <div class="col-12">
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="/admin-assets/img/ikportal.png"
+                                                                        alt="image" class="img-fluid avatar-s">
+                                                                </div>
+                                                                <div class="col-10">
+                                                                    <a href="https://ikportal.boltas.com/"
+                                                                        target="_blank">İK
+                                                                        Portal</a><br>
+                                                                    <small>İnsan Kaynakları</small>
+                                                                </div>
+                                                            </div>
 
+                                                        </li>
+                                                    </div>
 
-                                </div>
-                                <div class="row">
-                                    <div class="card col-lg-6 mb-3 mt-3">
-                                        <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
-                                        <div class="card-body">
-                                            <!-- <ul class="list-group list-group-flush">
+                                                    <div class="col-12">
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="/admin-assets/img/logo-kare.png"
+                                                                        alt="image" class="img-fluid avatar-s">
+                                                                </div>
+                                                                <div class="col-10">
+                                                                    <a href="https://flow.boltas.com/"
+                                                                        target="_blank">Flow(Eba)</a><br>
+                                                                    <small>Bilgi Teknolojileri</small>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="/admin-assets/img/akademi.png" alt="image"
+                                                                        class="img-fluid avatar-s">
+                                                                </div>
+                                                                <div class="col-10">
+                                                                    <a href="https://akademi.boltas.com/"
+                                                                        target="_blank">Boltas Akademi</a><br>
+                                                                    <small>Eğitim</small>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <li class="list-group-item">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="/admin-assets/img/safeq.png" alt="image"
+                                                                        class="img-fluid avatar-s">
+                                                                </div>
+                                                                <div class="col-10">
+                                                                    <a href="http://192.168.200.50/"
+                                                                        target="_blank">SafeQ</a><br>
+                                                                    <small>Yazıcı PIN</small>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </div>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="card col-lg-7 mb-3 mt-3">
+                                            <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
+                                            <div class="card-body">
+                                                <!-- <ul class="list-group list-group-flush">
                                                 <% const activeDocs=docs.filter(doc=> doc.isActive); %>
                                                     <% activeDocs.forEach((doc)=> { %>
                                                         <li class="list-group-item">
@@ -331,204 +444,165 @@
                                                         </li>
                                                         <% }); %>
                                             </ul> -->
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item">
-                                                    Organizasyon Şeması
-                                                    <span class="float-end">
-                                                        <a href="https://boltas.sharepoint.com/:u:/g/Dokumanlar/EYGfZOBD8HZEhkYW2AGrfVgBXCynLgU9K_9_WR7toaNtwQ"
-                                                            target="_blank">Tıklayınız...</a>
-                                                    </span>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Antetli Kağıt
-                                                    <span class="float-end">
-                                                        <a href="https://boltas.sharepoint.com/:w:/g/Dokumanlar/EQcIL_ilmfRGnG0DQI6z3QQBkUGOBHy-nfdfM8tLPtDtyg"
-                                                            target="_blank">Tıklayınız...</a>
-                                                    </span>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Öneri Formu
-                                                    <span class="float-end">
-                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7BD09EB508-9D04-40CA-91B4-A00E85F63D28%7D&file=%C3%96neri%20Formu%20-%20%C4%B0K.FR.004.docx&action=default&mobileredirect=true"
-                                                            target="_blank">Tıklayınız...</a>
-                                                    </span>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    İzin Talep Formu
-                                                    <span class="float-end">
-                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B35B5046E-4249-4972-A8E0-EE5E3573D80B%7D&file=%C4%B0zin%20Talep%20Formu%20-%20%C4%B0K.FR.006.docx&action=default&mobileredirect=true"
-                                                            target="_blank">Tıklayınız...</a>
-                                                    </span>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Toplantı Tutanağı
-                                                    <span class="float-end">
-                                                        <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/WopiFrame.aspx?sourcedoc=%7BBF352D2F-6525-4731-ADC3-CE104D1469F8%7D&file=Toplant%C4%B1%20Tutana%C4%9F%C4%B1%20%20-%20KY.FR.002.rtf&action=default"
-                                                            target="_blank">Tıklayınız...</a>
-                                                    </span>
-                                                </li>
-                                            </ul>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item">
+                                                        Organizasyon Şeması
+                                                        <span class="float-end">
+                                                            <a href="https://boltas.sharepoint.com/:u:/g/Dokumanlar/EYGfZOBD8HZEhkYW2AGrfVgBXCynLgU9K_9_WR7toaNtwQ"
+                                                                target="_blank">Tıklayınız...</a>
+                                                        </span>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Antetli Kağıt
+                                                        <span class="float-end">
+                                                            <a href="https://boltas.sharepoint.com/:w:/g/Dokumanlar/EQcIL_ilmfRGnG0DQI6z3QQBkUGOBHy-nfdfM8tLPtDtyg"
+                                                                target="_blank">Tıklayınız...</a>
+                                                        </span>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Öneri Formu
+                                                        <span class="float-end">
+                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7BD09EB508-9D04-40CA-91B4-A00E85F63D28%7D&file=%C3%96neri%20Formu%20-%20%C4%B0K.FR.004.docx&action=default&mobileredirect=true"
+                                                                target="_blank">Tıklayınız...</a>
+                                                        </span>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        İzin Talep Formu
+                                                        <span class="float-end">
+                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B35B5046E-4249-4972-A8E0-EE5E3573D80B%7D&file=%C4%B0zin%20Talep%20Formu%20-%20%C4%B0K.FR.006.docx&action=default&mobileredirect=true"
+                                                                target="_blank">Tıklayınız...</a>
+                                                        </span>
+                                                    </li>
+                                                    <li class="list-group-item">
+                                                        Toplantı Tutanağı
+                                                        <span class="float-end">
+                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/WopiFrame.aspx?sourcedoc=%7BBF352D2F-6525-4731-ADC3-CE104D1469F8%7D&file=Toplant%C4%B1%20Tutana%C4%9F%C4%B1%20%20-%20KY.FR.002.rtf&action=default"
+                                                                target="_blank">Tıklayınız...</a>
+                                                        </span>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
-    
-                                    <div class="col-lg-6 mt-3">
-                                        <% if (newHires.length> 0) { %>
-                                            <div class="card cta-box">
-                                                <div class="card-header"><strong>Bu Hafta Başlayanlar</strong></div>
-                                                <div class="card-body">
-                                                    <ul style="list-style-type: disc; padding-left: 20px;">
-                                                        <% newHires.forEach(person=> { %>
-                                                            <li>
-                                                                <b>
-                                                                    <%= person.Adi %>
-                                                                        <%= person.Soyadi %>
-                                                                </b> - 
-                                                                <%= person.Unvan %> -
-                                                                <%= new
-                                                                    Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
-                                                                    { day: 'numeric' , month: 'long' }) %>
-                                                            </li>
-                                                            <% }); %>
-                                                    </ul>
+                                </div>
+
+                                <!-- Bilgi Bankası -->
+
+                                <!-- Yemek Listesi ve Hava Durumu -->
+                                <div class="col-lg-3 col-md-12 col-sm-12">
+                                    <div class="card mb-3 shadow-sm">
+                                        <div class="card-header bg-primary text-white text-center">
+                                            <strong>Açık Kapı Görüşmeleri</strong>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row align-items-center">
+                                                <!-- Açıklama Kısmı -->
+                                                <div class="col-md-7">
+                                                    <p class="card-text">
+                                                        Açık Kapı görüşmeleri ile birebir toplantı planlayabilirsiniz.
+                                                        Randevu almak için aşağıdaki bağlantıyı kullanın.
+                                                    </p>
+                                                    <a target="_blank"
+                                                        href="https://outlook.office.com/bookwithme/user/9a76039895594f6b946a7fe4b1abe858%40boltas.com/meetingtype/4vnppCk_7EWHC89vTk1a9w2?anonymous"
+                                                        class="btn btn-primary">
+                                                        Randevu Al
+                                                    </a>
+                                                </div>
+                                                <!-- Görsel Kısmı -->
+                                                <div class="col-md-5 text-center">
+                                                    <img src="/uploads/acik-kapi.png" class="img-fluid" width="160"
+                                                        alt="Açık Kapı">
                                                 </div>
                                             </div>
-                                            <% } %>
-    
-                                                <% if (leavers.length> 0) { %>
-                                                    <div class="card cta-box">
-                                                        <div class="card-header"><strong>Şirketimizden Ayrılanlar</strong>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <ul style="list-style-type: disc; padding-left: 20px;">
-                                                                <% leavers.forEach(person=> { %>
-                                                                    <li>
-                                                                        <b>
-                                                                            <%= person.Adi %>
-                                                                                <%= person.Soyadi %>
-                                                                        </b> - 
-                                                                        <%= person.Unvan %> -
-                                                                        <%= new
-                                                                            Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR',
-                                                                            { day: 'numeric' , month: 'long' }) %> 
-                                                                    </li>
-                                                                    <% }); %>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <% } %>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Bilgi Bankası -->
-
-                            <!-- Yemek Listesi ve Hava Durumu -->
-                            <div class="col-lg-3 col-md-12 col-sm-12">
-                                <div class="card mb-3 shadow-sm">
-                                    <div class="card-header bg-primary text-white text-center">
-                                        <strong>Açık Kapı Görüşmeleri</strong>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row align-items-center">
-                                            <!-- Açıklama Kısmı -->
-                                            <div class="col-md-7">
-                                                <p class="card-text">
-                                                    Açık Kapı görüşmeleri ile birebir toplantı planlayabilirsiniz. Randevu almak için aşağıdaki bağlantıyı kullanın.
-                                                </p>
-                                                <a target="_blank" href="https://outlook.office.com/bookwithme/user/9a76039895594f6b946a7fe4b1abe858%40boltas.com/meetingtype/4vnppCk_7EWHC89vTk1a9w2?anonymous" class="btn btn-primary">
-                                                    Randevu Al
-                                                </a>
-                                            </div>
-                                            <!-- Görsel Kısmı -->
-                                            <div class="col-md-5 text-center">
-                                                    <img src="/uploads/acik-kapi.png" class="img-fluid" width="160" alt="Açık Kapı">
-                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                
 
-                                <div class="card mb-3 ">
-                                    <div class="card-header"><strong>Hava Durumu</strong></div>
-                                    <div class="card-body">
-                                        <label for="citySelect" class="form-label">Şehir Seçin:</label>
-                                        <select class="form-select" id="citySelect">
-                                            <option selected value="">Lütfen bir şehir seçin</option>
-                                            <option value="Istanbul">İstanbul</option>
-                                            <option value="Ankara">Ankara</option>
-                                            <option value="İzmir">İzmir</option>
-                                            <option value="Adana">Adana</option>
-                                            <option value="Nürnberg">Nürnberg</option>
-                                            <option value="Trieste">Trieste</option>
-                                            <option value="Willich">Willich</option>
-                                            <option value="Bucuresti">Bucuresti</option>
-                                            <option value="Akyaka">Akyaka</option>
-                                            <option value="Hamzabeyli">Hamzabeyli</option>
-                                            <option value="Edirne">Kapıkule</option>
-                                        </select>
-                                        <div id="weather-info" class="mt-3"></div>
+
+
+                                    <div class="card mb-3 ">
+                                        <div class="card-header"><strong>Hava Durumu</strong></div>
+                                        <div class="card-body">
+                                            <label for="citySelect" class="form-label">Şehir Seçin:</label>
+                                            <select class="form-select" id="citySelect">
+                                                <option selected value="">Lütfen bir şehir seçin</option>
+                                                <option value="Istanbul">İstanbul</option>
+                                                <option value="Ankara">Ankara</option>
+                                                <option value="İzmir">İzmir</option>
+                                                <option value="Adana">Adana</option>
+                                                <option value="Nürnberg">Nürnberg</option>
+                                                <option value="Trieste">Trieste</option>
+                                                <option value="Willich">Willich</option>
+                                                <option value="Bucuresti">Bucuresti</option>
+                                                <option value="Akyaka">Akyaka</option>
+                                                <option value="Hamzabeyli">Hamzabeyli</option>
+                                                <option value="Edirne">Kapıkule</option>
+                                            </select>
+                                            <div id="weather-info" class="mt-3"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header"><strong>Döviz Kurları</strong></div>
-                                    <div class="card-body">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Döviz Kodu</th>
-                                                    <th>Alış Fiyatı (TL)</th>
-                                                    <th>Satış Fiyatı (TL)</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% currencies.forEach(currency=> { %>
-                                                    <% if (['USD', 'EUR' , 'GBP' ].includes(currency.currencyCode)) { %>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="uil uil-<%= currency.currencyCode %>" style="color: #759e6f;"></i>&nbsp;&nbsp;<%= currency.currencyCode %>
-                                                            </td>
-                                                            <td>
-                                                                <%= currency.forexBuying %>
-                                                            </td>
-                                                            <td>
-                                                                <%= currency.forexSelling %>
-                                                            </td>
-                                                        </tr>
-                                                        <% } %>
-                                                            <% }) %>
-                                            </tbody>
-                                        </table>
+                                    <div class="card mb-3">
+                                        <div class="card-header"><strong>Döviz Kurları</strong></div>
+                                        <div class="card-body">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Döviz Kodu</th>
+                                                        <th>Alış Fiyatı (TL)</th>
+                                                        <th>Satış Fiyatı (TL)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% currencies.forEach(currency=> { %>
+                                                        <% if (['USD', 'EUR' , 'GBP' ].includes(currency.currencyCode))
+                                                            { %>
+                                                            <tr>
+                                                                <td>
+                                                                    <i class="uil uil-<%= currency.currencyCode %>"
+                                                                        style="color: #759e6f;"></i>&nbsp;&nbsp;<%=
+                                                                        currency.currencyCode %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= currency.forexBuying %>
+                                                                </td>
+                                                                <td>
+                                                                    <%= currency.forexSelling %>
+                                                                </td>
+                                                            </tr>
+                                                            <% } %>
+                                                                <% }) %>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
+
+
                                 </div>
-
-
                             </div>
+                            <!-- end row -->
                         </div>
-                        <!-- end row -->
-                    </div>
-                    <!-- container -->
-
-                </div>
-                <!-- content -->
-
-                <!-- Footer Start -->
-                <%- include("partials/footer") %>
-                <!-- end Footer -->
+                        <!-- container -->
 
             </div>
+            <!-- content -->
 
-            <!-- ============================================================== -->
-            <!-- End Page content -->
-            <!-- ============================================================== -->
-
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+                <!-- end Footer -->
 
         </div>
-        <!-- END wrapper -->
 
-       
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
 
-        <%- include("partials/scripts") %>
 
-    </body>
+    </div>
+    <!-- END wrapper -->
+
+
+
+    <%- include("partials/scripts") %>
+
+</body>
+
 </html>
