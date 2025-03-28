@@ -19,7 +19,15 @@ const authenticate = async (req, res) => {
 
   const client = ldap.createClient({
     url: process.env.LDAP_URL,
+    timeout: 5000,
+    connectTimeout: 10000,
+    reconnect: true
   });
+
+  client.on('error', (err) => {
+    console.error("LDAP client error:", err.message);
+  });
+  
 
   client.bind(username, password, async (err) => {
     if (err) {

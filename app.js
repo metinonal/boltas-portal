@@ -78,31 +78,24 @@ connectMongo();
 app.use((req, res, next) => {
     const publicPaths = ["/login", "/logout"];
 
+    // Eğer zaten giriş yaptıysa ve /login'e gelmeye çalışıyorsa ana sayfaya gönder
+    if (req.session.authenticated && req.path === "/login") {
+        return res.redirect("/");
+    }
+
+    // Giriş yapılmamışsa ve izin verilen yollardan biri değilse login sayfasına yönlendir
     if (
         !req.session.authenticated &&
         !publicPaths.includes(req.path) &&
         req.method === "GET"
     ) {
-        req.session.lastVisited = req.originalUrl;
+        return res.redirect("/login");
     }
 
-    if (req.session.authenticated && req.path === "/login") {
-        return res.redirect("/");
-    }
-
-    if (
-        publicPaths.includes(req.path) ||
-        (req.path === "/login" && req.method === "POST")
-    ) {
-        return next();
-    }
-
-    if (req.session.authenticated) {
-        return next();
-    }
-
-    return res.redirect("/login");
+    // Giriş yapılmışsa veya login/logout gibi public path'lerdeyse devam et
+    return next();
 });
+
 
 // Route'lar
 const adminRoutes = require("./routes/ikyonetim/adminRoutes");
