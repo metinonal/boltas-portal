@@ -1,9 +1,19 @@
 const menuController = require("./menuController");
 const axios = require('axios');
+const axiosRetry = require('axios-retry').default;
 const xml2js = require('xml2js');
 const sql = require('mssql');
 const Slider = require('../../models/Slider');
 const Docs = require('../../models/Doc');
+
+// 🔧 Retry yapılandırması
+axiosRetry(axios, {
+    retries: 3,
+    retryDelay: (retryCount) => retryCount * 1000,
+    retryCondition: (error) => {
+        return error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT';
+    }
+});
 
 const config = {
     user: 'userportal',
@@ -18,7 +28,7 @@ const config = {
 
 const connectToDatabase = async () => {
     let connected = false;
-    const maxRetries = 50; // Maksimum deneme sayısı
+    const maxRetries = 50;
     let attempt = 0;
 
     while (!connected && attempt < maxRetries) {
@@ -31,7 +41,7 @@ const connectToDatabase = async () => {
             if (attempt === maxRetries) {
                 throw new Error('Veritabanı bağlantısı sağlanamadı.');
             }
-            await new Promise(resolve => setTimeout(resolve, 2000)); // 2 saniye bekle
+            await new Promise(resolve => setTimeout(resolve, 2000));
         }
     }
 };
@@ -43,7 +53,6 @@ exports.indexPage = async (req, res) => {
         // Veritabanına bağlan
         await connectToDatabase();
 
-        // ✅ Doğum günü verisini çek
         const birthdayResult = await sql.query(`
             DECLARE @tarih DATE = GETDATE();
             SELECT *
@@ -52,64 +61,61 @@ exports.indexPage = async (req, res) => {
               AND DAY(@tarih) = DAY(DogumTarihi)
               AND CEMP_ENDDATE is null;
         `);
-
         const birthdays = birthdayResult.recordset;
 
-        // ✅ Son 7 gün içinde işe girenleri çek
         const newHiresResult = await sql.query(`
             SELECT * 
             FROM [vHROrganizationFromOrtakIK_ALL]
             WHERE IsYeriGirisTarihi >= DATEADD(DAY, -7, GETDATE())
               AND IsYeriGirisTarihi <= GETDATE();
         `);
-
         const newHires = newHiresResult.recordset;
 
-        // ✅ Son 7 gün içinde işten ayrılanları çek
         const leaversResult = await sql.query(`
             SELECT * 
             FROM [vHROrganizationFromOrtakIK_ALL]
             WHERE CEMP_ENDDATE >= DATEADD(DAY, -8, CAST(GETDATE() AS DATE))
               AND CEMP_ENDDATE <= DATEADD(DAY, -1, CAST(GETDATE() AS DATE));
         `);
-
         const leavers = leaversResult.recordset;
 
-        // ✅ Döviz bilgilerini çek
-        const response = await axios.get('https://www.tcmb.gov.tr/kurlar/today.xml');
+        // ✅ Döviz bilgilerini çek (hatalara karşı korumalı)
+        let currencies = [];
 
-        xml2js.parseString(response.data, async (err, result) => {
-            if (err) {
-                console.error('XML parse hatası:', err);
-                return res.status(500).send('Veri işlenirken hata oluştu.');
-            }
+        try {
+            const response = await axios.get('https://www.tcmb.gov.tr/kurlar/today.xml', {
+                timeout: 5000,
+            });
 
-            const currencies = result.Tarih_Date.Currency.map((item) => ({
+            const parsed = await xml2js.parseStringPromise(response.data);
+            currencies = parsed.Tarih_Date.Currency.map((item) => ({
                 currencyCode: item.$.CurrencyCode,
                 currencyName: item.Isim[0],
-                forexBuying: item.ForexBuying ? item.ForexBuying[0] : 'N/A',
-                forexSelling: item.ForexSelling ? item.ForexSelling[0] : 'N/A',
+                forexBuying: item.ForexBuying?.[0] || 'N/A',
+                forexSelling: item.ForexSelling?.[0] || 'N/A',
             }));
+        } catch (currencyError) {
+            console.error("Döviz verisi alınamadı:", currencyError.message);
+        }
 
-            try {
-                const sliders = await Slider.find().sort({ count: 1 });
-                const docs = await Docs.find();
+        try {
+            const sliders = await Slider.find().sort({ count: 1 });
+            const docs = await Docs.find();
 
-                // ✅ Verileri index.ejs sayfasına gönder
-                res.render('main/index', {
-                    todayMenu,
-                    currencies,
-                    sliders,
-                    docs,
-                    birthdays,
-                    newHires, // Son 7 gün içinde işe girenler
-                    leavers,  // Son 7 gün içinde işten ayrılanlar
-                });
-            } catch (sliderError) {
-                console.error('Slider verileri alınırken hata oluştu:', sliderError);
-                res.status(500).send('Slider verileri alınırken bir sorun oluştu.');
-            }
-        });
+            res.render('main/index', {
+                todayMenu,
+                currencies,
+                sliders,
+                docs,
+                birthdays,
+                newHires,
+                leavers,
+            });
+        } catch (sliderError) {
+            console.error('Slider verileri alınırken hata oluştu:', sliderError);
+            res.status(500).send('Slider verileri alınırken bir sorun oluştu.');
+        }
+
     } catch (err) {
         console.error('API çağrısı sırasında hata oluştu:', err);
         res.status(500).send('Veritabanı bağlantısı zaman aşımına uğradı.');
