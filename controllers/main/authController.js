@@ -25,7 +25,10 @@ const authenticate = async (req, res) => {
   });
 
   client.on('error', (err) => {
-    console.error("LDAP client error:", err.message);
+    if (err.code === 'ECONNRESET') {
+      return;
+    }
+      console.error('LDAP Hatası:', err.message);
   });
   
 

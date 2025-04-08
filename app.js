@@ -13,6 +13,8 @@ const cron = require("node-cron");
 const { exportADUsers } = require('./services/exportADUserService');
 const setUserLocals = require('./middlewares/setUserLocals'); // header kısmındaki profil bilgilerini gosteren fonk
 
+exportADUsers(); // cron dışında manuel test
+
 
 const { connectMSSQL, connectMongo } = require('./config/config');
 const { authMiddleware, sessionTimeoutMiddleware } = require('./middlewares/authMiddleware');
