@@ -1,23 +1,21 @@
+const path = require('path');
 const { exec } = require('child_process');
 
 function exportADUsers() {
-  const script = `
-    cd D:\\GitHub\\boltas-portal\\phone;
-    Get-ADUser -Filter * -Properties Mobile,mail,msExchHideFromAddressLists,DisplayName,userAccountControl, physicalDeliveryOfficeName |
-    Select-Object DisplayName,mail,Mobile,msExchHideFromAddressLists,userAccountControl, physicalDeliveryOfficeName |
-    ConvertTo-Json -Depth 3 | Out-File -FilePath "ADUserExport.json" -Encoding UTF8
-  `;
+  const scriptPath = path.join(__dirname, '..', 'phone', 'export-users.ps1');
+  const command = `powershell.exe -ExecutionPolicy Bypass -File "${scriptPath}"`;
 
-  exec(`powershell.exe -Command "${script}"`, (error, stdout, stderr) => {
+  exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error("PowerShell Hatası:", error.message);
       return;
     }
     if (stderr) {
-      console.error("PowerShell Çıktısı (stderr):", stderr);
-      return;
+      console.error("PowerShell stderr:", stderr);
     }
-    console.log("PowerShell komutu başarıyla çalıştı.");
+
+    console.log("PowerShell script başarıyla çalıştı.");
+    console.log("stdout:", stdout);
   });
 }
 

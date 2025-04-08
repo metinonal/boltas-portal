@@ -1957,7 +1957,7 @@
         "Mobile":  null,
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
-        "physicalDeliveryOfficeName":  "7411"
+        "physicalDeliveryOfficeName":  "7334"
     },
     {
         "DisplayName":  "Mustafa ÖZTÜRK",
@@ -5116,7 +5116,7 @@
         "mail":  "mustafasait.baydar@boltas.com",
         "Mobile":  "+90 549 473 82 02",
         "msExchHideFromAddressLists":  true,
-        "userAccountControl":  512,
+        "userAccountControl":  514,
         "physicalDeliveryOfficeName":  "6650"
     },
     {
@@ -7469,7 +7469,7 @@
         "Mobile":  "+90 541 843 68 85",
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
-        "physicalDeliveryOfficeName":  "6579"
+        "physicalDeliveryOfficeName":  "6664"
     },
     {
         "DisplayName":  "Ant ÖZTÜRK",
@@ -7930,7 +7930,7 @@
     {
         "DisplayName":  "Fatih ÇAKAR",
         "mail":  null,
-        "Mobile":  null,
+        "Mobile":  "+90 549 552 89 49",
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
         "physicalDeliveryOfficeName":  null
