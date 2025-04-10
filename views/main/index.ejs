@@ -314,46 +314,39 @@
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                         <div class="carousel-inner">
-                                            <% sliders.forEach((slider, index)=> { %>
+                                            <% 
+                                                const aktifSliderlar = sliders.filter(s => s.isActive == 1);
+                                                aktifSliderlar.forEach((slider, index) => { 
+                                            %>
                                                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                                                     <a target="_blank" href="https://<%= slider.link %>">
-                                                        <img class="d-block img-fluid" src="<%= slider.imageUrl %>"
-                                                            style="width: 100%;">
+                                                        <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
                                                     </a>
                                                     <% if (slider.title || slider.description) { %>
                                                         <div class="carousel-caption"
                                                             style="background: radial-gradient(circle, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);">
                                                             <% if (slider.title) { %>
-                                                                <h5>
-                                                                    <%= slider.title %>
-                                                                </h5>
-                                                                <% } %>
-
-                                                                    <% if (slider.description) { %>
-                                                                        <p>
-                                                                            <%= slider.description %>
-                                                                        </p>
-                                                                        <% } %>
+                                                                <h5><%= slider.title %></h5>
+                                                            <% } %>
+                                                            <% if (slider.description) { %>
+                                                                <p><%= slider.description %></p>
+                                                            <% } %>
                                                         </div>
-                                                        <% } %>
+                                                    <% } %>
                                                 </div>
-                                                <% }); %>
-
+                                            <% }); %>
                                         </div>
-                                        <a class="carousel-control-prev" href="#slider" role="button"
-                                            data-bs-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"
-                                                style="color: black;"></span>
+                                    
+                                        <a class="carousel-control-prev" href="#slider" role="button" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black;"></span>
                                             <span class="visually-hidden">Previous</span>
                                         </a>
-                                        <a class="carousel-control-next" href="#slider" role="button"
-                                            data-bs-slide="next">
+                                        <a class="carousel-control-next" href="#slider" role="button" data-bs-slide="next">
                                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                             <span class="visually-hidden">Next</span>
                                         </a>
-
-
                                     </div>
+                                    
                                     <div class="row">
                                         <div class="card col-lg-12 mb-3 mt-3">
                                             <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
