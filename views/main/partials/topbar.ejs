@@ -146,44 +146,25 @@
 
             <li class="dropdown notification-list d-none d-sm-inline-block">
                 <a class="nav-link dropdown-toggle arrow-none" data-bs-toggle="dropdown" href="#" role="button"
-                    aria-haspopup="false" aria-expanded="false">
+                   aria-haspopup="false" aria-expanded="false">
                     <i class="dripicons-view-apps noti-icon"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg p-0">
-
                     <div class="p-2">
                         <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item" target="_blank" href="https://ikportal.boltas.com/">
-                                    <img src="/admin-assets/img/ikportal.png" alt="ik-portal">
-                                    <span>İK Portal</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" target="_blank" href="https://flow.boltas.com/">
-                                    <img src="/admin-assets/img/logo-kare.png" alt="flow">
-                                    <span>Flow(Eba)</span>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a class="dropdown-icon-item" target="_blank" href="https://akademi.boltas.com/">
-                                    <img src="/admin-assets/img/akademi.png" alt="akademi">
-                                    <span>Boltas Akademi</span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row g-0">
-                            <div class="col">
-                                <a class="dropdown-icon-item" target="_blank" href="http://192.168.200.50/">
-                                    <img src="/admin-assets/img/safeq.png" alt="safeq">
-                                    <span>SafeQ</span>
-                                </a>
-                            </div>
+                            <% bilgiTopbar.forEach(item => { %>
+                                <div class="col">
+                                    <a class="dropdown-icon-item" target="_blank" href="<%= item.link %>">
+                                        <img src="<%= item.img %>" alt="<%= item.header %>">
+                                        <span><%= item.header %></span>
+                                    </a>
+                                </div>
+                            <% }); %>
                         </div>
                     </div>
-
                 </div>
             </li>
+            
 
             <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown"

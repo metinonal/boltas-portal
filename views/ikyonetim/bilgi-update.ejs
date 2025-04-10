@@ -53,7 +53,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
-                                    <h4 class="page-title">Mevcut Dökümanlar</h4>
+                                    <h4 class="page-title">Döküman Güncelle</h4>
                                 </div>
                             </div>
                         </div>
@@ -63,42 +63,47 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/ikyonetim/bilgi-edit/bilgi-add" method="post" enctype="multipart/form-data">
+                                        <form action="/ikyonetim/bilgi-edit/bilgi-update/<%= bilgi._id %>" method="post" enctype="multipart/form-data">
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="header" class="form-label">Başlık:</label>
-                                                    <input type="text" id="header" class="form-control" name="header" required>
+                                                    <input type="text" id="header" class="form-control" name="header" value="<%= bilgi.header %>" required>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="description" class="form-label">Açıklama:</label>
-                                                    <input type="text" id="description" class="form-control" name="description" required>
+                                                    <input type="text" id="description" class="form-control" name="description" value="<%= bilgi.description %>" required>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="link" class="form-label">Hedef Bağlantı:</label>
-                                                    <input type="url" id="link" class="form-control" name="link" placeholder="https://..." required>
+                                                    <input type="url" id="link" class="form-control" name="link" value="<%= bilgi.link %>" placeholder="https://..." required>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="isActive" class="form-label">Aktif Mi?:</label>
                                                     <select class="form-select mb-3" id="isActive" name="isActive">
-                                                        <option value="1">Evet</option>
-                                                        <option value="0">Hayır</option>
+                                                        <option value="1" <%= bilgi.isActive ? 'selected' : '' %>>Evet</option>
+                                                        <option value="0" <%= !bilgi.isActive ? 'selected' : '' %>>Hayır</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="row mb-3">
+                                            <div class="row mb-3 align-items-end">
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="img" class="form-label">Logo Seç:</label>
-                                                    <input type="file" id="img" class="form-control" name="img" required>
+                                                    <label for="img" class="form-label">Yeni Logo Seç: (Opsiyonel)</label>
+                                                    <input type="file" id="img" class="form-control" name="img">
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label class="form-label">Mevcut Logo:</label><br>
+                                                    <img src="<%= bilgi.img %>" alt="Mevcut Logo" class="img-thumbnail" style="max-height:100px;">
                                                 </div>
                                             </div>
-                                            <button type="submit" class="btn btn-primary">Ekle</button>
+                                            <button type="submit" class="btn btn-success">Güncelle</button>
                                         </form>
                                     </div> <!-- end card-body-->
                                 </div> <!-- end card-->
                             </div>
                         </div>
+                        
                         
 
                     </div>

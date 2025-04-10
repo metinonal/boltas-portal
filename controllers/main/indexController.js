@@ -5,6 +5,8 @@ const xml2js = require('xml2js');
 const sql = require('mssql');
 const Slider = require('../../models/Slider');
 const Docs = require('../../models/Doc');
+const bilgiBankasi = require('../../models/bilgiBankasi');
+
 
 // 🔧 Retry yapılandırması
 axiosRetry(axios, {
@@ -101,6 +103,7 @@ exports.indexPage = async (req, res) => {
         try {
             const sliders = await Slider.find().sort({ count: 1 });
             const docs = await Docs.find();
+            const bilgi = await bilgiBankasi.find({ isActive: true });
 
             res.render('main/index', {
                 todayMenu,
@@ -110,6 +113,7 @@ exports.indexPage = async (req, res) => {
                 birthdays,
                 newHires,
                 leavers,
+                bilgi,
             });
         } catch (sliderError) {
             console.error('Slider verileri alınırken hata oluştu:', sliderError);

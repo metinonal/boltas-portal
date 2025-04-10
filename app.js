@@ -19,7 +19,6 @@ const setUserLocals = require('./middlewares/setUserLocals'); // header kısmın
 const { connectMSSQL, connectMongo } = require('./config/config');
 const { authMiddleware, sessionTimeoutMiddleware } = require('./middlewares/authMiddleware');
 
-
 dotenv.config();
 const app = express();
 connectDB();
@@ -111,6 +110,12 @@ const bilgiBankasiRoutes = require("./routes/ikyonetim/bilgiBankasiRoutes");
 const menuRoutes = require("./routes/main/menuRoutes");
 const indexRoutes = require("./routes/main/indexRoutes");
 const phoneRoutes = require("./routes/main/phoneRoutes");
+
+//Middleware ler
+
+const bilgiMiddleware = require('./middlewares/bilgiMiddleware');
+app.use(bilgiMiddleware);
+
 
 // Routing
 app.use(authRoutes);
