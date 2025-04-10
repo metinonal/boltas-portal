@@ -23105,7 +23105,7 @@ body[data-layout-color=dark] .fc-daygrid-day-number {
 }
 
 table.dataTable {
-    border-collapse: collapse !important;
+    /* border-collapse: collapse !important; */
     margin-bottom: 15px !important
 }
 

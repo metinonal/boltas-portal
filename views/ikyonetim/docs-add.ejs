@@ -63,17 +63,21 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/ikyonetim/docs-edit/docs-add" method="post" enctype="multipart/form-data">
+                                        <form action="/ikyonetim/docs-edit/docs-add" method="post">
                                             <div class="row mb-3">
-                                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="docName" class="form-label">Başlık:</label>
                                                     <input type="text" id="docName" class="form-control" name="docName" required>
+                                                </div>
+                                                <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                                    <label for="count" class="form-label">Sıra (Count):</label>
+                                                    <input type="number" id="count" class="form-control" name="count" value="1" min="1" placeholder="Otomatik için boş bırak">
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="docFile" class="form-label">Döküman Seç:</label>
-                                                    <input type="file" id="docFile" class="form-control" name="docFile" required>
+                                                    <label for="docLink" class="form-label">Döküman Linki:</label>
+                                                    <input type="url" id="docLink" class="form-control" name="docLink" placeholder="https://..." required>
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
                                                     <label for="isActive" class="form-label">Aktif Mi?:</label>
@@ -89,6 +93,8 @@
                                 </div> <!-- end card-->
                             </div>
                         </div>
+                        
+                        
 
                     </div>
                      <!-- container -->

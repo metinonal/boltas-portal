@@ -1,32 +1,10 @@
 const Doc = require('../../models/Doc');
-const multer = require('multer');
-const fs = require('fs');
-const path = require('path');
-
-// Multer yapılandırması (dosya yükleme ayarları)
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadPath = path.join(__dirname, '../../public/uploads/docs');
-        // Eğer dizin yoksa oluştur
-        if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-        }
-        cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
-
-// Multer upload nesnesi
-const upload = multer({ storage });
 
 // Tüm dökümanları listeleme sayfası
 exports.getDocs = async (req, res) => {
     try {
         const docs = await Doc.find();
 
-        // isActive özelliğini her dökümana ekle
         const updatedDocs = docs.map(doc => ({
             ...doc.toObject(),
             isActive: doc.isActive ? 1 : 0
@@ -38,38 +16,42 @@ exports.getDocs = async (req, res) => {
         res.status(500).send("Dökümanlar alınırken bir hata oluştu.");
     }
 };
+
 // Döküman ekleme sayfasını gösterme
 exports.showAddDocPage = (req, res) => {
     res.render('ikyonetim/docs-add', { error: null });
 };
 
-// Döküman ekleme işlemi
-exports.addDoc = [
-    upload.single('docFile'),
-    async (req, res) => {
-        try {
-            if (!req.file) {
-                return res.status(400).send("Lütfen bir dosya yükleyin.");
-            }
+// Döküman ekleme işlemi (sadece link üzerinden)
+exports.addDoc = async (req, res) => {
+    try {
+        const { docName, docLink, isActive } = req.body;
 
-            const { docName, docLink, isActive } = req.body;
-
-            const newDoc = new Doc({
-                docName,
-                docLink,
-                docFile: `/uploads/docs/${req.file.filename}`,
-                isActive: isActive === '1' ? true : false
-            });
-
-            await newDoc.save();
-            res.redirect('/ikyonetim/docs-edit');
-        } catch (err) {
-            console.error("Döküman eklenirken hata oluştu:", err);
-            res.status(500).send("Döküman eklenirken bir hata oluştu.");
+        if (!docName || !docLink) {
+            return res.status(400).send("Lütfen döküman adı ve linki giriniz.");
         }
-    }
-];
 
+        // En yüksek count değeri bulunur
+        const lastDoc = await Doc.findOne().sort({ count: -1 });
+        const nextCount = lastDoc ? lastDoc.count + 1 : 1;
+
+        const newDoc = new Doc({
+            docName,
+            docLink,
+            isActive: isActive === '1' ? true : false,
+            count: nextCount
+        });
+
+        await newDoc.save();
+        res.redirect('/ikyonetim/docs-edit');
+    } catch (err) {
+        console.error("Döküman eklenirken hata oluştu:", err);
+        res.status(500).send("Döküman eklenirken bir hata oluştu.");
+    }
+};
+
+
+// Döküman güncelleme sayfasını gösterme
 exports.showUpdateDocPage = async (req, res) => {
     try {
         const { id } = req.params;
@@ -79,7 +61,6 @@ exports.showUpdateDocPage = async (req, res) => {
             return res.status(404).send("Döküman bulunamadı.");
         }
 
-        // isActive değerini 1 veya 0 olarak dönüştür
         const formattedDoc = {
             ...doc._doc,
             isActive: doc.isActive ? 1 : 0
@@ -92,47 +73,35 @@ exports.showUpdateDocPage = async (req, res) => {
     }
 };
 
+// Döküman güncelleme işlemi (sadece link üzerinden)
+exports.updateDoc = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { docName, docLink, isActive, count } = req.body;
 
+        const doc = await Doc.findById(id);
+        if (!doc) return res.status(404).send("Döküman bulunamadı.");
 
-// Döküman güncelleme işlemi
-exports.updateDoc = [
-    upload.single('docFile'),
-    async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { docName, docLink, isActive } = req.body;
-
-            const doc = await Doc.findById(id);
-
-            if (!doc) {
-                return res.status(404).send("Döküman bulunamadı.");
-            }
-
-            // Eski dosyayı sil ve yeni dosyayı ekle
-            if (req.file) {
-                const oldFilePath = path.join(__dirname, '../../public', doc.docFile);
-                if (fs.existsSync(oldFilePath)) {
-                    fs.unlinkSync(oldFilePath);
-                }
-                doc.docFile = `/uploads/docs/${req.file.filename}`;
-            }
-
-            // Diğer alanları güncelle
-            doc.docName = docName;
-            doc.docLink = docLink;
-            doc.isActive = isActive === '1';
-
-            await doc.save();
-
-            res.redirect('/ikyonetim/docs-edit');
-        } catch (err) {
-            console.error("Döküman güncellenirken hata oluştu:", err);
-            res.status(500).send("Döküman güncellenirken bir hata oluştu.");
+        // Güvenli sayı kontrolü
+        const parsedCount = parseInt(count, 10);
+        if (!isNaN(parsedCount)) {
+            doc.count = parsedCount;
         }
-    }
-];
 
-// Döküman silme işlemi
+        doc.docName = docName;
+        doc.docLink = docLink;
+        doc.isActive = isActive === '1';
+
+        await doc.save();
+        res.redirect('/ikyonetim/docs-edit');
+    } catch (err) {
+        console.error("Döküman güncellenirken hata oluştu:", err);
+        res.status(500).send("Döküman güncellenirken bir hata oluştu.");
+    }
+};
+
+
+// Döküman silme işlemi (sadece veritabanından silinir)
 exports.deleteDoc = async (req, res) => {
     try {
         const { id } = req.params;
@@ -140,12 +109,6 @@ exports.deleteDoc = async (req, res) => {
 
         if (!doc) {
             return res.status(404).send("Döküman bulunamadı.");
-        }
-
-        // Dosya sisteminden dosyayı sil
-        const filePath = path.join(__dirname, '../../public', doc.docFile);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
         }
 
         await Doc.findByIdAndDelete(id);

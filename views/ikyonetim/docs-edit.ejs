@@ -70,21 +70,18 @@
                                                 </a>
                                             </div>
                                         </div>
-
+                        
                                         <div class="table-responsive">
-                                            <table class="table table-centered w-100 dt-responsive nowrap"
-                                                id="docs-datatable">
+                                            <table class="table table-centered w-100 dt-responsive nowrap" id="docs-datatable">
                                                 <thead class="table-light">
                                                     <tr>
-                                                        <th class="all" style="width: 20px;">
+                                                        <th style="width: 20px;">
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                    id="customCheck1">
-                                                                <label class="form-check-label"
-                                                                    for="customCheck1">&nbsp;</label>
+                                                                <input type="checkbox" class="form-check-input" id="customCheck1">
+                                                                <label class="form-check-label" for="customCheck1">&nbsp;</label>
                                                             </div>
                                                         </th>
-                                                        <th width="20">ID</th>
+                                                        <th>Sıra</th> <!-- COUNT ALANI -->
                                                         <th class="all">Döküman Adı</th>
                                                         <th>Döküman Linki</th>
                                                         <th>Statü</th>
@@ -92,55 +89,43 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <% docs.forEach(d=> { %>
+                                                    <% docs.forEach(d => { %>
                                                         <tr>
                                                             <td>
                                                                 <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input"
-                                                                        id="customCheck2">
-                                                                    <label class="form-check-label"
-                                                                        for="customCheck2">&nbsp;</label>
+                                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                                    <label class="form-check-label" for="customCheck2">&nbsp;</label>
                                                                 </div>
                                                             </td>
+                                                            <td><%= d.count %></td>
                                                             <td>
-                                                                <%= d._id %>
+                                                                <p class="m-0 d-inline-block align-middle font-16"><%= d.docName %></p>
                                                             </td>
                                                             <td>
-                                                                <p class="m-0 d-inline-block align-middle font-16">
-                                                                    <%= d.docName %>
-                                                                </p>
+                                                                <a href="<%= d.docLink %>" target="_blank">Tıklayınız</a>
                                                             </td>
                                                             <td>
-                                                                <a href="<%= d.docLink %>">Tıklayınız</a>
-                                                            </td>
-                                                            <td>
-                                                                <% if (d.isActive===1) { %>
+                                                                <% if (d.isActive === 1) { %>
                                                                     <span class="badge bg-success">Aktif</span>
-                                                                    <% } else { %>
-                                                                        <span class="badge bg-danger">Pasif</span>
-                                                                        <% } %>
+                                                                <% } else { %>
+                                                                    <span class="badge bg-danger">Pasif</span>
+                                                                <% } %>
                                                             </td>
-                                                            <td class="table-action" style="width: 10%;">
-                                                                <a href="/" target="_blank"
-                                                                    class="action-icon">
+                                                            <td class="table-action">
+                                                                <a href="<%= d.docLink %>" target="_blank" class="action-icon">
                                                                     <i class="mdi mdi-eye"></i>
                                                                 </a>
-                                                                <form
-                                                                    action="/ikyonetim/docs-edit/docs-delete/<%= d._id %>"
-                                                                    onsubmit="return confirmDelete();" method="post"
-                                                                    style="display: inline;">
-                                                                    <button style="border: none; background: none;"
-                                                                        type="submit" class="action-icon">
+                                                                <form action="/ikyonetim/docs-edit/docs-delete/<%= d._id %>" onsubmit="return confirmDelete();" method="post" style="display: inline;">
+                                                                    <button style="border: none; background: none;" type="submit" class="action-icon">
                                                                         <i class="mdi mdi-delete"></i>
                                                                     </button>
                                                                 </form>
-                                                                <a href="/ikyonetim/docs-edit/docs-update/<%= d._id %>"
-                                                                    class="action-icon">
+                                                                <a href="/ikyonetim/docs-edit/docs-update/<%= d._id %>" class="action-icon">
                                                                     <i class="mdi mdi-square-edit-outline"></i>
                                                                 </a>
                                                             </td>
                                                         </tr>
-                                                        <% }); %>
+                                                    <% }); %>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -148,6 +133,7 @@
                                 </div>
                             </div>
                         </div>
+                        
 
                     </div>
                      <!-- container -->

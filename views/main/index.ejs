@@ -426,61 +426,65 @@
                                             </div>
 
                                         </div> -->
+                                        <!-- <div class="card col-lg-12 mb-3 mt-3">
+                                            <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-centered w-100 dt-responsive nowrap" id="docss-datatable">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td width="90%">
+                                                                    Organizasyon Şeması
+                                                                </td>
+                                                                <td width="10%">
+                                                                   <a href="">Tıklayınız...</a>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div> -->
 
                                         <div class="card col-lg-12 mb-3 mt-3">
                                             <div class="card-header"><strong>Doküman Yönetim Sistemi</strong></div>
                                             <div class="card-body">
-                                                <!-- <ul class="list-group list-group-flush">
-                                                <% const activeDocs=docs.filter(doc=> doc.isActive); %>
-                                                    <% activeDocs.forEach((doc)=> { %>
-                                                        <li class="list-group-item">
-                                                            <%= doc.docName %>
-                                                                <span class="float-end">
-                                                                    <a href="https://portal.boltas.com/<%= doc.docFile %>"
-                                                                        target="_blank">Tıklayınız...</a>
-                                                                </span>
-                                                        </li>
-                                                        <% }); %>
-                                            </ul> -->
-                                                <ul class="list-group list-group-flush">
-                                                    <li class="list-group-item">
-                                                        Organizasyon Şeması
-                                                        <span class="float-end">
-                                                            <a href="https://boltas.sharepoint.com/:u:/g/Dokumanlar/EYGfZOBD8HZEhkYW2AGrfVgBXCynLgU9K_9_WR7toaNtwQ"
-                                                                target="_blank">Tıklayınız...</a>
-                                                        </span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        Antetli Kağıt
-                                                        <span class="float-end">
-                                                            <a href="https://boltas.sharepoint.com/:w:/g/Dokumanlar/EQcIL_ilmfRGnG0DQI6z3QQBkUGOBHy-nfdfM8tLPtDtyg"
-                                                                target="_blank">Tıklayınız...</a>
-                                                        </span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        Öneri Formu
-                                                        <span class="float-end">
-                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7BD09EB508-9D04-40CA-91B4-A00E85F63D28%7D&file=%C3%96neri%20Formu%20-%20%C4%B0K.FR.004.docx&action=default&mobileredirect=true"
-                                                                target="_blank">Tıklayınız...</a>
-                                                        </span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        İzin Talep Formu
-                                                        <span class="float-end">
-                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/Doc.aspx?sourcedoc=%7B35B5046E-4249-4972-A8E0-EE5E3573D80B%7D&file=%C4%B0zin%20Talep%20Formu%20-%20%C4%B0K.FR.006.docx&action=default&mobileredirect=true"
-                                                                target="_blank">Tıklayınız...</a>
-                                                        </span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        Toplantı Tutanağı
-                                                        <span class="float-end">
-                                                            <a href="https://boltas.sharepoint.com/:w:/r/Dokumanlar/_layouts/15/WopiFrame.aspx?sourcedoc=%7BBF352D2F-6525-4731-ADC3-CE104D1469F8%7D&file=Toplant%C4%B1%20Tutana%C4%9F%C4%B1%20%20-%20KY.FR.002.rtf&action=default"
-                                                                target="_blank">Tıklayınız...</a>
-                                                        </span>
-                                                    </li>
-                                                </ul>
+                                                <div class="table-responsive">
+                                                    <table class="table table-centered w-100 dt-responsive nowrap" id="docss-datatable">
+                                                        <tbody>
+                                                            <% 
+                                                                // Aktif olanları filtrele ve count'a göre sırala
+                                                                const sortedDocs = docs
+                                                                    .filter(doc => doc.isActive) // sadece aktif olanlar
+                                                                    .sort((a, b) => {
+                                                                        const condition = true; // buraya koşul yazabilirsin
+                                                                        return condition ? a.count - b.count : b.count - a.count;
+                                                                    });
+                                                            %>
+                                        
+                                                            <% if (sortedDocs.length === 0) { %>
+                                                                <tr>
+                                                                    <td colspan="2">Gösterilecek aktif döküman bulunamadı.</td>
+                                                                </tr>
+                                                            <% } else { %>
+                                                                <% sortedDocs.forEach(doc => { %>
+                                                                    <tr>
+                                                                        <td width="90%">
+                                                                            <%= doc.docName %>
+                                                                        </td>
+                                                                        <td width="10%">
+                                                                            <a href="<%= doc.docLink %>" target="_blank">Tıklayınız...</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                <% }) %>
+                                                            <% } %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
+                                        
+                                        
                                     </div>
                                 </div>
 
