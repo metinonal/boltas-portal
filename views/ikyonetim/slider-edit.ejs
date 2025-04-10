@@ -84,10 +84,9 @@
                                                                     for="customCheck1">&nbsp;</label>
                                                             </div>
                                                         </th>
-                                                        <th width="20">ID</th>
+                                                        <th width="20">Sıra</th>
                                                         <th class="all">Slider Adı</th>
                                                         <th>Eklenme Tarihi</th>
-                                                        <th>Sıra</th>
                                                         <th>Statü</th>
                                                         <th style="width: 85px;">Aksiyon</th>
                                                     </tr>
@@ -104,7 +103,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <%= s._id %>
+                                                                <%= s.count %>
                                                             </td>
                                                             <td>
                                                                 <img src="<%= s.imageUrl %>" alt="blog-img"
@@ -115,9 +114,6 @@
                                                             </td>
                                                             <td>
                                                                 <%= s.createdAt %>
-                                                            </td>
-                                                            <td>
-                                                                <%= s.count %>
                                                             </td>
                                                             <td>
                                                                 <% if (s.isActive===1) { %>
