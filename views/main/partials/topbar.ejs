@@ -151,19 +151,23 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated dropdown-lg p-0">
                     <div class="p-2">
-                        <div class="row g-0">
-                            <% bilgiTopbar.forEach(item => { %>
-                                <div class="col">
-                                    <a class="dropdown-icon-item" target="_blank" href="<%= item.link %>">
-                                        <img src="<%= item.img %>" alt="<%= item.header %>">
-                                        <span><%= item.header %></span>
-                                    </a>
-                                </div>
-                            <% }); %>
-                        </div>
+            
+                        <% for (let i = 0; i < bilgiTopbar.length; i += 3) { %>
+                            <div class="row g-0">
+                                <% for (let j = i; j < i + 3 && j < bilgiTopbar.length; j++) { %>
+                                    <div class="col">
+                                        <a class="dropdown-icon-item" target="_blank" href="<%= bilgiTopbar[j].link %>">
+                                            <img src="<%= bilgiTopbar[j].img %>" alt="<%= bilgiTopbar[j].header %>">
+                                            <span><%= bilgiTopbar[j].header %></span>
+                                        </a>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% } %>
+            
                     </div>
                 </div>
-            </li>
+            </li>            
             
 
             <li class="dropdown notification-list">
