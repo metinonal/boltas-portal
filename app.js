@@ -25,7 +25,7 @@ connectDB();
 
 // SSL Sertifikası (.pfx dosyası)
 const options = {
-    pfx: fs.readFileSync(path.join(__dirname, "2025_yildiz.boltas.com.pfx")),
+    pfx: fs.readFileSync(path.join(__dirname, "STAR.BOLTAS.COM.pfx")),
     passphrase: "Bolat2020!*"
 };
 

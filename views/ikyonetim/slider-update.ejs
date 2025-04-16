@@ -70,7 +70,7 @@
                                                     <input type="text" id="title" class="form-control" value="<%= slider.title %>" name="title" >
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="image" class="form-label">Resim Seç: <span style="font-size: 0.7em;">(1920x1080 boyutunda olması önemlidir.)</span> </label>
+                                                    <label for="image" class="form-label">Resim Seç: <span style="font-size: 0.7em;">(1000x500 boyutunda olması önemlidir.)</span> </label>
                                                     <input type="file" id="image" class="form-control" name="image">
                                                 </div>
                                             </div>
@@ -80,8 +80,8 @@
                                                     <input type="text" id="description" value="<%= slider.description %>" class="form-control" name="description" >
                                                 </div>
                                                 <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                                                    <label for="link" class="form-label">Link:<span style="font-size: 0.7em;">(www ile başlayan bir link yazınız.)</span></label>
-                                                    <input type="text" id="link" class="form-control" value="<%= slider.link %>" name="link" required>
+                                                    <label for="link" class="form-label">Döküman Linki:</label>
+                                                    <input type="url" id="link" class="form-control" name="link" value="<%= slider.link %>" placeholder="https://..." required>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">

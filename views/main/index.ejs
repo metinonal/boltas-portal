@@ -319,7 +319,7 @@
                                                 aktifSliderlar.forEach((slider, index) => { 
                                             %>
                                                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                                    <a target="_blank" href="https://<%= slider.link %>">
+                                                    <a target="_blank" href="<%= slider.link %>">
                                                         <img class="d-block img-fluid" src="<%= slider.imageUrl %>" style="width: 100%;">
                                                     </a>
                                                     <% if (slider.title || slider.description) { %>

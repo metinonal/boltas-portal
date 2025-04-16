@@ -48,7 +48,12 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row mb-2">
-                                                <div class="col-12 text-sm-end">
+                                                <div class="col-6 text-sm-start">
+                                                    <button type="button" class="btn btn-success" onclick="exportToExcel()">
+                                                        Excel'e Aktar
+                                                    </button>
+                                                </div>
+                                                <div class="col-6 text-sm-end">
                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#vcfModal">
                                                         Telefon Rehberine Ekle
@@ -234,6 +239,18 @@
 
 
     <%- include("partials/scripts") %>
+
+    <!-- SheetJS kütüphanesi -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script>
+    function exportToExcel() {
+        var table = document.getElementById("phone-datatable");
+        var wb = XLSX.utils.table_to_book(table, { sheet: "Rehber" });
+        XLSX.writeFile(wb, "telefon_rehberi.xlsx");
+    }
+</script>
+
 
 </body>
 
