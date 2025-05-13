@@ -61,7 +61,8 @@ exports.indexPage = async (req, res) => {
             FROM [vHROrganizationFromOrtakIK_ALL]
             WHERE MONTH(@tarih) = MONTH(DogumTarihi)
               AND DAY(@tarih) = DAY(DogumTarihi)
-              AND CEMP_ENDDATE is null;
+              AND CEMP_ENDDATE IS NULL
+              AND SicilNo != 1001;
         `);
         const birthdays = birthdayResult.recordset;
 
