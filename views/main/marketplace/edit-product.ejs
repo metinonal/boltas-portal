@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title><%= title %> | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Boltas Portal Pazaryeri" name="description">
+
+    <%- include("../partials/css") %>
+    <link href="/admin-assets/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+                                        <li class="breadcrumb-item"><a href="/pazaryeri">Pazaryeri</a></li>
+                                        <li class="breadcrumb-item"><a href="/pazaryeri/urunlerim">Ürünlerim</a></li>
+                                        <li class="breadcrumb-item active">Ürün Düzenle</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Ürün Düzenle</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="alert alert-warning">
+                                        <i class="mdi mdi-information-outline me-2"></i>
+                                        <strong>Dikkat:</strong> Ürün bilgilerini düzenlediğinizde, ürününüz tekrar yönetici onayına gönderilecektir.
+                                    </div>
+                                    
+                                    <form action="/pazaryeri/urun-duzenle/<%= product._id %>" method="POST" enctype="multipart/form-data">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Ürün Başlığı <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="title" name="title" value="<%= product.title %>" required>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="price" class="form-label">Fiyat (₺) <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" id="price" name="price" min="1" value="<%= product.price %>" required>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="category" class="form-label">Kategori <span class="text-danger">*</span></label>
+                                                    <select class="form-select" id="category" name="category" required>
+                                                        <option value="">Seçiniz</option>
+                                                        <option value="Elektronik" <%= product.category === 'Elektronik' ? 'selected' : '' %>>Elektronik</option>
+                                                        <option value="Mobilya" <%= product.category === 'Mobilya' ? 'selected' : '' %>>Mobilya</option>
+                                                        <option value="Giyim" <%= product.category === 'Giyim' ? 'selected' : '' %>>Giyim</option>
+                                                        <option value="Kitap" <%= product.category === 'Kitap' ? 'selected' : '' %>>Kitap</option>
+                                                        <option value="Spor" <%= product.category === 'Spor' ? 'selected' : '' %>>Spor</option>
+                                                        <option value="Otomotiv" <%= product.category === 'Otomotiv' ? 'selected' : '' %>>Otomotiv</option>
+                                                        <option value="Diğer" <%= product.category === 'Diğer' ? 'selected' : '' %>>Diğer</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="condition" class="form-label">Ürün Durumu <span class="text-danger">*</span></label>
+                                                    <select class="form-select" id="condition" name="condition" required>
+                                                        <option value="">Seçiniz</option>
+                                                        <option value="Yeni" <%= product.condition === 'Yeni' ? 'selected' : '' %>>Yeni</option>
+                                                        <option value="Yeni Gibi" <%= product.condition === 'Yeni Gibi' ? 'selected' : '' %>>Yeni Gibi</option>
+                                                        <option value="İyi" <%= product.condition === 'İyi' ? 'selected' : '' %>>İyi</option>
+                                                        <option value="Makul" <%= product.condition === 'Makul' ? 'selected' : '' %>>Makul</option>
+                                                        <option value="Yıpranmış" <%= product.condition === 'Yıpranmış' ? 'selected' : '' %>>Yıpranmış</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label for="location" class="form-label">Konum <span class="text-danger">*</span></label>
+                                                    <select class="form-select" id="location" name="location" required>
+                                                        <option value="">Seçiniz</option>
+                                                        <option value="İstanbul" <%= product.location === 'İstanbul' ? 'selected' : '' %>>İstanbul</option>
+                                                        <option value="Kocaeli" <%= product.location === 'Kocaeli' ? 'selected' : '' %>>Kocaeli</option>
+                                                        <option value="Dilovası" <%= product.location === 'Dilovası' ? 'selected' : '' %>>Dilovası</option>
+                                                        <option value="Diğer" <%= product.location === 'Diğer' ? 'selected' : '' %>>Diğer</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="description" class="form-label">Ürün Açıklaması <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" id="description" name="description" rows="5" required><%= product.description %></textarea>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Mevcut Fotoğraflar</label>
+                                                    <div class="d-flex flex-wrap gap-2 mb-3">
+                                                        <% if (product.images && product.images.length > 0) { %>
+                                                            <% product.images.forEach((image, index) => { %>
+                                                                <div class="position-relative product-image-container">
+                                                                    <img src="<%= image %>" alt="Ürün Resmi <%= index + 1 %>" class="img-thumbnail product-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                                                    <div class="form-check position-absolute" style="top: 5px; right: 5px;">
+                                                                        <input type="checkbox" class="form-check-input" id="keep-image-<%= index %>" name="keepImages[]" value="<%= image %>" checked>
+                                                                        <label class="form-check-label" for="keep-image-<%= index %>"></label>
+                                                                    </div>
+                                                                </div>
+                                                            <% }) %>
+                                                        <% } else { %>
+                                                            <p class="text-muted">Ürün fotoğrafı bulunmuyor.</p>
+                                                        <% } %>
+                                                    </div>
+                                                    <div class="form-text mb-3">İşaretli fotoğraflar korunacak, işareti kaldırılanlar silinecektir.</div>
+                                                </div>
+                                                
+                                                <label for="images" class="form-label">Yeni Fotoğraflar Ekle (En fazla 10 adet toplam)</label>
+                                                <input type="file" class="form-control" id="images" name="images" accept="image/*" multiple>
+                                                <div class="form-text">
+                                                    Yükleyeceğiniz resimlerin boyutu 10MB'ı geçmemelidir.<br>
+                                                    Desteklenen formatlar: JPG, JPEG, PNG, GIF, BMP, JFIF, WEBP
+                                                </div>
+                                            </div>
+                                            
+                                            <div id="image-preview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                        </div>
+                                        
+                                        <div class="text-end mt-3">
+                                            <a href="/pazaryeri/urunlerim" class="btn btn-secondary me-2">İptal</a>
+                                            <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- container -->
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+    
+    <script>
+        document.getElementById('images').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const previewContainer = document.getElementById('image-preview');
+            previewContainer.innerHTML = '';
+            
+            // Mevcut resim sayısını kontrol et
+            const existingImagesCount = <%= product.images ? product.images.length : 0 %>;
+            const checkedExistingImages = document.querySelectorAll('input[name="keepImages[]"]:checked').length;
+            
+            if (files.length + checkedExistingImages > 10) {
+                alert('Toplam en fazla 10 adet resim yükleyebilirsiniz. Lütfen bazı mevcut resimlerin işaretini kaldırın veya daha az yeni resim seçin.');
+                e.target.value = '';
+                return;
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('Resim boyutu 10MB\'ı geçemez.');
+                    e.target.value = '';
+                    previewContainer.innerHTML = '';
+                    return;
+                }
+                
+                // Desteklenen resim formatlarını kontrol et
+                const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+                if (!validImageTypes.includes(file.type) && !file.name.toLowerCase().endsWith('.jfif')) {
+                    alert('Desteklenmeyen dosya formatı: ' + file.name + '\nDesteklenen formatlar: JPG, JPEG, PNG, GIF, BMP, JFIF, WEBP');
+                    continue;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.style.border = '1px solid #dee2e6';
+                    img.style.borderRadius = '4px';
+                    img.style.margin = '5px';
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Mevcut resimlerin işaretlenmesi değiştiğinde kontrol et
+        document.querySelectorAll('input[name="keepImages[]"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const newImagesInput = document.getElementById('images');
+                if (newImagesInput.files.length > 0) {
+                    const checkedExistingImages = document.querySelectorAll('input[name="keepImages[]"]:checked').length;
+                    
+                    if (newImagesInput.files.length + checkedExistingImages > 10) {
+                        alert('Toplam en fazla 10 adet resim yükleyebilirsiniz. Lütfen bazı mevcut resimlerin işaretini kaldırın veya daha az yeni resim seçin.');
+                        this.checked = true; // İşareti geri koy
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

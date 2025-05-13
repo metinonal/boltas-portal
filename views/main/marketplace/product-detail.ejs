@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title><%= title %> | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Boltas Portal Pazaryeri" name="description">
+
+    <%- include("../partials/css") %>
+    <link href="/main-assets/css/product-detail.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    
+    <style>
+        .swiper {
+            width: 100%;
+            height: 350px;
+            margin-bottom: 10px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            /* Prevent selection */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .swiper-slide {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+        
+        .swiper-slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            /* Prevent dragging */
+            pointer-events: none;
+        }
+        
+        .swiper-button-next, .swiper-button-prev {
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .swiper-button-next:after, .swiper-button-prev:after {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .gallery-thumbs {
+            height: 80px;
+            box-sizing: border-box;
+            padding: 10px 0;
+            /* Prevent selection */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .gallery-thumbs .swiper-slide {
+            width: 80px;
+            height: 80px;
+            opacity: 0.5;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .gallery-thumbs .swiper-slide-thumb-active {
+            opacity: 1;
+            border-color: #727cf5;
+        }
+        
+        /* Prevent text selection in the entire product gallery */
+        .card-body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        /* Allow text selection in product description */
+        .product-detail-description {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+    </style>
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/">Ana Sayfa</a></li>
+                                        <li class="breadcrumb-item"><a href="/pazaryeri">Pazaryeri</a></li>
+                                        <% if (product.category) { %>
+                                            <li class="breadcrumb-item"><a href="/pazaryeri/kategori/<%= product.category %>"><%= product.category %></a></li>
+                                        <% } %>
+                                        <li class="breadcrumb-item active"><%= product.title %></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-lg-6 mb-3">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <% if (product.images && product.images.length > 0) { %>
+                                        <!-- Swiper -->
+                                        <div class="swiper gallery-top">
+                                            <div class="swiper-wrapper">
+                                                <% product.images.forEach(function(image) { %>
+                                                    <div class="swiper-slide">
+                                                        <img src="<%= image %>" alt="<%= product.title %>" draggable="false">
+                                                    </div>
+                                                <% }); %>
+                                            </div>
+                                            <!-- Add Navigation -->
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                        </div>
+                                        
+                                        <% if (product.images.length > 1) { %>
+                                            <!-- Swiper thumbs -->
+                                            <div class="swiper gallery-thumbs">
+                                                <div class="swiper-wrapper">
+                                                    <% product.images.forEach(function(image) { %>
+                                                        <div class="swiper-slide">
+                                                            <img src="<%= image %>" alt="Thumbnail" draggable="false">
+                                                        </div>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } else { %>
+                                        <div class="swiper gallery-top">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide">
+                                                    <img src="/uploads/no-image.png" alt="Resim Yok" draggable="false">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+
+                                    <div class="p-3">
+                                        <h5 class="mb-3">Ürün Açıklaması</h5>
+                                        <div class="product-detail-description">
+                                            <%= product.description %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6 mb-3">
+                            <div class="card product-detail-info-card">
+                                <div class="card-body">
+                                    <h3 class="product-detail-title"><%= product.title %></h3>
+                                    
+                                    <div class="d-flex align-items-center mb-3">
+                                        <span class="product-detail-price"><%= product.price.toLocaleString('tr-TR') %> ₺</span>
+                                        <span class="badge bg-primary product-detail-category-badge"><%= product.category %></span>
+                                    </div>
+                                    
+                                    <div class="product-detail-meta">
+                                        <span class="product-detail-meta-badge">
+                                            <i class="mdi mdi-tag-outline"></i> Durum: <%= product.condition %>
+                                        </span>
+                                        <span class="product-detail-meta-badge">
+                                            <i class="mdi mdi-map-marker-outline"></i> Konum: <%= product.location %>
+                                        </span>
+                                        <span class="product-detail-meta-badge">
+                                            <i class="mdi mdi-eye-outline"></i> <%= product.viewCount %> görüntülenme
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="seller-detail-card mt-4">
+                                        <h5 class="mb-3">Satıcı Bilgileri</h5>
+                                        
+                                        <div class="seller-detail-info">
+                                            <span class="account-user-avatar">
+                                                <img width="50" src="/uploads/pphotos/<%= product.seller %>.png" alt="user-image" class="rounded-circle" draggable="false">
+                                            </span>&nbsp;&nbsp;&nbsp;
+                                            <div>
+                                                <h5 class="seller-detail-name"><%= product.sellerName %></h5>
+                                                <small class="text-muted"><%= product.sellerTitle %></small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="seller-detail-contact">
+                                            <% if (product.sellerPhone) { %>
+                                                <div class="seller-detail-contact-item">
+                                                    <i class="mdi mdi-phone"></i>
+                                                    <span><%= product.sellerPhone %></span>
+                                                </div>
+                                            <% } %>
+                                            <div class="seller-detail-contact-item">
+                                                <i class="mdi mdi-email-outline"></i>
+                                                <span><%= product.seller %></span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="seller-detail-actions">
+                                            <a href="mailto:<%= product.seller %>" class="btn btn-primary btn-sm">
+                                                <i class="mdi mdi-email-outline me-1"></i> E-posta Gönder
+                                            </a>
+                                            <% if (product.sellerPhone) { %>
+                                                <a href="tel:<%= product.sellerPhone %>" class="btn btn-info btn-sm">
+                                                    <i class="mdi mdi-phone me-1"></i> Ara
+                                                </a>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="product-detail-actions">
+                                        <button type="button" class="btn btn-outline-primary" id="report-button">
+                                            <i class="mdi mdi-flag-outline me-1"></i> Bildir
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info" id="favorite-button">
+                                            <i class="mdi mdi-heart-outline me-1"></i> Favorilere Ekle
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="product-detail-date">
+                                        İlan Tarihi: <%= new Date(product.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }) %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- container -->
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Report Product Modal -->
+    <div id="report-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ürünü Bildir</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="report-form">
+                        <div class="mb-3">
+                            <label for="report-reason" class="form-label">Bildirim Nedeni</label>
+                            <select class="form-select" id="report-reason" required>
+                                <option value="">Seçiniz</option>
+                                <option value="inappropriate">Uygunsuz İçerik</option>
+                                <option value="fake">Sahte Ürün</option>
+                                <option value="misleading">Yanıltıcı Bilgi</option>
+                                <option value="other">Diğer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="report-description" class="form-label">Açıklama</label>
+                            <textarea class="form-control" id="report-description" rows="4" placeholder="Lütfen bildirim nedeninizi detaylandırın"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" id="submit-report">Bildir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Report Product Modal -->
+
+    <%- include("../partials/scripts") %>
+    
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize Swiper
+            var galleryThumbs = new Swiper('.gallery-thumbs', {
+                spaceBetween: 10,
+                slidesPerView: 'auto',
+                freeMode: true,
+                watchSlidesProgress: true,
+            });
+            
+            var galleryTop = new Swiper('.gallery-top', {
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                thumbs: {
+                    swiper: galleryThumbs
+                }
+            });
+            
+            // Prevent image selection
+            $('.swiper-slide img').on('dragstart', function(e) {
+                e.preventDefault();
+            });
+            
+            // Prevent double-click selection
+            $('.swiper').on('mousedown', function(e) {
+                if (e.detail > 1) { // Check if it's a double click
+                    e.preventDefault();
+                }
+            });
+            
+            // Report button
+            $('#report-button').on('click', function() {
+                $('#report-modal').modal('show');
+            });
+            
+            // Favorites button
+            $('#favorite-button').on('click', function() {
+                Swal.fire({
+                    title: 'Favorilere Eklendi',
+                    text: 'Ürün favorilerinize eklendi',
+                    icon: 'success',
+                    confirmButtonText: 'Tamam'
+                });
+            });
+            
+            // Share buttons
+            $('#share-facebook').on('click', function() {
+                var url = encodeURIComponent(window.location.href);
+                var title = encodeURIComponent('<%= product.title %>');
+                window.open('https://www.facebook.com/sharer/sharer.php?u=' + url + '&t=' + title, '_blank');
+            });
+            
+            $('#share-twitter').on('click', function() {
+                var url = encodeURIComponent(window.location.href);
+                var text = encodeURIComponent('<%= product.title %> - Boltas Portal Pazaryeri');
+                window.open('https://twitter.com/intent/tweet?url=' + url + '&text=' + text, '_blank');
+            });
+            
+            $('#share-whatsapp').on('click', function() {
+                var url = encodeURIComponent(window.location.href);
+                var text = encodeURIComponent('<%= product.title %> - Boltas Portal Pazaryeri');
+                window.open('https://wa.me/?text=' + text + '%20' + url, '_blank');
+            });
+            
+            // Handle report submission
+            $('#submit-report').on('click', function() {
+                var reason = $('#report-reason').val();
+                if (!reason) {
+                    Swal.fire({
+                        title: 'Hata',
+                        text: 'Lütfen bir bildirim nedeni seçin',
+                        icon: 'error',
+                        confirmButtonText: 'Tamam'
+                    });
+                    return;
+                }
+                
+                // Here you would normally send the report to the server
+                // For now, just show a success message
+                $('#report-modal').modal('hide');
+                
+                Swal.fire({
+                    title: 'Bildirim Alındı',
+                    text: 'Bildiriminiz için teşekkür ederiz. En kısa sürede incelenecektir.',
+                    icon: 'success',
+                    confirmButtonText: 'Tamam'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Ana Sayfa | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
+
+    <%- include("partials/css") %>
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <%- include("partials/topnav") %>
+
+                        <!-- Start Content-->
+                        <div class="container-fluid mt-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div class="card shadow-sm">
+                                        <div class="card-body text-center py-5">
+                                            <h1 class="display-1 text-danger fw-bold">404</h1>
+                                            <h2 class="mb-4">Sayfa Bulunamadı</h2>
+                                            <p class="lead mb-4">
+                                                Aradığınız sayfa mevcut değil veya taşınmış olabilir.
+                                            </p>
+                                            <div class="mt-4">
+                                                <a href="/" class="btn btn-primary btn-md">Ana Sayfaya Dön</a>
+                                                <a href="javascript:history.back()"
+                                                    class="btn btn-outline-secondary btn-md ms-2">Geri Git</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- container -->
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+                <!-- end Footer -->
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("partials/scripts") %>
+</body>
+
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                <!--- Sidemenu -->
+                <%- include("partials/sidemenu") %>
+                    <!-- End Sidebar -->
+
+                    <div class="clearfix"></div>
+
+            </div>
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <h4 class="page-title">Pazaryeri Yönetimi</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="nav nav-tabs nav-bordered mb-3">
+                                        <li class="nav-item">
+                                            <a href="#pending-products" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                                <i class="mdi mdi-clock-outline d-md-none d-block"></i>
+                                                <span class="d-none d-md-block">Onay Bekleyen Ürünler <span class="badge bg-warning rounded-pill ms-1"><%= pendingProducts.length %></span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#approved-products" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                <i class="mdi mdi-check-circle-outline d-md-none d-block"></i>
+                                                <span class="d-none d-md-block">Onaylanmış Ürünler <span class="badge bg-success rounded-pill ms-1"><%= approvedProducts.length %></span></span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#rejected-products" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                <i class="mdi mdi-close-circle-outline d-md-none d-block"></i>
+                                                <span class="d-none d-md-block">Reddedilmiş Ürünler <span class="badge bg-danger rounded-pill ms-1"><%= rejectedProducts.length %></span></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <!-- Onay Bekleyen Ürünler -->
+                                        <div class="tab-pane show active" id="pending-products">
+                                            <% if (pendingProducts.length === 0) { %>
+                                                <div class="text-center py-5">
+                                                    <i class="mdi mdi-clock-outline text-muted" style="font-size: 48px;"></i>
+                                                    <h4 class="mt-3">Onay bekleyen ürün bulunmuyor</h4>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="table-responsive">
+                                                    <table class="table table-centered table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ürün</th>
+                                                                <th>Satıcı</th>
+                                                                <th>Fiyat</th>
+                                                                <th>Kategori</th>
+                                                                <th>Durum</th>
+                                                                <th>Tarih</th>
+                                                                <th style="width: 125px;">İşlemler</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% pendingProducts.forEach(product => { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="flex-shrink-0">
+                                                                                <% if (product.images && product.images.length > 0) { %>
+                                                                                    <img src="<%= product.images[0] %>" class="rounded" alt="<%= product.title %>" width="40">
+                                                                                <% } else { %>
+                                                                                    <img src="/uploads/no-image.png" class="rounded" alt="Resim Yok" width="40">
+                                                                                <% } %>
+                                                                            </div>
+                                                                            <div class="flex-grow-1 ms-2">
+                                                                                <h5 class="m-0"><%= product.title %></h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.sellerName %><br>
+                                                                        <small class="text-muted"><%= product.seller %></small>
+                                                                    </td>
+                                                                    <td><%= product.price.toLocaleString('tr-TR') %> ₺</td>
+                                                                    <td><%= product.category %></td>
+                                                                    <td><%= product.condition %></td>
+                                                                    <td><%= new Date(product.createdAt).toLocaleDateString('tr-TR') %></td>
+                                                                    <td>
+                                                                        <a href="/pazaryeri/urun/<%= product._id %>" class="action-icon" title="Görüntüle" target="_blank">
+                                                                            <i class="mdi mdi-eye"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon approve-product" data-id="<%= product._id %>" title="Onayla">
+                                                                            <i class="mdi mdi-check-circle text-success"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon reject-product" data-id="<%= product._id %>" title="Reddet">
+                                                                            <i class="mdi mdi-close-circle text-danger"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+                                        <!-- Onaylanmış Ürünler -->
+                                        <div class="tab-pane" id="approved-products">
+                                            <% if (approvedProducts.length === 0) { %>
+                                                <div class="text-center py-5">
+                                                    <i class="mdi mdi-check-circle-outline text-muted" style="font-size: 48px;"></i>
+                                                    <h4 class="mt-3">Onaylanmış ürün bulunmuyor</h4>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="table-responsive">
+                                                    <table class="table table-centered table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ürün</th>
+                                                                <th>Satıcı</th>
+                                                                <th>Fiyat</th>
+                                                                <th>Kategori</th>
+                                                                <th>Durum</th>
+                                                                <th>Tarih</th>
+                                                                <th style="width: 125px;">İşlemler</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% approvedProducts.forEach(product => { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="flex-shrink-0">
+                                                                                <% if (product.images && product.images.length > 0) { %>
+                                                                                    <img src="<%= product.images[0] %>" class="rounded" alt="<%= product.title %>" width="40">
+                                                                                <% } else { %>
+                                                                                    <img src="/uploads/no-image.png" class="rounded" alt="Resim Yok" width="40">
+                                                                                <% } %>
+                                                                            </div>
+                                                                            <div class="flex-grow-1 ms-2">
+                                                                                <h5 class="m-0"><%= product.title %></h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.sellerName %><br>
+                                                                        <small class="text-muted"><%= product.seller %></small>
+                                                                    </td>
+                                                                    <td><%= product.price.toLocaleString('tr-TR') %> ₺</td>
+                                                                    <td><%= product.category %></td>
+                                                                    <td><%= product.condition %></td>
+                                                                    <td><%= new Date(product.createdAt).toLocaleDateString('tr-TR') %></td>
+                                                                    <td>
+                                                                        <a href="/pazaryeri/urun/<%= product._id %>" class="action-icon" title="Görüntüle" target="_blank">
+                                                                            <i class="mdi mdi-eye"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon reject-product" data-id="<%= product._id %>" title="Reddet">
+                                                                            <i class="mdi mdi-close-circle text-danger"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon delete-product" data-id="<%= product._id %>" title="Sil">
+                                                                            <i class="mdi mdi-delete text-danger"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+                                        <!-- Reddedilmiş Ürünler -->
+                                        <div class="tab-pane" id="rejected-products">
+                                            <% if (rejectedProducts.length === 0) { %>
+                                                <div class="text-center py-5">
+                                                    <i class="mdi mdi-close-circle-outline text-muted" style="font-size: 48px;"></i>
+                                                    <h4 class="mt-3">Reddedilmiş ürün bulunmuyor</h4>
+                                                </div>
+                                            <% } else { %>
+                                                <div class="table-responsive">
+                                                    <table class="table table-centered table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Ürün</th>
+                                                                <th>Satıcı</th>
+                                                                <th>Fiyat</th>
+                                                                <th>Kategori</th>
+                                                                <th>Durum</th>
+                                                                <th>Tarih</th>
+                                                                <th style="width: 125px;">İşlemler</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% rejectedProducts.forEach(product => { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="flex-shrink-0">
+                                                                                <% if (product.images && product.images.length > 0) { %>
+                                                                                    <img src="<%= product.images[0] %>" class="rounded" alt="<%= product.title %>" width="40">
+                                                                                <% } else { %>
+                                                                                    <img src="/uploads/no-image.png" class="rounded" alt="Resim Yok" width="40">
+                                                                                <% } %>
+                                                                            </div>
+                                                                            <div class="flex-grow-1 ms-2">
+                                                                                <h5 class="m-0"><%= product.title %></h5>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.sellerName %><br>
+                                                                        <small class="text-muted"><%= product.seller %></small>
+                                                                    </td>
+                                                                    <td><%= product.price.toLocaleString('tr-TR') %> ₺</td>
+                                                                    <td><%= product.category %></td>
+                                                                    <td><%= product.condition %></td>
+                                                                    <td><%= new Date(product.createdAt).toLocaleDateString('tr-TR') %></td>
+                                                                    <td>
+                                                                        <a href="/pazaryeri/urun/<%= product._id %>" class="action-icon" title="Görüntüle" target="_blank">
+                                                                            <i class="mdi mdi-eye"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon approve-product" data-id="<%= product._id %>" title="Onayla">
+                                                                            <i class="mdi mdi-check-circle text-success"></i>
+                                                                        </a>
+                                                                        <a href="#" class="action-icon delete-product" data-id="<%= product._id %>" title="Sil">
+                                                                            <i class="mdi mdi-delete text-danger"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    </div>
+                     <!-- container -->
+
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+<!-- Approve Product Modal -->
+    <div id="approve-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="mdi mdi-check-circle-outline h1 text-success"></i>
+                        <h4 class="mt-2">Ürünü Onayla</h4>
+                        <p class="mt-3">Bu ürünü onaylamak istediğinizden emin misiniz?</p>
+                        <form id="approve-form" action="" method="POST">
+                            <button type="button" class="btn btn-light me-2 my-2" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn btn-success my-2">Onayla</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Product Modal -->
+    <div id="reject-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="mdi mdi-close-circle-outline h1 text-danger"></i>
+                        <h4 class="mt-2">Ürünü Reddet</h4>
+                        <p class="mt-3">Bu ürünü reddetmek istediğinizden emin misiniz?</p>
+                        <form id="reject-form" action="" method="POST">
+                            <button type="button" class="btn btn-light me-2 my-2" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn btn-danger my-2">Reddet</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Product Modal -->
+    <div id="delete-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body p-4">
+                    <div class="text-center">
+                        <i class="mdi mdi-alert-circle-outline h1 text-danger"></i>
+                        <h4 class="mt-2">Emin misiniz?</h4>
+                        <p class="mt-3">Bu ürünü silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</p>
+                        <form id="delete-form" action="" method="POST">
+                            <button type="button" class="btn btn-light me-2 my-2" data-bs-dismiss="modal">İptal</button>
+                            <button type="submit" class="btn btn-danger my-2">Evet, Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <%- include("partials/scripts") %>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Approve product
+            const approveButtons = document.querySelectorAll('.approve-product');
+            const approveForm = document.getElementById('approve-form');
+            const approveModal = new bootstrap.Modal(document.getElementById('approve-modal'));
+            
+            approveButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-id');
+                    approveForm.action = `/ikyonetim/pazaryeri/onay/${productId}`;
+                    approveModal.show();
+                });
+            });
+            
+            // Reject product
+            const rejectButtons = document.querySelectorAll('.reject-product');
+            const rejectForm = document.getElementById('reject-form');
+            const rejectModal = new bootstrap.Modal(document.getElementById('reject-modal'));
+            
+            rejectButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-id');
+                    rejectForm.action = `/ikyonetim/pazaryeri/red/${productId}`;
+                    rejectModal.show();
+                });
+            });
+            
+            // Delete product
+            const deleteButtons = document.querySelectorAll('.delete-product');
+            const deleteForm = document.getElementById('delete-form');
+            const deleteModal = new bootstrap.Modal(document.getElementById('delete-modal'));
+            
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const productId = this.getAttribute('data-id');
+                    deleteForm.action = `/ikyonetim/pazaryeri/sil/${productId}`;
+                    deleteModal.show();
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
