@@ -5,6 +5,10 @@
     <title>Kullanıcı Yönetimi</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%- include("partials/css") %>
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 </head>
 
 <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
@@ -29,8 +33,7 @@
                                     <h4 class="header-title mb-4">KULLANICI LİSTESİ</h4>
                                     
                                     <div class="table-responsive">
-
-                                        <table class="table table-centered w-100 dt-responsive nowrap" id="users-datatable">
+                                        <table class="table table-striped table-bordered dt-responsive nowrap" id="userTable" style="width:100%">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Profil</th>
@@ -62,8 +65,16 @@
     </div>
 
     <%- include("partials/scripts") %>
+    
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
     <script>
+        let dataTable;
+
         $(document).ready(function() {
             loadUsers();
         });
@@ -86,6 +97,11 @@
         }
 
         function displayUsers(users) {
+            // Eğer DataTable zaten varsa, yok et
+            if (dataTable) {
+                dataTable.destroy();
+            }
+
             let html = '';
             
             users.forEach(function(user) {
@@ -139,6 +155,36 @@
             });
             
             $('#userTableBody').html(html);
+
+            // DataTable'ı başlat
+            dataTable = $('#userTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/tr.json"
+                },
+                "responsive": true,
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Tümü"]],
+                "order": [[1, 'asc']], // E-posta sütununa göre sırala
+                "columnDefs": [
+                    {
+                        "targets": [0, 3, 4], // Profil, Yeni Yetki ve İşlem sütunları
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [2], // Mevcut Yetki sütunu
+                        "searchable": true
+                    }
+                ],
+                "dom": '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                       '<"row"<"col-sm-12"tr>>' +
+                       '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                "drawCallback": function() {
+                    // DataTable yeniden çizildikten sonra select ve button'ları yeniden bağla
+                    $('select[id^="newRole_"]').off('change');
+                    $('button[onclick^="updateUserRole"]').off('click');
+                }
+            });
         }
 
         function updateUserRole(userId, email) {
