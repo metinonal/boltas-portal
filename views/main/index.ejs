@@ -24,6 +24,19 @@
                 text-decoration: none;
                 /* Hover sırasında altı çizgi kalkar */
             }
+
+            /* Ayarlara göre gizleme */
+            .birthday-section {
+                display: <%= (settings && settings.show_birthdays === false) ? 'none' : 'block' %>;
+            }
+
+            .new-hires-section {
+                display: <%= (settings && settings.show_new_hires === false) ? 'none' : 'block' %>;
+            }
+
+            .leavers-section {
+                display: <%= (settings && settings.show_leavers === false) ? 'none' : 'block' %>;
+            }
         </style>
 
 </head>
@@ -162,151 +175,141 @@
                                         </div>
                                     </div>
 
-                                    <% if (birthdays.length> 0) { %>
-                                        <div class="swiper mySwiper"
-                                            style="width: 100%; height: auto; margin-top: 20px;">
-                                            <div class="swiper-wrapper">
-                                                <% let index=1; %>
-                                                    <% birthdays.forEach(kisi=> { %>
-                                                        <div class="swiper-slide">
-                                                            <div class="card cta-box text-white"
-                                                                style="background-color: #201750;">
-                                                                <div class="card-body">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <div class="w-100 overflow-hidden">
-                                                                            <h3 class="m-0 fw-normal cta-box-title">
-                                                                                Doğum Günün Kutlu Olsun <b><br>
-                                                                                    <%= kisi.Adi %>
-                                                                                        <%= kisi.Soyadi %>
-                                                                                </b>!
-                                                                            </h3>
-                                                                            <h4>
-                                                                                <%= new
-                                                                                    Date(kisi.DogumTarihi).toLocaleDateString('tr-TR',
-                                                                                    { day: 'numeric' , month: 'long' })
-                                                                                    %>
-                                                                            </h4>
+                                    <!-- Doğum Günü Bölümü -->
+                                    <div class="birthday-section">
+                                        <% if (birthdays.length> 0) { %>
+                                            <div class="swiper mySwiper"
+                                                style="width: 100%; height: auto; margin-top: 20px;">
+                                                <div class="swiper-wrapper">
+                                                    <% let index=1; %>
+                                                        <% birthdays.forEach(kisi=> { %>
+                                                            <div class="swiper-slide">
+                                                                <div class="card cta-box text-white"
+                                                                    style="background-color: #201750;">
+                                                                    <div class="card-body">
+                                                                        <div class="d-flex align-items-center">
+                                                                            <div class="w-100 overflow-hidden">
+                                                                                <h3 class="m-0 fw-normal cta-box-title">
+                                                                                    Doğum Günün Kutlu Olsun <b><br>
+                                                                                        <%= kisi.Adi %>
+                                                                                            <%= kisi.Soyadi %>
+                                                                                    </b>!
+                                                                                </h3>
+                                                                                <h4>
+                                                                                    <%= new
+                                                                                        Date(kisi.DogumTarihi).toLocaleDateString('tr-TR',
+                                                                                        { day: 'numeric' , month: 'long' })
+                                                                                        %>
+                                                                                </h4>
+                                                                            </div>
+                                                                            <a href="#" id="confettiButton<%= index %>"
+                                                                                onclick="handleButtonClick(this)">
+                                                                                <img class="ms-3" src="/uploads/pasta.png"
+                                                                                    width="100" alt="Pasta">
+                                                                            </a>
                                                                         </div>
-                                                                        <a href="#" id="confettiButton<%= index %>"
-                                                                            onclick="handleButtonClick(this)">
-                                                                            <img class="ms-3" src="/uploads/pasta.png"
-                                                                                width="100" alt="Pasta">
-                                                                        </a>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <% index++; %>
-                                                            <% }); %>
-                                            </div>
-                                        </div>
-                                        <% } %>
-
-                                            <% if (newHires.length> 0) {
-                                                const sortedNewHires = newHires.sort((a, b) => new
-                                                Date(b.IsYeriGirisTarihi) - new Date(a.IsYeriGirisTarihi));
-                                                %>
-                                                <div class="card shadow-sm border-0 mb-3">
-                                                    <div class="card-header"><strong>Bu Hafta Başlayanlar</strong></div>
-                                                    <div class="card-body"
-                                                        style="overflow-y: auto; max-height: 200px;">
-                                                        <ul class="list-group list-group-flush">
-                                                            <% sortedNewHires.forEach(person=> { %>
-                                                                <li class="list-group-item d-flex align-items-start">
-                                                                    <i
-                                                                        class="mdi mdi-account-plus text-success me-3 mt-1" style="font-size: 1.3em;"></i>
-                                                                    <div>
-                                                                        <div><strong>
-                                                                                <%= person.Adi %>
-                                                                                    <%= person.Soyadi %>
-                                                                            </strong></div>
-                                                                        <div class="text-muted">
-                                                                            <%= person.Unvan %>
-                                                                        </div>
-                                                                        <div class="small text-secondary">
-                                                                            Başlama Tarihi:
-                                                                            <%= new
-                                                                                Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
-                                                                                { day: 'numeric' , month: 'long' }) %>
-                                                                        </div>
-                                                                    </div>
-                                                                </li>
+                                                            <% index++; %>
                                                                 <% }); %>
-                                                        </ul>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    </div>
+
+                                    <!-- İşe Girenler Bölümü -->
+                                    <div class="new-hires-section">
+                                        <% if (newHires.length> 0) {
+                                            const sortedNewHires = newHires.sort((a, b) => new
+                                            Date(b.IsYeriGirisTarihi) - new Date(a.IsYeriGirisTarihi));
+                                            %>
+                                            <div class="card shadow-sm border-0 mb-3">
+                                                <div class="card-header"><strong>Bu Hafta Başlayanlar</strong></div>
+                                                <div class="card-body"
+                                                    style="overflow-y: auto; max-height: 200px;">
+                                                    <ul class="list-group list-group-flush">
+                                                        <% sortedNewHires.forEach(person=> { %>
+                                                            <li class="list-group-item d-flex align-items-start">
+                                                                <i
+                                                                    class="mdi mdi-account-plus text-success me-3 mt-1" style="font-size: 1.3em;"></i>
+                                                                <div>
+                                                                    <div><strong>
+                                                                            <%= person.Adi %>
+                                                                                <%= person.Soyadi %>
+                                                                        </strong></div>
+                                                                    <div class="text-muted">
+                                                                        <%= person.Unvan %>
+                                                                    </div>
+                                                                    <div class="small text-secondary">
+                                                                        Başlama Tarihi:
+                                                                        <%= new
+                                                                            Date(person.IsYeriGirisTarihi).toLocaleDateString('tr-TR',
+                                                                            { day: 'numeric' , month: 'long' }) %>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <% }); %>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card shadow-sm border-0 mb-4">
+                                                    <div class="card-header"><strong>Bu Hafta Başlayanlar</strong>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        
                                                     </div>
                                                 </div>
-                                                <% } else { %>
-                                                    <div class="card shadow-sm border-0 mb-4">
-                                                        <div class="card-header"><strong>Bu Hafta Başlayanlar</strong>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            
-                                                        </div>
-                                                    </div>
-                                                    <% } %>
+                                                <% } %>
+                                    </div>
 
-
-
-                                                        <% if (leavers.length> 0) {
-                                                            const sortedLeavers = leavers.sort((a, b) => new
-                                                            Date(b.CEMP_ENDDATE) - new Date(a.CEMP_ENDDATE));
-                                                            %>
-                                                            <div class="card shadow-sm border-0 mb-3">
-                                                                <div class="card-header"><strong>Şirketimizden
-                                                                        Ayrılanlar</strong></div>
-                                                                <div class="card-body"
-                                                                    style="overflow-y: auto; max-height: 200px;">
-                                                                    <ul class="list-group list-group-flush">
-                                                                        <% sortedLeavers.filter(person => person.SicilNo !== 2020).forEach(person => { %>
-                                                                            <li class="list-group-item d-flex align-items-start">
-                                                                                <i class="mdi mdi-account text-danger me-3 mt-1" style="font-size: 1.3em;"></i>
-                                                                                <div>
-                                                                                    <div><strong>
-                                                                                        <%= person.Adi %> <%= person.Soyadi %>
-                                                                                    </strong></div>
-                                                                                    <div class="text-muted">
-                                                                                        <%= person.Unvan %>
-                                                                                    </div>
-                                                                                    <div class="small text-secondary">
-                                                                                        Ayrılma Tarihi:
-                                                                                        <%= new Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR', {
-                                                                                            day: 'numeric',
-                                                                                            month: 'long'
-                                                                                        }) %>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </li>
-                                                                        <% }); %>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <% } else { %>
-                                                                <div class="card shadow-sm border-0 mb-4">
-                                                                    <div class="card-header"><strong>Şirketimizden
-                                                                            Ayrılanlar</strong></div>
-                                                                    <div class="card-body">
-                                                                        
+                                    <!-- İşten Çıkanlar Bölümü -->
+                                    <div class="leavers-section">
+                                        <% if (leavers.length> 0) {
+                                            const sortedLeavers = leavers.sort((a, b) => new
+                                            Date(b.CEMP_ENDDATE) - new Date(a.CEMP_ENDDATE));
+                                            %>
+                                            <div class="card shadow-sm border-0 mb-3">
+                                                <div class="card-header"><strong>Şirketimizden
+                                                        Ayrılanlar</strong></div>
+                                                <div class="card-body"
+                                                    style="overflow-y: auto; max-height: 200px;">
+                                                    <ul class="list-group list-group-flush">
+                                                        <% sortedLeavers.filter(person => person.SicilNo !== 2020).forEach(person => { %>
+                                                            <li class="list-group-item d-flex align-items-start">
+                                                                <i class="mdi mdi-account text-danger me-3 mt-1" style="font-size: 1.3em;"></i>
+                                                                <div>
+                                                                    <div><strong>
+                                                                        <%= person.Adi %> <%= person.Soyadi %>
+                                                                    </strong></div>
+                                                                    <div class="text-muted">
+                                                                        <%= person.Unvan %>
+                                                                    </div>
+                                                                    <div class="small text-secondary">
+                                                                        Ayrılma Tarihi:
+                                                                        <%= new Date(person.CEMP_ENDDATE).toLocaleDateString('tr-TR', {
+                                                                            day: 'numeric',
+                                                                            month: 'long'
+                                                                        }) %>
                                                                     </div>
                                                                 </div>
-                                                                <% } %>
-
-
-
-                                                                    <!-- <div class="card cta-box text-white" style="background-color: #201750;">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h3 class="m-0 fw-normal cta-box-title">Doğum günün kutlu olsun
-                                                    <b>Metin!</b>&nbsp<i class="mdi mdi-arrow-right-bold-outline"></i>
-                                                </h3>
+                                                            </li>
+                                                        <% }); %>
+                                                    </ul>
+                                                </div>
                                             </div>
-                                            <a href="#" id="confettiButton">
-                                                <img class="ms-3" src="/uploads/pasta.png" width="120"
-                                                    alt="Generic placeholder image">
-                                            </a>
-                                        </div>
+                                            <% } else { %>
+                                                <div class="card shadow-sm border-0 mb-4">
+                                                    <div class="card-header"><strong>Şirketimizden
+                                                            Ayrılanlar</strong></div>
+                                                    <div class="card-body">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <% } %>
                                     </div>
-                                </div> -->
+
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12">
                                     <div id="slider" class="carousel slide carousel-fade" data-bs-ride="carousel">

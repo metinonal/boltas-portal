@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>Kullanıcı Yönetimi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include("partials/css") %>
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <div class="wrapper">
+        <div class="leftside-menu">
+            <%- include("partials/logo") %>
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+                <%- include("partials/sidemenu") %>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="content-page">
+            <div class="content">
+                <%- include("partials/topbar") %>
+                
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-4">KULLANICI LİSTESİ</h4>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Profil</th>
+                                                    <th>E-posta</th>
+                                                    <th>Mevcut Yetki</th>
+                                                    <th>Yeni Yetki</th>
+                                                    <th>İşlem</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="userTableBody">
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-4">
+                                                        <div class="spinner-border text-primary" role="status"></div>
+                                                        <div class="mt-2">Yükleniyor...</div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%- include("partials/footer") %>
+        </div>
+    </div>
+
+    <%- include("partials/scripts") %>
+
+    <script>
+        $(document).ready(function() {
+            loadUsers();
+        });
+
+        function loadUsers() {
+            $.ajax({
+                url: '/ikyonetim/kullanicilar',
+                type: 'GET',
+                success: function(response) {
+                    if (response.success && response.users) {
+                        displayUsers(response.users);
+                    } else {
+                        $('#userTableBody').html('<tr><td colspan="5" class="text-center text-danger">Kullanıcılar yüklenemedi</td></tr>');
+                    }
+                },
+                error: function() {
+                    $('#userTableBody').html('<tr><td colspan="5" class="text-center text-danger">Bağlantı hatası</td></tr>');
+                }
+            });
+        }
+
+        function displayUsers(users) {
+            let html = '';
+            
+            users.forEach(function(user) {
+                const email = user.email || 'E-posta yok';
+                
+                // roles array'inden ilk elemanı al
+                const currentRole = (user.roles && user.roles.length > 0) ? user.roles[0] : 'member';
+                
+                // Profil resmi
+                const profileImage = email !== 'E-posta yok' ? 
+                    `/uploads/pphotos/${email}.png` : 
+                    '/uploads/pphotos/default.jpg';
+                
+                // Mevcut yetki badge - admin'i ik olarak göster
+                let currentRoleText = 'Üye';
+                let currentRoleClass = 'bg-secondary';
+                
+                if (currentRole === 'ik' || currentRole === 'admin') {
+                    currentRoleText = 'İK Yöneticisi';
+                    currentRoleClass = 'bg-danger';
+                }
+                
+                // Select için değer - admin'i ik'ya çevir
+                const selectValue = (currentRole === 'admin') ? 'ik' : currentRole;
+                
+                html += `
+                    <tr>
+                        <td>
+                            <img src="${profileImage}" 
+                                 class="rounded-circle" 
+                                 style="width: 40px; height: 40px; object-fit: cover;"
+                                 onerror="this.src='/uploads/pphotos/default.jpg'">
+                        </td>
+                        <td><strong>${email}</strong></td>
+                        <td>
+                            <span class="badge ${currentRoleClass}">${currentRoleText}</span>
+                        </td>
+                        <td>
+                            <select class="form-select" id="newRole_${user._id}" style="min-width: 150px;">
+                                <option value="member" ${selectValue === 'member' ? 'selected' : ''}>Üye</option>
+                                <option value="ik" ${selectValue === 'ik' ? 'selected' : ''}>İK Yöneticisi</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-success btn-sm" onclick="updateUserRole('${user._id}', '${email}')">
+                                Güncelle
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            $('#userTableBody').html(html);
+        }
+
+        function updateUserRole(userId, email) {
+            const newRole = document.getElementById(`newRole_${userId}`).value;
+            
+            if (confirm(`${email} kullanıcısının yetkisini güncellemek istediğinizden emin misiniz?`)) {
+                $.ajax({
+                    url: '/ikyonetim/kullanici-yetki-guncelle',
+                    type: 'POST',
+                    data: {
+                        userId: userId,
+                        role: newRole
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            loadUsers(); // Tabloyu yenile
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>

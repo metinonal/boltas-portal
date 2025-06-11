@@ -93,6 +93,7 @@ app.use((req, res, next) => {
 
 // Route'lar
 const adminRoutes = require("./routes/ikyonetim/adminRoutes")
+const userRoutes = require("./routes/ikyonetim/userRoutes")
 const yemekRoutes = require("./routes/ikyonetim/yemekRoutes")
 const sliderRoutes = require("./routes/ikyonetim/sliderRoutes")
 const documentRoutes = require("./routes/ikyonetim/documentRoutes")
@@ -119,6 +120,7 @@ app.use("/ikyonetim", bilgiBankasiRoutes)
 app.use("/ikyonetim", sliderRoutes)
 app.use("/ikyonetim", documentRoutes)
 app.use("/ikyonetim", adminRoutes)
+app.use("/ikyonetim", userRoutes)
 app.use("/ikyonetim", marketplaceAdminRoutes)
 app.use("/", menuRoutes)
 app.use("/", phoneRoutes)
