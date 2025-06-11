@@ -138,6 +138,32 @@
                     </div>
                     <!-- end page title -->
 
+                    <!-- Red nedeni uyarısı -->
+                    <% if (product.status === 'reddedildi' && product.rejectionReason && product.seller === currentUserEmail) { %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-danger">
+                                    <h5><i class="mdi mdi-alert-circle-outline me-2"></i>Ürününüz Reddedildi</h5>
+                                    <p class="mb-0"><strong>Red Nedeni:</strong> <%= product.rejectionReason %></p>
+                                    <hr>
+                                    <p class="mb-0">Ürününüzü düzenleyerek tekrar onaya gönderebilirsiniz.</p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Satıldı uyarısı -->
+                    <% if (product.isSold) { %>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="alert alert-success">
+                                    <h5><i class="mdi mdi-check-circle-outline me-2"></i>Bu Ürün Satıldı</h5>
+                                    <p class="mb-0">Bu ürün satıldı olarak işaretlenmiştir.</p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
                     <div class="row">
                         <div class="col-lg-6 mb-3">
                             <div class="card">
@@ -195,8 +221,10 @@
                                     <h3 class="product-detail-title"><%= product.title %></h3>
                                     
                                     <div class="d-flex align-items-center mb-3">
-                                        <span class="product-detail-price"><%= product.price.toLocaleString('tr-TR') %> ₺</span>
                                         <span class="badge bg-primary product-detail-category-badge"><%= product.category %></span>
+                                        <% if (product.isSold) { %>
+                                            <span class="badge bg-success ms-2">SATILDI</span>
+                                        <% } %>
                                     </div>
                                     
                                     <div class="product-detail-meta">
@@ -225,10 +253,10 @@
                                         </div>
                                         
                                         <div class="seller-detail-contact">
-                                            <% if (product.sellerPhone) { %>
+                                            <% if (product.phoneNumber) { %>
                                                 <div class="seller-detail-contact-item">
                                                     <i class="mdi mdi-phone"></i>
-                                                    <span><%= product.sellerPhone %></span>
+                                                    <span><%= product.phoneNumber %></span>
                                                 </div>
                                             <% } %>
                                             <div class="seller-detail-contact-item">
@@ -241,8 +269,8 @@
                                             <a href="mailto:<%= product.seller %>" class="btn btn-primary btn-sm">
                                                 <i class="mdi mdi-email-outline me-1"></i> E-posta Gönder
                                             </a>
-                                            <% if (product.sellerPhone) { %>
-                                                <a href="tel:<%= product.sellerPhone %>" class="btn btn-info btn-sm">
+                                            <% if (product.phoneNumber) { %>
+                                                <a href="tel:<%= product.phoneNumber %>" class="btn btn-info btn-sm">
                                                     <i class="mdi mdi-phone me-1"></i> Ara
                                                 </a>
                                             <% } %>
@@ -252,9 +280,6 @@
                                     <div class="product-detail-actions">
                                         <button type="button" class="btn btn-outline-primary" id="report-button">
                                             <i class="mdi mdi-flag-outline me-1"></i> Bildir
-                                        </button>
-                                        <button type="button" class="btn btn-outline-info" id="favorite-button">
-                                            <i class="mdi mdi-heart-outline me-1"></i> Favorilere Ekle
                                         </button>
                                     </div>
                                     
@@ -361,12 +386,43 @@
             
             // Favorites button
             $('#favorite-button').on('click', function() {
-                Swal.fire({
-                    title: 'Favorilere Eklendi',
-                    text: 'Ürün favorilerinize eklendi',
-                    icon: 'success',
-                    confirmButtonText: 'Tamam'
-                });
+                var button = $(this);
+                var isFavorited = button.data('favorited');
+                var productId = '<%= product._id %>';
+                var icon = button.find('i');
+                
+                var url = isFavorited ? '/pazaryeri/favorilerden-cikar/' + productId : '/pazaryeri/favorilere-ekle/' + productId;
+                
+                $.post(url)
+                    .done(function(response) {
+                        if (response.success) {
+                            if (isFavorited) {
+                                icon.removeClass('mdi-heart').addClass('mdi-heart-outline');
+                                button.html('<i class="mdi mdi-heart-outline me-1"></i> Favorilere Ekle');
+                                button.data('favorited', false);
+                            } else {
+                                icon.removeClass('mdi-heart-outline').addClass('mdi-heart');
+                                button.html('<i class="mdi mdi-heart me-1"></i> Favorilerden Çıkar');
+                                button.data('favorited', true);
+                            }
+                            
+                            Swal.fire({
+                                title: 'Başarılı',
+                                text: response.message,
+                                icon: 'success',
+                                confirmButtonText: 'Tamam',
+                                timer: 2000
+                            });
+                        }
+                    })
+                    .fail(function() {
+                        Swal.fire({
+                            title: 'Hata',
+                            text: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+                            icon: 'error',
+                            confirmButtonText: 'Tamam'
+                        });
+                    });
             });
             
             // Share buttons

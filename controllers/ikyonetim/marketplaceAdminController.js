@@ -32,6 +32,7 @@ exports.approveProduct = async (req, res) => {
     }
 
     product.status = "onaylandı"
+    product.rejectionReason = "" // Red nedenini temizle
     await product.save()
 
     res.redirect("/ikyonetim/pazaryeri")
@@ -44,18 +45,47 @@ exports.approveProduct = async (req, res) => {
 // Ürün reddetme
 exports.rejectProduct = async (req, res) => {
   try {
+    const { rejectReason } = req.body
+
+    // Red nedeni zorunlu
+    if (!rejectReason || rejectReason.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Red nedeni belirtilmesi zorunludur.",
+      })
+    }
+
     const product = await Product.findById(req.params.id)
 
     if (!product) {
-      return res.status(404).send("Ürün bulunamadı")
+      return res.status(404).json({
+        success: false,
+        message: "Ürün bulunamadı",
+      })
     }
 
     product.status = "reddedildi"
+    product.rejectionReason = rejectReason.trim()
     await product.save()
 
+    // AJAX isteği ise JSON döndür
+    if (req.headers["content-type"] === "application/json") {
+      return res.json({ success: true, message: "Ürün reddedildi." })
+    }
+
+    // Normal form isteği ise redirect yap
     res.redirect("/ikyonetim/pazaryeri")
   } catch (err) {
     console.error("Ürün reddedilirken hata oluştu:", err)
+
+    // AJAX isteği ise JSON döndür
+    if (req.headers["content-type"] === "application/json") {
+      return res.status(500).json({
+        success: false,
+        message: "Ürün reddedilirken bir hata oluştu.",
+      })
+    }
+
     res.status(500).send("Ürün reddedilirken bir hata oluştu.")
   }
 }

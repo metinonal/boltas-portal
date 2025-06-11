@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title><%= title %> | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Boltas Portal Pazaryeri" name="description">
+
+    <%- include("../partials/css") %>
+    <link href="/admin-assets/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <a href="/pazaryeri" class="btn btn-primary">
+                                        <i class="mdi mdi-arrow-left me-1"></i> Pazaryerine Dön
+                                    </a>
+                                </div>
+                                <h4 class="page-title">Favorilerim</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <% if (products.length === 0) { %>
+                                        <div class="text-center py-5">
+                                            <i class="mdi mdi-heart-outline text-muted" style="font-size: 48px;"></i>
+                                            <h4 class="mt-3">Henüz favori ürününüz yok</h4>
+                                            <p class="text-muted">Beğendiğiniz ürünleri favorilere ekleyerek buradan takip edebilirsiniz.</p>
+                                            <a href="/pazaryeri" class="btn btn-primary mt-2">
+                                                <i class="mdi mdi-shopping me-1"></i> Pazaryerine Git
+                                            </a>
+                                        </div>
+                                    <% } else { %>
+                                        <div class="row">
+                                            <% products.forEach(product => { %>
+                                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                                    <div class="card product-box">
+                                                        <div class="card-body">
+                                                            <div class="bg-light">
+                                                                <% if (product.images && product.images.length > 0) { %>
+                                                                    <img src="<%= product.images[0] %>" alt="<%= product.title %>" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
+                                                                <% } else { %>
+                                                                    <img src="/uploads/no-image.png" alt="Resim Yok" class="img-fluid" style="height: 200px; width: 100%; object-fit: cover;">
+                                                                <% } %>
+                                                            </div>
+
+                                                            <div class="product-info">
+                                                                <div class="row align-items-center">
+                                                                    <div class="col">
+                                                                        <h5 class="font-16 mt-0 sp-line-1">
+                                                                            <a href="/pazaryeri/urun/<%= product._id %>" class="text-dark"><%= product.title %></a>
+                                                                        </h5>
+                                                                        <div class="mt-3">
+                                                                            <% if (product.price) { %>
+                                                                                <h5 class="m-0">
+                                                                                    <span class="text-muted">₺<%= product.price.toLocaleString('tr-TR') %></span>
+                                                                                </h5>
+                                                                            <% } else { %>
+                                                                                <h5 class="m-0">
+                                                                                    <span class="text-muted">Fiyat Belirtilmemiş</span>
+                                                                                </h5>
+                                                                            <% } %>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                <div class="mt-3">
+                                                                    <p class="text-muted mb-2">
+                                                                        <i class="mdi mdi-map-marker me-1"></i> <%= product.location %>
+                                                                    </p>
+                                                                    <p class="text-muted mb-2">
+                                                                        <i class="mdi mdi-account me-1"></i> <%= product.sellerName %>
+                                                                    </p>
+                                                                    <p class="text-muted mb-0">
+                                                                        <i class="mdi mdi-eye me-1"></i> <%= product.viewCount %> görüntülenme
+                                                                    </p>
+                                                                </div>
+
+                                                                <div class="mt-3 d-flex justify-content-between">
+                                                                    <a href="/pazaryeri/urun/<%= product._id %>" class="btn btn-primary btn-sm">
+                                                                        <i class="mdi mdi-eye me-1"></i> Görüntüle
+                                                                    </a>
+                                                                    <button class="btn btn-outline-danger btn-sm remove-favorite" data-id="<%= product._id %>">
+                                                                        <i class="mdi mdi-heart-off me-1"></i> Çıkar
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <% }) %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+                </div>
+                <!-- container -->
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Favorilerden çıkarma
+            const removeFavoriteButtons = document.querySelectorAll('.remove-favorite');
+            
+            removeFavoriteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.getAttribute('data-id');
+                    
+                    fetch(`/pazaryeri/favorilerden-cikar/${productId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Sayfayı yenile
+                            location.reload();
+                        } else {
+                            alert('Bir hata oluştu: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Bir hata oluştu');
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

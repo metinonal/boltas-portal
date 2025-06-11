@@ -54,6 +54,9 @@
                                         <a href="/pazaryeri/urunlerim" class="btn btn-info">
                                             <i class="mdi mdi-format-list-bulleted me-1"></i> Ürünlerim
                                         </a>
+                                        <a href="/pazaryeri/favorilerim" class="btn btn-warning">
+                                            <i class="mdi mdi-heart me-1"></i> Favorilerim
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -133,39 +136,6 @@
                             </div>
 
                             <form id="filter-form" method="GET" action="">
-                                <!-- Fiyat Aralığı Filtresi -->
-                                <div class="card mt-3">
-                                    <div class="card-body">
-                                        <h5 class="card-title mb-3">Fiyat Aralığı</h5>
-                                        <div id="price-range" class="price-slider mb-3"></div>
-                                        
-                                        <!-- Fiyat input alanları -->
-                                        <div class="row mt-3">
-                                            <div class="col-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-text">₺</span>
-                                                    <input type="number" class="form-control" id="price-min-input" 
-                                                           min="0" max="10000" step="1" 
-                                                           value="<%= locals.filters ? filters.minPrice : 0 %>" 
-                                                           placeholder="Min">
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-text">₺</span>
-                                                    <input type="number" class="form-control" id="price-max-input" 
-                                                           min="0" max="10000" step="1" 
-                                                           value="<%= locals.filters ? filters.maxPrice : 10000 %>" 
-                                                           placeholder="Max">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <input type="hidden" name="minPrice" id="minPrice" value="<%= locals.filters ? filters.minPrice : 0 %>">
-                                        <input type="hidden" name="maxPrice" id="maxPrice" value="<%= locals.filters ? filters.maxPrice : 10000 %>">
-                                    </div>
-                                </div>
-
                                 <!-- Durum Filtresi - Dropdown Yapıda -->
                                 <div class="card mt-3">
                                     <div class="card-body">
@@ -386,21 +356,38 @@
                                     <% products.forEach(product => { %>
                                         <div class="col-md-6 col-lg-4 mb-4 product-item">
                                             <div class="card product-card h-100">
-                                                <div class="product-img-container">
+                                                <div class="product-img-container position-relative">
                                                     <% if (product.images && product.images.length > 0) { %>
                                                         <img src="<%= product.images[0] %>" class="product-img" alt="<%= product.title %>">
                                                     <% } else { %>
                                                         <img src="/uploads/no-image.png" class="product-img" alt="Resim Yok">
                                                     <% } %>
-                                                    <span class="badge bg-primary category-badge"><%= product.category %></span>
+                                                    
+                                                    <!-- Kategori badge -->
+                                                    <span class="badge bg-primary category-badge position-absolute" style="top: 10px; right: 10px;"><%= product.category %></span>
+                                                    
+                                                    <!-- Favori butonu - sol üst köşe, kırmızı -->
+                                                    <button class="btn btn-sm favorite-btn position-absolute" 
+                                                            style="top: 10px; left: 10px; z-index: 10; background-color: rgba(220, 53, 69, 0.9); border: none; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center;" 
+                                                            data-product-id="<%= product._id %>"
+                                                            data-favorited="<%= product.favoritedBy && product.favoritedBy.includes(locals.user ? (user.EMail || user.email || user.mail || user.username) : '') ? 'true' : 'false' %>">
+                                                        <i class="mdi mdi-heart<%= product.favoritedBy && product.favoritedBy.includes(locals.user ? (user.EMail || user.email || user.mail || user.username) : '') ? '' : '-outline' %>" style="color: white; font-size: 16px;"></i>
+                                                    </button>
+                                                    
+                                                    <!-- Satıldı badge -->
+                                                    <% if (product.isSold) { %>
+                                                        <span class="badge bg-success position-absolute" style="top: 50px; left: 10px;">SATILDI</span>
+                                                    <% } %>
                                                 </div>
                                                 <div class="card-body d-flex flex-column">
                                                     <h5 class="card-title text-truncate"><%= product.title %></h5>
                                                     <p class="card-text text-truncate mb-2"><%= product.description %></p>
                                                     <div class="mt-auto">
                                                         <div class="d-flex justify-content-between align-items-center">
-                                                            <span class="text-primary fw-bold"><%= product.price.toLocaleString('tr-TR') %> ₺</span>
                                                             <span class="badge bg-light text-dark"><%= product.condition %></span>
+                                                            <% if (product.isSold) { %>
+                                                                <span class="text-success fw-bold">SATILDI</span>
+                                                            <% } %>
                                                         </div>
                                                         <div class="d-flex justify-content-between align-items-center mt-2">
                                                             <small class="text-muted"><i class="mdi mdi-map-marker"></i> <%= product.location %></small>
@@ -497,11 +484,110 @@
     </div>
     <!-- END wrapper -->
 
+    <!-- Pazaryeri Aydınlatma Metni Modal -->
+    <div id="terms-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pazaryeri Kullanım Şartları ve Aydınlatma Metni</h5>
+                </div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                    <h6><strong>Pazaryeri Kullanım Şartları</strong></h6>
+                    <p>Boltas Portal Pazaryeri'ni kullanarak aşağıdaki şartları kabul etmiş sayılırsınız:</p>
+                    
+                    <ul>
+                        <li><strong>Genel Kurallar:</strong> Pazaryerimiz sadece şirket çalışanları arasında ikinci el eşya alım-satımı için tasarlanmıştır.</li>
+                        <li><strong>Yasak İçerikler:</strong> Yasadışı, zararlı, tehlikeli veya uygunsuz ürünlerin satışı kesinlikle yasaktır.</li>
+                        <li><strong>Sorumluluk:</strong> Ürün kalitesi, teslimat ve ödeme konularında sorumluluk tamamen alıcı ve satıcı arasındadır.</li>
+                        <li><strong>Moderasyon:</strong> Tüm ilanlar yönetici onayından geçer. Uygunsuz ilanlar reddedilir.</li>
+                        <li><strong>İletişim:</strong> Alıcı ve satıcı arasındaki iletişim kendi sorumluluklarındadır.</li>
+                    </ul>
+
+                    <h6><strong>Kişisel Verilerin Korunması</strong></h6>
+                    <p>KVKK kapsamında kişisel verilerinizin işlenmesi hakkında bilgilendirme:</p>
+                    
+                    <ul>
+                        <li><strong>Veri Sorumlusu:</strong> Boltas A.Ş.</li>
+                        <li><strong>İşlenen Veriler:</strong> Ad, soyad, e-posta, telefon numarası, ürün bilgileri</li>
+                        <li><strong>İşleme Amacı:</strong> Pazaryeri hizmetinin sunulması, iletişimin sağlanması</li>
+                        <li><strong>Saklama Süresi:</strong> Hizmet süresi boyunca ve yasal yükümlülükler gereği</li>
+                        <li><strong>Haklarınız:</strong> Verilerinize erişim, düzeltme, silme haklarınız bulunmaktadır.</li>
+                    </ul>
+
+                    <h6><strong>Güvenlik Uyarıları</strong></h6>
+                    <ul>
+                        <li>Alışveriş yaparken dikkatli olun ve güvendiğiniz kişilerle işlem yapın.</li>
+                        <li>Ödeme işlemlerini güvenli yöntemlerle gerçekleştirin.</li>
+                        <li>Şüpheli durumları derhal yönetime bildirin.</li>
+                        <li>Kişisel bilgilerinizi koruyun ve gereksiz paylaşımlardan kaçının.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="reject-terms">Kabul Etmiyorum</button>
+                    <button type="button" class="btn btn-primary" id="accept-terms">Kabul Ediyorum</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <%- include("../partials/scripts") %>
     <script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
 
     <script>
         $(document).ready(function() {
+            // Pazaryeri şartları kontrolü
+            var termsAccepted = <%= termsAccepted %>;
+            if (!termsAccepted) {
+                $('#terms-modal').modal('show');
+            }
+
+            // Şartları kabul etme
+            $('#accept-terms').on('click', function() {
+                $.post('/pazaryeri/sartlari-kabul-et')
+                    .done(function(response) {
+                        if (response.success) {
+                            $('#terms-modal').modal('hide');
+                        }
+                    })
+                    .fail(function() {
+                        alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+                    });
+            });
+
+            // Şartları reddetme
+            $('#reject-terms').on('click', function() {
+                window.location.href = '/';
+            });
+
+            // Favorilere ekleme/çıkarma
+            $('.favorite-btn').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var button = $(this);
+                var productId = button.data('product-id');
+                var isFavorited = button.data('favorited') === 'true';
+                var icon = button.find('i');
+                
+                var url = isFavorited ? '/pazaryeri/favorilerden-cikar/' + productId : '/pazaryeri/favorilere-ekle/' + productId;
+                
+                $.post(url)
+                    .done(function(response) {
+                        if (response.success) {
+                            if (isFavorited) {
+                                icon.removeClass('mdi-heart').addClass('mdi-heart-outline');
+                                button.data('favorited', 'false');
+                            } else {
+                                icon.removeClass('mdi-heart-outline').addClass('mdi-heart');
+                                button.data('favorited', 'true');
+                            }
+                        }
+                    })
+                    .fail(function() {
+                        alert('Bir hata oluştu. Lütfen tekrar deneyin.');
+                    });
+            });
+
             // Fiyat aralığı slider'ı
             var priceSlider = document.getElementById('price-range');
             var minPrice = <%= locals.filters ? filters.minPrice : 0 %>;

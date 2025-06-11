@@ -78,12 +78,11 @@
                                                             </div>
                                                         </th>
                                                         <th>Ürün</th>
-                                                        <th>Fiyat</th>
                                                         <th>Kategori</th>
                                                         <th>Durum</th>
                                                         <th>Görüntülenme</th>
                                                         <th>Tarih</th>
-                                                        <th style="width: 125px;">İşlemler</th>
+                                                        <th style="width: 150px;">İşlemler</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -106,10 +105,12 @@
                                                                     </div>
                                                                     <div class="flex-grow-1 ms-2">
                                                                         <h5 class="m-0"><%= product.title %></h5>
+                                                                        <% if (product.isSold) { %>
+                                                                            <span class="badge bg-success">SATILDI</span>
+                                                                        <% } %>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td><%= product.price.toLocaleString('tr-TR') %> ₺</td>
                                                             <td><%= product.category %></td>
                                                             <td>
                                                                 <% if (product.status === 'beklemede') { %>
@@ -118,6 +119,9 @@
                                                                     <span class="badge bg-success">Onaylandı</span>
                                                                 <% } else if (product.status === 'reddedildi') { %>
                                                                     <span class="badge bg-danger">Reddedildi</span>
+                                                                    <% if (product.rejectionReason) { %>
+                                                                        <br><small class="text-muted"><%= product.rejectionReason %></small>
+                                                                    <% } %>
                                                                 <% } %>
                                                             </td>
                                                             <td><%= product.viewCount %></td>
@@ -129,6 +133,11 @@
                                                                 <a href="/pazaryeri/urun-duzenle/<%= product._id %>" class="action-icon" title="Düzenle">
                                                                     <i class="mdi mdi-square-edit-outline"></i>
                                                                 </a>
+                                                                <form action="/pazaryeri/urun-satildi/<%= product._id %>" method="POST" class="d-inline">
+                                                                    <button type="submit" class="action-icon btn btn-link p-0" title="<%= product.isSold ? 'Satışa Geri Koy' : 'Satıldı Olarak İşaretle' %>">
+                                                                        <i class="mdi mdi-<%= product.isSold ? 'refresh' : 'check-circle' %> text-<%= product.isSold ? 'warning' : 'success' %>"></i>
+                                                                    </button>
+                                                                </form>
                                                                 <a href="#" class="action-icon delete-product" data-id="<%= product._id %>" title="Sil">
                                                                     <i class="mdi mdi-delete"></i>
                                                                 </a>

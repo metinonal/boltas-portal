@@ -11,10 +11,6 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
-    },
     category: {
       type: String,
       required: true,
@@ -41,13 +37,18 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    sellerPhone: {
+    phoneNumber: {
       type: String,
+      default: "", // Kullanıcının girdiği telefon numarası
     },
     status: {
       type: String,
       enum: ["beklemede", "onaylandı", "reddedildi"],
       default: "beklemede",
+    },
+    rejectionReason: {
+      type: String,
+      default: "", // Red nedeni
     },
     location: {
       type: String,
@@ -57,10 +58,26 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isSold: {
+      type: Boolean,
+      default: false, // Satıldı durumu
+    },
     viewCount: {
       type: Number,
       default: 0,
     },
+    expiresAt: {
+      type: Date,
+      default: () => {
+        // 15 gün sonra expire olacak
+        return new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+      },
+    },
+    favoritedBy: [
+      {
+        type: String, // User email'leri
+      },
+    ],
   },
   { timestamps: true },
 )

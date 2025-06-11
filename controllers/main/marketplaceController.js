@@ -1,23 +1,36 @@
 const Product = require("../../models/Product")
+const User = require("../../models/User")
 const fs = require("fs")
 const path = require("path")
 
 // Tüm onaylı ürünleri getir (filtreleme, sıralama ve pagination ile)
 exports.getAllProducts = async (req, res) => {
   try {
+    // Kullanıcının pazaryeri şartlarını kabul edip etmediğini kontrol et
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+    let user = await User.findOne({ email: userEmail })
+
+    if (!user) {
+      // Kullanıcı yoksa oluştur
+      user = new User({
+        email: userEmail,
+        marketplaceTermsAccepted: false,
+      })
+      await user.save()
+    }
+
     // Sayfalama parametreleri
     const page = Number.parseInt(req.query.page) || 1
     const limit = Number.parseInt(req.query.limit) || 12
     const skip = (page - 1) * limit
 
-    // Filtreleme parametreleri
-    const filters = { status: "onaylandı", isActive: true }
-
-    // Fiyat filtresi
-    if (req.query.minPrice || req.query.maxPrice) {
-      filters.price = {}
-      if (req.query.minPrice) filters.price.$gte = Number.parseInt(req.query.minPrice)
-      if (req.query.maxPrice) filters.price.$lte = Number.parseInt(req.query.maxPrice)
+    // Filtreleme parametreleri - sadece aktif, satılmamış ve süresi dolmamış ürünler
+    const filters = {
+      status: "onaylandı",
+      isActive: true,
+      isSold: false,
+      expiresAt: { $gt: new Date() },
     }
 
     // Durum filtresi
@@ -114,6 +127,7 @@ exports.getAllProducts = async (req, res) => {
       filters: filterParams,
       sort: req.query.sort || "newest",
       search: req.query.search || "",
+      termsAccepted: user.marketplaceTermsAccepted,
     })
   } catch (err) {
     console.error("Ürünler getirilirken hata oluştu:", err)
@@ -121,10 +135,38 @@ exports.getAllProducts = async (req, res) => {
   }
 }
 
+// Pazaryeri şartlarını kabul etme
+exports.acceptTerms = async (req, res) => {
+  try {
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    await User.findOneAndUpdate({ email: userEmail }, { marketplaceTermsAccepted: true }, { upsert: true })
+
+    res.json({ success: true })
+  } catch (err) {
+    console.error("Şartlar kabul edilirken hata oluştu:", err)
+    res.status(500).json({ success: false, message: "Bir hata oluştu." })
+  }
+}
+
 // Kategoriye göre ürünleri getir (filtreleme, sıralama ve pagination ile)
 exports.getProductsByCategory = async (req, res) => {
   try {
     const category = req.params.category
+
+    // Kullanıcının pazaryeri şartlarını kabul edip etmediğini kontrol et
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+    let user = await User.findOne({ email: userEmail })
+
+    if (!user) {
+      user = new User({
+        email: userEmail,
+        marketplaceTermsAccepted: false,
+      })
+      await user.save()
+    }
 
     // Sayfalama parametreleri
     const page = Number.parseInt(req.query.page) || 1
@@ -136,13 +178,8 @@ exports.getProductsByCategory = async (req, res) => {
       category,
       status: "onaylandı",
       isActive: true,
-    }
-
-    // Fiyat filtresi
-    if (req.query.minPrice || req.query.maxPrice) {
-      filters.price = {}
-      if (req.query.minPrice) filters.price.$gte = Number.parseInt(req.query.minPrice)
-      if (req.query.maxPrice) filters.price.$lte = Number.parseInt(req.query.maxPrice)
+      isSold: false,
+      expiresAt: { $gt: new Date() },
     }
 
     // Durum filtresi
@@ -240,6 +277,7 @@ exports.getProductsByCategory = async (req, res) => {
       filters: filterParams,
       sort: req.query.sort || "newest",
       search: req.query.search || "",
+      termsAccepted: user.marketplaceTermsAccepted,
     })
   } catch (err) {
     console.error("Kategori ürünleri getirilirken hata oluştu:", err)
@@ -256,13 +294,34 @@ exports.getProductDetail = async (req, res) => {
       return res.status(404).send("Ürün bulunamadı")
     }
 
-    // Görüntülenme sayısını artır
-    product.viewCount += 1
-    await product.save()
+    // Erişim kontrolü - sadece onaylı ürünler herkese açık
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    // Ürün onaylanmamışsa sadece ürün sahibi ve admin erişebilir
+    if (product.status !== "onaylandı") {
+      const isOwner = product.seller === userEmail
+      const isAdmin = req.session.user.role === "admin" || req.session.user.isAdmin
+
+      if (!isOwner && !isAdmin) {
+        return res.status(403).send("Bu ürüne erişim yetkiniz yok")
+      }
+    }
+
+    // Görüntülenme sayısını artır (sadece onaylı ürünler için)
+    if (product.status === "onaylandı") {
+      product.viewCount += 1
+      await product.save()
+    }
+
+    // Kullanıcının bu ürünü favorilere eklemiş mi kontrol et
+    const isFavorited = product.favoritedBy.includes(userEmail)
 
     res.render("main/marketplace/product-detail", {
       title: product.title,
       product,
+      isFavorited,
+      currentUserEmail: userEmail,
     })
   } catch (err) {
     console.error("Ürün detayı getirilirken hata oluştu:", err)
@@ -285,7 +344,7 @@ exports.getAddProductPage = (req, res) => {
 // Ürün ekle
 exports.addProduct = async (req, res) => {
   try {
-    const { title, description, price, category, condition, location } = req.body
+    const { title, description, category, condition, location, phoneNumber } = req.body
 
     // Kullanıcı bilgilerini kontrol et
     if (!req.session || !req.session.user) {
@@ -336,15 +395,15 @@ exports.addProduct = async (req, res) => {
     const newProduct = new Product({
       title,
       description,
-      price,
       category,
       condition,
       images,
       seller: userEmail,
       sellerName: sellerName,
       sellerTitle: sellerTitle,
-      sellerPhone: req.session.user.CepTelefonu || req.session.user.phone || req.session.user.phoneNumber || "",
+      phoneNumber: phoneNumber || "",
       location,
+      expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 gün sonra expire
     })
 
     await newProduct.save()
@@ -448,7 +507,7 @@ exports.getEditProductPage = async (req, res) => {
 // Ürün düzenle
 exports.updateProduct = async (req, res) => {
   try {
-    const { title, description, price, category, condition, location, keepImages } = req.body
+    const { title, description, category, condition, location, keepImages, phoneNumber } = req.body
     const productId = req.params.id
 
     const product = await Product.findById(productId)
@@ -517,19 +576,121 @@ exports.updateProduct = async (req, res) => {
     await Product.findByIdAndUpdate(productId, {
       title,
       description,
-      price,
       category,
       condition,
       location,
       images: updatedImages,
-      sellerTitle: sellerTitle, // Unvanı güncelle
-      status: "beklemede", // Düzenlenen ürün tekrar onaya düşsün
+      sellerTitle: sellerTitle,
+      phoneNumber: phoneNumber || "",
+      status: "beklemede",
+      rejectionReason: "",
       updatedAt: Date.now(),
+      expiresAt: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000), // 15 gün süre ver
     })
 
     res.redirect("/pazaryeri/urunlerim?success=true")
   } catch (err) {
     console.error("Ürün güncellenirken hata oluştu:", err)
     res.status(500).send("Ürün güncellenirken bir hata oluştu: " + err.message)
+  }
+}
+
+// Ürünü satıldı olarak işaretle
+exports.toggleSold = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id)
+
+    if (!product) {
+      return res.status(404).send("Ürün bulunamadı")
+    }
+
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    // Sadece ürün sahibi işaretleyebilir
+    if (product.seller !== userEmail) {
+      return res.status(403).send("Bu işlem için yetkiniz yok")
+    }
+
+    // Satıldı durumunu değiştir
+    product.isSold = !product.isSold
+    await product.save()
+
+    res.redirect("/pazaryeri/urunlerim?success=true")
+  } catch (err) {
+    console.error("Ürün satıldı durumu güncellenirken hata oluştu:", err)
+    res.status(500).send("Ürün satıldı durumu güncellenirken bir hata oluştu.")
+  }
+}
+
+// Favorilere ekle
+exports.addToFavorites = async (req, res) => {
+  try {
+    const productId = req.params.id
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    const product = await Product.findById(productId)
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Ürün bulunamadı" })
+    }
+
+    // Zaten favorilerde mi kontrol et
+    if (!product.favoritedBy.includes(userEmail)) {
+      product.favoritedBy.push(userEmail)
+      await product.save()
+    }
+
+    res.json({ success: true, message: "Ürün favorilere eklendi" })
+  } catch (err) {
+    console.error("Favorilere eklenirken hata oluştu:", err)
+    res.status(500).json({ success: false, message: "Bir hata oluştu" })
+  }
+}
+
+// Favorilerden çıkar
+exports.removeFromFavorites = async (req, res) => {
+  try {
+    const productId = req.params.id
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    const product = await Product.findById(productId)
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Ürün bulunamadı" })
+    }
+
+    // Favorilerden çıkar
+    product.favoritedBy = product.favoritedBy.filter((email) => email !== userEmail)
+    await product.save()
+
+    res.json({ success: true, message: "Ürün favorilerden çıkarıldı" })
+  } catch (err) {
+    console.error("Favorilerden çıkarılırken hata oluştu:", err)
+    res.status(500).json({ success: false, message: "Bir hata oluştu" })
+  }
+}
+
+// Favori ürünleri getir
+exports.getFavorites = async (req, res) => {
+  try {
+    const userEmail =
+      req.session.user.EMail || req.session.user.email || req.session.user.mail || req.session.user.username
+
+    const favoriteProducts = await Product.find({
+      favoritedBy: userEmail,
+      status: "onaylandı",
+      isActive: true,
+      isSold: false,
+      expiresAt: { $gt: new Date() },
+    }).sort({ createdAt: -1 })
+
+    res.render("main/marketplace/favorites", {
+      title: "Favorilerim",
+      products: favoriteProducts,
+    })
+  } catch (err) {
+    console.error("Favori ürünler getirilirken hata oluştu:", err)
+    res.status(500).send("Favori ürünler getirilirken bir hata oluştu.")
   }
 }

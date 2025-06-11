@@ -38,15 +38,15 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Tüm <textarea> öğelerini bul
-        var textareas = document.querySelectorAll('textarea');
+    // Sadece id'si 'editor' olan textarea'yı seç
+    var textarea = document.getElementById('editor');
 
-        // Her bir <textarea> için CKEditor'u başlat
-        textareas.forEach(function (textarea) {
-            CKEDITOR.replace(textarea, {
-                filebrowserUploadUrl: '/admin/upload',
-                filebrowserBrowseUrl: '/admin/uploads'
-            });
+    // Eğer textarea varsa CKEditor'u başlat
+    if (textarea) {
+        CKEDITOR.replace(textarea, {
+            filebrowserUploadUrl: '/admin/upload',
+            filebrowserBrowseUrl: '/admin/uploads'
         });
-    });
+    }
+});
 </script>

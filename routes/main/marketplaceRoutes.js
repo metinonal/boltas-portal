@@ -7,6 +7,9 @@ const upload = require("../../middlewares/upload")
 // Pazaryeri ana sayfası - tüm onaylı ürünleri göster
 router.get("/", marketplaceController.getAllProducts)
 
+// Pazaryeri şartlarını kabul etme
+router.post("/sartlari-kabul-et", sessionTimeoutMiddleware, authMiddleware, marketplaceController.acceptTerms)
+
 // Ürün detay sayfası
 router.get("/urun/:id", marketplaceController.getProductDetail)
 
@@ -27,6 +30,21 @@ router.get("/urunlerim", sessionTimeoutMiddleware, authMiddleware, marketplaceCo
 
 // Kullanıcının kendi ürününü silme
 router.post("/urun-sil/:id", sessionTimeoutMiddleware, authMiddleware, marketplaceController.deleteUserProduct)
+
+// Ürünü satıldı olarak işaretleme
+router.post("/urun-satildi/:id", sessionTimeoutMiddleware, authMiddleware, marketplaceController.toggleSold)
+
+// Favorilere ekleme/çıkarma
+router.post("/favorilere-ekle/:id", sessionTimeoutMiddleware, authMiddleware, marketplaceController.addToFavorites)
+router.post(
+  "/favorilerden-cikar/:id",
+  sessionTimeoutMiddleware,
+  authMiddleware,
+  marketplaceController.removeFromFavorites,
+)
+
+// Favori ürünleri görüntüleme
+router.get("/favorilerim", sessionTimeoutMiddleware, authMiddleware, marketplaceController.getFavorites)
 
 // Kategori filtreleme
 router.get("/kategori/:category", marketplaceController.getProductsByCategory)
