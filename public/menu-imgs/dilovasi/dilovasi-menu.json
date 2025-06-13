@@ -1,0 +1,551 @@
+[
+    {
+        "date": "2025-06-02",
+        "meals": [
+            {
+                "name": "EZOGELİN ÇORBA",
+                "calorie": 227
+            },
+            {
+                "name": "MANTARLI PİLİÇ SOTE",
+                "calorie": 422
+            },
+            {
+                "name": "MELEK PİLAVI",
+                "calorie": 434
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede YOĞURT",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-03",
+        "meals": [
+            {
+                "name": "ŞEHRİYE ÇORBA",
+                "calorie": 186
+            },
+            {
+                "name": "ETLİ NOHUT",
+                "calorie": 386
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "KARAGÖZ TATLISI",
+                "calorie": 541
+            }
+        ]
+    },
+    {
+        "date": "2025-06-04",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBA",
+                "calorie": 209
+            },
+            {
+                "name": "MADALYON KÖFTE",
+                "calorie": 557
+            },
+            {
+                "name": "SPAGETTİ",
+                "calorie": 331
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-05",
+        "meals": [
+            {
+                "name": "ARİFE GÜNÜ",
+                "calorie": null
+            }
+        ]
+    },
+    {
+        "date": "2025-06-06",
+        "meals": [
+            {
+                "name": "RESMİ TATİL",
+                "calorie": null
+            }
+        ]
+    },
+    {
+        "date": "2025-06-09",
+        "meals": [
+            {
+                "name": "RESMİ TATİL",
+                "calorie": null
+            }
+        ]
+    },
+    {
+        "date": "2025-06-10",
+        "meals": [
+            {
+                "name": "TANELİ SEBZE ÇORBASI",
+                "calorie": 162
+            },
+            {
+                "name": "HÜNKAR BEĞENDİ",
+                "calorie": 460
+            },
+            {
+                "name": "MEYHANE PİLAVI",
+                "calorie": 388
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "DONDURMA",
+                "calorie": 110
+            }
+        ]
+    },
+    {
+        "date": "2025-06-11",
+        "meals": [
+            {
+                "name": "MANTAR ÇORBASI",
+                "calorie": 179
+            },
+            {
+                "name": "PANELİ PİLİÇ BUT KAVURMA",
+                "calorie": 430
+            },
+            {
+                "name": "MAKARNA",
+                "calorie": 331
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede YOĞURT",
+                "calorie": 110
+            },
+            {
+                "name": "PEYNİR TATLISI",
+                "calorie": 301
+            }
+        ]
+    },
+    {
+        "date": "2025-06-12",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBASI",
+                "calorie": 209
+            },
+            {
+                "name": "BİBER DOLMA",
+                "calorie": 316
+            },
+            {
+                "name": "SU BÖREĞİ",
+                "calorie": 462
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede YOĞURT",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-13",
+        "meals": [
+            {
+                "name": "FESLEĞENLİ DOMATES ÇORBASI",
+                "calorie": 163
+            },
+            {
+                "name": "IZGARA KÖFTE",
+                "calorie": 439
+            },
+            {
+                "name": "MISIRLI PİLAV",
+                "calorie": 434
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "MOZAİK PASTA",
+                "calorie": 497
+            }
+        ]
+    },
+    {
+        "date": "2025-06-16",
+        "meals": [
+            {
+                "name": "EZOGELİN ÇORBA",
+                "calorie": 227
+            },
+            {
+                "name": "PİLİÇ PİRZOLA",
+                "calorie": 441
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-17",
+        "meals": [
+            {
+                "name": "DÜĞÜN ÇORBASI",
+                "calorie": 194
+            },
+            {
+                "name": "GEMİCİ KURU FASULYE",
+                "calorie": 315
+            },
+            {
+                "name": "SADE PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "SARI BURMA",
+                "calorie": 482
+            }
+        ]
+    },
+    {
+        "date": "2025-06-18",
+        "meals": [
+            {
+                "name": "YAYLA ÇORBASI",
+                "calorie": 192
+            },
+            {
+                "name": "MARMARİS KÖFTE",
+                "calorie": 486
+            },
+            {
+                "name": "MAKARNA",
+                "calorie": 331
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede YOĞURT",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-19",
+        "meals": [
+            {
+                "name": "DOMATES ÇORBASI",
+                "calorie": 163
+            },
+            {
+                "name": "KARNIYARIK",
+                "calorie": 324
+            },
+            {
+                "name": "ARPA ŞEH. PİRİNÇ PİLAVI",
+                "calorie": 437
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "KALBURABASTI",
+                "calorie": 452
+            }
+        ]
+    },
+    {
+        "date": "2025-06-20",
+        "meals": [
+            {
+                "name": "SEBZE ÇORBASI",
+                "calorie": 162
+            },
+            {
+                "name": "ET DÖNER",
+                "calorie": 557
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "İÇECEK (KOLA/FANTA)",
+                "calorie": 110
+            }
+        ]
+    },
+    {
+        "date": "2025-06-23",
+        "meals": [
+            {
+                "name": "DÜĞÜN ÇORBASI",
+                "calorie": 194
+            },
+            {
+                "name": "SEBZELİ NOHUT",
+                "calorie": 301
+            },
+            {
+                "name": "SADE PİLAV",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-24",
+        "meals": [
+            {
+                "name": "SARAY ÇORBASI",
+                "calorie": 199
+            },
+            {
+                "name": "SOSLU FIRIN KÖFTE",
+                "calorie": 380
+            },
+            {
+                "name": "MAKARNA",
+                "calorie": 331
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede YOĞURT",
+                "calorie": 110
+            },
+            {
+                "name": "TEL KADAYIF",
+                "calorie": 328
+            }
+        ]
+    },
+    {
+        "date": "2025-06-25",
+        "meals": [
+            {
+                "name": "NANELİ YOĞURT ÇORBASI",
+                "calorie": 173
+            },
+            {
+                "name": "PİLİÇ BÜRYAN",
+                "calorie": 375
+            },
+            {
+                "name": "SU BÖREĞİ",
+                "calorie": 462
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-26",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBASI",
+                "calorie": 209
+            },
+            {
+                "name": "EV USULÜ TAZE FASULYE",
+                "calorie": 190
+            },
+            {
+                "name": "BULGUR PİLAVI",
+                "calorie": 388
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "ELMALI TART",
+                "calorie": 470
+            }
+        ]
+    },
+    {
+        "date": "2025-06-27",
+        "meals": [
+            {
+                "name": "ŞEHRİYELİ DOMATES ÇORBASI",
+                "calorie": 186
+            },
+            {
+                "name": "KARIŞIK IZGARA",
+                "calorie": 542
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede AYRAN",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    },
+    {
+        "date": "2025-06-30",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBASI",
+                "calorie": 209
+            },
+            {
+                "name": "AVCI KEBABI",
+                "calorie": 321
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 416
+            },
+            {
+                "name": "SALATA BÜFESİ",
+                "calorie": 250
+            },
+            {
+                "name": "Salata Büfede CACIK",
+                "calorie": 110
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            }
+        ]
+    }
+]

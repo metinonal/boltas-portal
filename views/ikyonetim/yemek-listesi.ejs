@@ -64,14 +64,35 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <form action="/ikyonetim/yemek-listesi" method="POST"
+                                        <form action="/ikyonetim/yemek-listesi-istanbul" method="POST"
                                             enctype="multipart/form-data">
                                             <div class="row mb-3">
                                                 <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                                                    <label for="header" class="form-label">Yemek Listesi
+                                                    <label for="header" class="form-label">İstanbul Yemek Listesi
                                                         (Excel):</label>
-                                                    <input id="yemekDosyasi" type="file" class="form-control"
-                                                        name="yemekDosyasi" required>
+                                                    <input id="yemekDosyasiIstanbul" type="file" class="form-control"
+                                                        name="yemekDosyasiIstanbul" required>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary" type="submit">Yükle</button>
+                                        </form>
+                                        <div id="output" style="margin-top: 20px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <form action="/ikyonetim/yemek-listesi-dilovasi" method="POST"
+                                            enctype="multipart/form-data">
+                                            <div class="row mb-3">
+                                                <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                                    <label for="header" class="form-label">Dilovası Yemek Listesi
+                                                        (Excel):</label>
+                                                    <input id="yemekDosyasiDilovasi" type="file" class="form-control"
+                                                        name="yemekDosyasiDilovasi" required>
                                                 </div>
                                             </div>
                                             <button class="btn btn-primary" type="submit">Yükle</button>

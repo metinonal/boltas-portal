@@ -2,43 +2,75 @@ const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
 
-// Bugünün menüsünü döndürür (sadece veri)
-exports.getTodayMenuData = () => {
-    try {
-        const jsonFilePath = path.join(__dirname, "../../public/menu-imgs/menu.json");
-        const menuData = JSON.parse(fs.readFileSync(jsonFilePath, "utf-8"));
+// 🔧 Lokasyona göre JSON yolunu döner
+function getMenuFilePath(location) {
+    if (!["istanbul", "dilovasi"].includes(location)) {
+        throw new Error("Geçersiz lokasyon");
+    }
+    return path.join(__dirname, `../../public/menu-imgs/${location}/${location}-menu.json`);
+}
 
+// 🔎 Belirli şube için bugünkü menüyü döner
+exports.getTodayMenuData = (location) => {
+    try {
+        const jsonFilePath = getMenuFilePath(location);
+        const menuData = JSON.parse(fs.readFileSync(jsonFilePath, "utf-8"));
         const today = moment().format("YYYY-MM-DD");
         return menuData.find((item) => item.date === today) || null;
     } catch (err) {
-        console.error("Menü verisi alınırken bir hata oluştu:", err);
+        console.error(`[${location}] bugünkü menü alınamadı:`, err);
         return null;
     }
 };
 
-// Bugünün menüsünü JSON olarak döndürür (rota işleyici)
+// 📦 Bugünkü menü (JSON response olarak kullanılabilir)
 exports.getTodayMenu = (req, res) => {
     try {
-        const todayMenu = exports.getTodayMenuData(); // Yukarıdaki işlevi çağır
+        const location = req.query.location;
+        const todayMenu = exports.getTodayMenuData(location);
         res.json(todayMenu || { message: "Bugün için yemek bulunamadı." });
     } catch (err) {
-        console.error("Menü verisi alınırken bir hata oluştu:", err);
-        res.status(500).json({ message: "Menü bilgisi alınırken bir hata oluştu." });
+        console.error("Bugünkü menü JSON dönerken hata:", err);
+        res.status(500).json({ message: "Menü bilgisi alınırken hata oluştu." });
     }
 };
 
+// 📋 Sekmeli görünüm için hem tüm menüler hem bugünkü menüler birlikte
 exports.getAllMenus = (req, res) => {
     try {
-        // JSON dosyasının yolunu belirle
-        const jsonFilePath = path.join(__dirname, "../../public/menu-imgs/menu.json");
+        let menuDataIstanbul = [];
+        let menuDataDilovasi = [];
+        let todayMenuIstanbul = null;
+        let todayMenuDilovasi = null;
 
-        // Dosyayı oku ve JSON olarak parse et
-        const menuData = JSON.parse(fs.readFileSync(jsonFilePath, "utf-8"));
+        // İstanbul
+        try {
+            const istanbulPath = getMenuFilePath("istanbul");
+            menuDataIstanbul = JSON.parse(fs.readFileSync(istanbulPath, "utf-8"));
+            todayMenuIstanbul = menuDataIstanbul.find(m => m.date === moment().format("YYYY-MM-DD")) || null;
+        } catch (e) {
+            console.warn("İstanbul menüsü okunamadı:", e.message);
+        }
 
-        // Tüm yemek listesini ejs'e gönder
-        res.render("main/yemek-listesi", { menuData });
+        // Dilovası
+        try {
+            const dilovasiPath = getMenuFilePath("dilovasi");
+            menuDataDilovasi = JSON.parse(fs.readFileSync(dilovasiPath, "utf-8"));
+            todayMenuDilovasi = menuDataDilovasi.find(m => m.date === moment().format("YYYY-MM-DD")) || null;
+        } catch (e) {
+            console.warn("Dilovası menüsü okunamadı:", e.message);
+        }
+
+        // Hem günlük hem tüm menüler gönderiliyor
+        res.render("main/yemek-listesi", {
+            menuDataIstanbul,
+            menuDataDilovasi,
+            todayMenuIstanbul,
+            todayMenuDilovasi
+        });
+
     } catch (err) {
-        console.error("Tüm yemek listesi alınırken bir hata oluştu:", err);
+        console.error("Menüler alınırken genel hata:", err);
         res.status(500).send("Yemek listesi yüklenirken bir hata oluştu.");
     }
 };

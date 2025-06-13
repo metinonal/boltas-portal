@@ -77,24 +77,20 @@
                                     <div class="card mb-3">
                                         <div class="card-header d-flex justify-content-between align-items-center">
                                             <span><strong>Günün Yemek Listesi</strong></span>
-                                            <a href="/yemek-listesi" class=" text-decoration-none small"
-                                                target="_blank">
+                                            <a href="/yemek-listesi" class=" text-decoration-none small" target="_blank">
                                                 Tümünü Gör
                                             </a>
                                         </div>
                                         <div class="card-body">
                                             <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
                                                 <li class="nav-item">
-                                                    <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true"
-                                                        class="nav-link rounded-0 active">
-                                                        <!-- <i class="mdi mdi-home-variant d-md-none d-block"></i> -->
+                                                    <a href="#istanbul" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0 active">
                                                         <span class="d-none d-md-block">İstanbul</span>
                                                         <span class="d-md-none d-block">İstanbul</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false"
-                                                        class="nav-link rounded-0">
+                                                    <a href="#dilovasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
                                                         <span class="d-none d-md-block">Dilovası</span>
                                                         <span class="d-md-none d-block">Dilovası</span>
                                                     </a>
@@ -102,78 +98,81 @@
                                             </ul>
 
                                             <div class="tab-content">
+                                                <!-- İstanbul -->
                                                 <div class="tab-pane show active menu" id="istanbul">
-                                                    <% if (todayMenu) { %>
+                                                    <% if (todayMenuIstanbul) { %>
                                                         <ul class="list-group list-group-flush">
-                                                            <% let foundSalad=false; %>
-                                                                <% let saladIndex=-1; %>
-                                                                    <% todayMenu.meals.forEach((meal, index)=> { %>
-                                                                        <% if
-                                                                            (meal.name==="SALATA VE ZEYTİNYAĞLI BÜFESİ"
-                                                                            ) { %>
-                                                                            <li
-                                                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                                                <span class="clickable"
-                                                                                    data-bs-toggle="collapse"
-                                                                                    data-bs-target="#dropdown-<%= index %>"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="dropdown-<%= index %>">
-                                                                                    <%= meal.name %>
-                                                                                </span>
-                                                                                <% if (meal.calorie) { %>
-                                                                                    <span
-                                                                                        class="badge bg-primary text-white">
-                                                                                        <%= meal.calorie %> kcal
-                                                                                    </span>
-                                                                                    <% } %>
-                                                                            </li>
-                                                                            <% foundSalad=true; saladIndex=index; %>
-                                                                                <ul class="list-group list-group-flush collapse"
-                                                                                    id="dropdown-<%= index %>">
-                                                                                    <% } else if (foundSalad) { %>
-                                                                                        <li class="list-group-item">
-                                                                                            <span>
-                                                                                                <%= meal.name %>
-                                                                                            </span>
-                                                                                        </li>
-                                                                                        <% } else { %>
-                                                                                            <li
-                                                                                                class="list-group-item d-flex justify-content-between align-items-center">
-                                                                                                <span>
-                                                                                                    <%= meal.name %>
-                                                                                                </span>
-                                                                                                <% if (meal.calorie) {
-                                                                                                    %>
-                                                                                                    <span
-                                                                                                        class="badge bg-primary text-white">
-                                                                                                        <%= meal.calorie
-                                                                                                            %> kcal
-                                                                                                    </span>
-                                                                                                    <% } %>
-                                                                                            </li>
-                                                                                            <% } %>
-                                                                                                <% }) %>
-                                                                                                    <% if (foundSalad) {
-                                                                                                        %>
-                                                                                </ul>
-                                                                                <% } %>
+                                                            <% let foundSalad = false; %>
+                                                            <% let saladIndex = -1; %>
+                                                            <% todayMenuIstanbul.meals.forEach((meal, index) => { %>
+                                                                <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span class="clickable" data-bs-toggle="collapse" data-bs-target="#dropdown-istanbul-<%= index %>" aria-expanded="false" aria-controls="dropdown-istanbul-<%= index %>">
+                                                                            <%= meal.name %>
+                                                                        </span>
+                                                                        <% if (meal.calorie) { %>
+                                                                            <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                        <% } %>
+                                                                    </li>
+                                                                    <% foundSalad = true; saladIndex = index; %>
+                                                                    <ul class="list-group list-group-flush collapse" id="dropdown-istanbul-<%= index %>">
+                                                                <% } else if (foundSalad) { %>
+                                                                    <li class="list-group-item"><span><%= meal.name %></span></li>
+                                                                <% } else { %>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span><%= meal.name %></span>
+                                                                        <% if (meal.calorie) { %>
+                                                                            <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                        <% } %>
+                                                                    </li>
+                                                                <% } %>
+                                                            <% }) %>
+                                                            <% if (foundSalad) { %></ul><% } %>
                                                         </ul>
-                                                        <% } else { %>
-                                                            <p class="text-muted text-center mt-3">Bugün için yemek
-                                                                bulunamadı.
-                                                            </p>
-                                                            <% } %>
+                                                    <% } else { %>
+                                                        <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
+                                                    <% } %>
                                                 </div>
 
+                                                <!-- Dilovası -->
                                                 <div class="tab-pane" id="dilovasi">
-                                                    <p class='text-danger' style="text-align: center;">Yakında
-                                                        eklenecek.</p>
+                                                    <% if (todayMenuDilovasi) { %>
+                                                        <ul class="list-group list-group-flush">
+                                                            <% let foundSalad = false; %>
+                                                            <% let saladIndex = -1; %>
+                                                            <% todayMenuDilovasi.meals.forEach((meal, index) => { %>
+                                                                <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span class="clickable" data-bs-toggle="collapse" data-bs-target="#dropdown-dilovasi-<%= index %>" aria-expanded="false" aria-controls="dropdown-dilovasi-<%= index %>">
+                                                                            <%= meal.name %>
+                                                                        </span>
+                                                                        <% if (meal.calorie) { %>
+                                                                            <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                        <% } %>
+                                                                    </li>
+                                                                    <% foundSalad = true; saladIndex = index; %>
+                                                                    <ul class="list-group list-group-flush collapse" id="dropdown-dilovasi-<%= index %>">
+                                                                <% } else if (foundSalad) { %>
+                                                                    <li class="list-group-item"><span><%= meal.name %></span></li>
+                                                                <% } else { %>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <span><%= meal.name %></span>
+                                                                        <% if (meal.calorie) { %>
+                                                                            <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                        <% } %>
+                                                                    </li>
+                                                                <% } %>
+                                                            <% }) %>
+                                                            <% if (foundSalad) { %></ul><% } %>
+                                                        </ul>
+                                                    <% } else { %>
+                                                        <p class="text-muted text-center mt-3">Bugün için yemek bulunamadı.</p>
+                                                    <% } %>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
+
 
                                     <!-- Doğum Günü Bölümü -->
                                     <div class="birthday-section">

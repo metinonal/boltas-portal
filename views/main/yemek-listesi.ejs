@@ -91,72 +91,92 @@
                         </div>
                     </div>
 
-                    <div class="container-fluid">
-                        <% if (menuData && menuData.length > 0) { %>
-                            <div class="row g-3 non-selectable">
-                                <% 
-                                    const today = new Date().toISOString().split('T')[0];
-                                %>
-                                <% menuData.forEach((menu) => { %>
-                                    <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                                        <div class="meal-card <%= menu.date === today ? 'highlight' : '' %>">
-                                            <!-- Tarih -->
-                                            <% if (menu.date) { %>
-                                                <span class="date-title">
-                                                    <%= (() => {
-                                                        const days = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
-                                                        const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-                                                        const dateObj = new Date(menu.date);
-                                                        const dayName = days[dateObj.getDay() - 1] || "Bilinmiyor";
-                                                        const monthName = months[dateObj.getMonth()] || "Bilinmiyor";
-                                                        return `${dateObj.getDate()} ${monthName} ${dayName}`;
-                                                    })() %>
-                                                </span>
-                                            <% } else { %>
-                                                <span class="date-title">Tarih Bilinmiyor</span>
-                                            <% } %>
-                    
-                                            <!-- Yemekler -->
-                                            <% if (menu.meals && menu.meals.length > 0) { %>
-                                                <ul class="list-group">
-                                                    <% menu.meals.forEach((meal, index) => { %>
-                                                        <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
-                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <span data-bs-toggle="collapse" data-bs-target="#dropdown-<%= index %>" aria-expanded="false" aria-controls="dropdown-<%= index %>" style="cursor: pointer;">
-                                                                    <%= meal.name %>
-                                                                </span>
-                                                                <% if (meal.calorie) { %>
-                                                                    <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
-                                                                <% } %>
-                                                            </li>
-                                                            <ul class="list-group list-group-flush collapse" id="dropdown-<%= index %>">
-                                                                <% menu.meals.slice(menu.meals.indexOf(meal) + 1).forEach(subMeal => { %>
-                                                                    <% if (!subMeal.calorie) { %>
-                                                                        <li class="list-group-item collapse-item"><%= subMeal.name %></li>
-                                                                    <% } else { return; } %>
-                                                                <% }); %>
+                        <div class="container-fluid mt-4">
+                            <ul class="nav nav-tabs" id="menuTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="istanbul-tab" data-bs-toggle="tab" data-bs-target="#istanbul" type="button" role="tab" aria-controls="istanbul" aria-selected="true">
+                                        İstanbul
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="dilovasi-tab" data-bs-toggle="tab" data-bs-target="#dilovasi" type="button" role="tab" aria-controls="dilovasi" aria-selected="false">
+                                        Dilovası
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content mt-3" id="menuTabsContent">
+                                <% const renderMenus = (menuData) => { %>
+                                    <% if (menuData && menuData.length > 0) { %>
+                                        <div class="row g-3 non-selectable">
+                                            <% const today = new Date().toISOString().split('T')[0]; %>
+                                            <% menuData.forEach((menu) => { %>
+                                                <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div class="meal-card <%= menu.date === today ? 'highlight' : '' %>">
+                                                        <span class="date-title">
+                                                            <%= (() => {
+                                                                const days = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
+                                                                const months = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+                                                                const dateObj = new Date(menu.date);
+                                                                const dayName = days[dateObj.getDay()];
+                                                                const monthName = months[dateObj.getMonth()];
+                                                                return `${dateObj.getDate()} ${monthName} ${dayName}`;
+                                                            })() %>
+                                                        </span>
+
+                                                        <% if (menu.meals && menu.meals.length > 0) { %>
+                                                            <ul class="list-group">
+                                                                <% menu.meals.forEach((meal, index) => { %>
+                                                                    <% if (meal.name === "SALATA VE ZEYTİNYAĞLI BÜFESİ") { %>
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                            <span data-bs-toggle="collapse" data-bs-target="#dropdown-<%= index %>" aria-expanded="false" aria-controls="dropdown-<%= index %>" style="cursor: pointer;">
+                                                                                <%= meal.name %>
+                                                                            </span>
+                                                                            <% if (meal.calorie) { %>
+                                                                                <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                            <% } %>
+                                                                        </li>
+                                                                        <ul class="list-group list-group-flush collapse" id="dropdown-<%= index %>">
+                                                                            <% menu.meals.slice(menu.meals.indexOf(meal) + 1).forEach(subMeal => { %>
+                                                                                <% if (!subMeal.calorie) { %>
+                                                                                    <li class="list-group-item collapse-item"><%= subMeal.name %></li>
+                                                                                <% } else { return; } %>
+                                                                            <% }); %>
+                                                                        </ul>
+                                                                    <% } else if (meal.calorie) { %>
+                                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                            <span><%= meal.name %></span>
+                                                                            <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
+                                                                        </li>
+                                                                    <% } else { %>
+                                                                        <li class="list-group-item"><%= meal.name %></li>
+                                                                    <% } %>
+                                                                <% }) %>
                                                             </ul>
-                                                        <% } else if (meal.calorie) { %>
-                                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <span><%= meal.name %></span>
-                                                                <span class="badge bg-primary text-white"><%= meal.calorie %> kcal</span>
-                                                            </li>
                                                         <% } else { %>
-                                                            <li class="list-group-item"><%= meal.name %></li>
+                                                            <div class="no-data">Yemek Bilgisi Yok</div>
                                                         <% } %>
-                                                    <% }) %>
-                                                </ul>
-                                            <% } else { %>
-                                                <div class="no-data">Yemek Bilgisi Yok</div>
-                                            <% } %>
+                                                    </div>
+                                                </div>
+                                            <% }) %>
                                         </div>
-                                    </div>
-                                <% }) %>
+                                    <% } else { %>
+                                        <p class="text-center text-muted">Henüz bir yemek listesi yüklenmedi.</p>
+                                    <% } %>
+                                <% } %>
+
+                                <!-- İstanbul -->
+                                <div class="tab-pane fade show active" id="istanbul" role="tabpanel" aria-labelledby="istanbul-tab">
+                                    <% renderMenus(menuDataIstanbul) %>
+                                </div>
+
+                                <!-- Dilovası -->
+                                <div class="tab-pane fade" id="dilovasi" role="tabpanel" aria-labelledby="dilovasi-tab">
+                                    <% renderMenus(menuDataDilovasi) %>
+                                </div>
                             </div>
-                        <% } else { %>
-                            <p class="text-center text-muted">Henüz bir yemek listesi yüklenmedi.</p>
-                        <% } %>
-                    </div>
+                        </div>
+
                     <!-- container -->
 
                 </div>
