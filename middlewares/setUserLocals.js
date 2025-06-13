@@ -11,11 +11,15 @@ module.exports = (req, res, next) => {
 
         const photoPath = path.join(__dirname, '../public/uploads/pphotos/', `${EMail}.png`);
         res.locals.userPhoto = fs.existsSync(photoPath) ? `${EMail}.png` : 'default.jpg';
+
+        res.locals.roles = req.session.roles || [];
     } else {
         res.locals.displayName = null;
         res.locals.EMail = null;
         res.locals.Unvan = null;
         res.locals.userPhoto = 'default.jpg';
+        res.locals.roles = []; 
     }
+
     next();
 };
