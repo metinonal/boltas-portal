@@ -7974,5 +7974,13 @@
         "msExchHideFromAddressLists":  null,
         "userAccountControl":  512,
         "physicalDeliveryOfficeName":  null
+    },
+    {
+        "DisplayName":  "Mihaela ÇOBANOĞLU",
+        "mail":  "mihaela.cobanoglu@boltas.com",
+        "Mobile":  "+90 532 314 85 50",
+        "msExchHideFromAddressLists":  true,
+        "userAccountControl":  66048,
+        "physicalDeliveryOfficeName":  null
     }
 ]
