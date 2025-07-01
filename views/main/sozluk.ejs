@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Profilim | Boltas Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+  <meta content="Coderthemes" name="author">
+
+  <%- include("partials/css") %>
+
+  <style>
+    .dictionary-header {
+        background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+    }
+    
+    .dictionary-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .dictionary-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .letter-accordion {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    
+    .letter-header {
+        background: #f8f9fa;
+        border: none;
+        padding: 1.25rem 1.5rem;
+        width: 100%;
+        text-align: left;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #495057;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .letter-header:hover {
+        background: #e9ecef;
+        color: #17a2b8;
+    }
+    
+    .letter-header.active {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .letter-header .arrow {
+        transition: transform 0.3s ease;
+        font-size: 1.2rem;
+    }
+    
+    .letter-header.active .arrow {
+        transform: rotate(90deg);
+    }
+    
+    .letter-content {
+        display: none;
+        padding: 0;
+        background: white;
+    }
+    
+    .letter-content.show {
+        display: block;
+    }
+    
+    .word-item {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f1f3f4;
+        transition: background-color 0.2s ease;
+    }
+    
+    .word-item:last-child {
+        border-bottom: none;
+    }
+    
+    .word-item:hover {
+        background: #f8f9fa;
+    }
+    
+    .word-title {
+        color: #17a2b8;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .word-category {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        display: inline-block;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .word-meaning {
+        color: #6c757d;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    .search-container {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .search-box {
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box:focus {
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stats-badge {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin: 0 0.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        .dictionary-header {
+            padding: 1.5rem 0;
+        }
+        
+        .dictionary-title {
+            font-size: 1.5rem;
+        }
+        
+        .letter-header {
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+        }
+        
+        .word-item {
+            padding: 1.25rem;
+        }
+        
+        .word-title {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid"
+  data-rightbar-onstart="true">
+  <!-- Begin page -->
+  <div class="wrapper">
+
+    <!-- ============================================================== -->
+    <!-- Start Page Content here -->
+    <!-- ============================================================== -->
+
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Topbar Start -->
+            <%- include("partials/topbar") %>
+            <!-- end Topbar -->
+
+            <%- include("partials/topnav") %>
+
+            <!-- Start Content-->
+            <div class="container-fluid">
+
+                <!-- Page Title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Sözlük</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arama -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="search-container">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <div class="position-relative">
+                                        <input type="text" class="form-control search-box" id="searchInput" 
+                                               placeholder="Kelime veya anlam ara..." value="<%= search %>">
+                                        <i class="mdi mdi-magnify position-absolute" style="right: 15px; top: 50%; transform: translateY(-50%); color: #6c757d;"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-2 mt-md-0">
+                                    <select class="form-select" id="kategoriFilter">
+                                        <option value="">Tüm Kategoriler</option>
+                                        <% kategoriler.forEach(kategori => { %>
+                                            <option value="<%= kategori %>" <%= selectedKategori === kategori ? 'selected' : '' %>><%= kategori %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="loading-spinner">
+                            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                <span class="visually-hidden">Yükleniyor...</span>
+                            </div>
+                            <h5 class="mt-3">Kelimeler yükleniyor...</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accordion Sözlük -->
+                <div class="row">
+                    <div class="col-12">
+                        <div id="dictionaryAccordion">
+                            <% 
+                            // Harflere göre kelimeleri grupla
+                            const harfGruplari = {};
+                            sozlukler.forEach(sozluk => {
+                                if (!harfGruplari[sozluk.harf]) {
+                                    harfGruplari[sozluk.harf] = [];
+                                }
+                                harfGruplari[sozluk.harf].push(sozluk);
+                            });
+                            
+                            // Tüm harfleri sırala
+                            const tumHarfler = ['A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P', 'R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'];
+                            %>
+                            
+                            <% tumHarfler.forEach(harf => { %>
+                                <% if (harfGruplari[harf] && harfGruplari[harf].length > 0) { %>
+                                    <div class="letter-accordion">
+                                        <button class="letter-header" type="button" data-letter="<%= harf %>">
+                                            <span><%= harf %></span>
+                                            <i class="mdi mdi-chevron-right arrow"></i>
+                                        </button>
+                                        <div class="letter-content" id="content-<%= harf %>">
+                                            <% harfGruplari[harf].forEach(sozluk => { %>
+                                                <div class="word-item">
+                                                    <h5 class="word-title"><%= sozluk.kelime %></h5>
+                                                    <span class="word-category"><%= sozluk.kategori %></span>
+                                                    <p class="word-meaning"><%= sozluk.anlam %></p>
+                                                </div>
+                                            <% }) %>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                            
+                            <% if (Object.keys(harfGruplari).length === 0) { %>
+                                <div class="no-results">
+                                    <i class="mdi mdi-book-open-page-variant" style="font-size: 4rem; color: #e9ecef;"></i>
+                                    <h4 class="mt-3">Kelime bulunamadı</h4>
+                                    <p class="mb-0">Arama kriterlerinizi değiştirerek tekrar deneyin.</p>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- container -->
+
+        </div>
+        <!-- content -->
+
+        <!-- Footer Start -->
+        <%- include("partials/footer") %>
+        <!-- end Footer -->
+
+    </div>
+
+      <!-- ============================================================== -->
+      <!-- End Page content -->
+      <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("partials/scripts") %>
+    <script>
+        $(document).ready(function() {
+            // Accordion toggle
+            $('.letter-header').on('click', function() {
+                const letter = $(this).data('letter');
+                const content = $('#content-' + letter);
+                const isActive = $(this).hasClass('active');
+                
+                // Tüm accordion'ları kapat
+                $('.letter-header').removeClass('active');
+                $('.letter-content').removeClass('show').slideUp(300);
+                
+                // Eğer tıklanan zaten aktif değilse aç
+                if (!isActive) {
+                    $(this).addClass('active');
+                    content.addClass('show').slideDown(300);
+                }
+            });
+            
+            // Arama fonksiyonu
+            function performSearch() {
+                const search = $('#searchInput').val();
+                const kategori = $('#kategoriFilter').val();
+                
+                $('.loading-spinner').show();
+                $('#dictionaryAccordion').hide();
+                
+                $.ajax({
+                    url: '/sozluk/search',
+                    method: 'GET',
+                    data: { search, kategori },
+                    success: function(response) {
+                        if (response.success) {
+                            displayAccordion(response.data);
+                        } else {
+                            showNoResults();
+                        }
+                    },
+                    error: function() {
+                        showError();
+                    },
+                    complete: function() {
+                        $('.loading-spinner').hide();
+                        $('#dictionaryAccordion').show();
+                    }
+                });
+            }
+            
+            // Accordion'ı göster
+            function displayAccordion(words) {
+                // Harflere göre grupla
+                const harfGruplari = {};
+                words.forEach(word => {
+                    if (!harfGruplari[word.harf]) {
+                        harfGruplari[word.harf] = [];
+                    }
+                    harfGruplari[word.harf].push(word);
+                });
+                
+                let html = '';
+                const tumHarfler = ['A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P', 'R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'];
+                
+                tumHarfler.forEach(harf => {
+                    if (harfGruplari[harf] && harfGruplari[harf].length > 0) {
+                        html += `
+                            <div class="letter-accordion">
+                                <button class="letter-header" type="button" data-letter="${harf}">
+                                    <span>${harf}</span>
+                                    <i class="mdi mdi-chevron-right arrow"></i>
+                                </button>
+                                <div class="letter-content" id="content-${harf}">
+                        `;
+                        
+                        harfGruplari[harf].forEach(word => {
+                            html += `
+                                <div class="word-item">
+                                    <h5 class="word-title">${word.kelime}</h5>
+                                    <span class="word-category">${word.kategori}</span>
+                                    <p class="word-meaning">${word.anlam}</p>
+                                </div>
+                            `;
+                        });
+                        
+                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if (html === '') {
+                    html = showNoResultsHTML();
+                }
+                
+                $('#dictionaryAccordion').html(html);
+                
+                // Event listener'ları yeniden bağla
+                $('.letter-header').on('click', function() {
+                    const letter = $(this).data('letter');
+                    const content = $('#content-' + letter);
+                    const isActive = $(this).hasClass('active');
+                    
+                    $('.letter-header').removeClass('active');
+                    $('.letter-content').removeClass('show').slideUp(300);
+                    
+                    if (!isActive) {
+                        $(this).addClass('active');
+                        content.addClass('show').slideDown(300);
+                    }
+                });
+            }
+            
+            // Sonuç bulunamadı HTML
+            function showNoResultsHTML() {
+                return `
+                    <div class="no-results">
+                        <i class="mdi mdi-book-open-page-variant" style="font-size: 4rem; color: #e9ecef;"></i>
+                        <h4 class="mt-3">Kelime bulunamadı</h4>
+                        <p class="mb-0">Arama kriterlerinizi değiştirerek tekrar deneyin.</p>
+                    </div>
+                `;
+            }
+            
+            // Sonuç bulunamadı
+            function showNoResults() {
+                $('#dictionaryAccordion').html(showNoResultsHTML());
+            }
+            
+            // Hata göster
+            function showError() {
+                $('#dictionaryAccordion').html(`
+                    <div class="no-results">
+                        <i class="mdi mdi-alert-circle" style="font-size: 4rem; color: #e9ecef;"></i>
+                        <h4 class="mt-3">Bir hata oluştu</h4>
+                        <p class="mb-0">Lütfen daha sonra tekrar deneyin.</p>
+                    </div>
+                `);
+            }
+            
+            // Kategori değişikliği
+            $('#kategoriFilter').on('change', performSearch);
+            
+            // Gerçek zamanlı arama (debounce ile)
+            let searchTimeout;
+            $('#searchInput').on('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(performSearch, 500);
+            });
+            
+            // Enter tuşu ile arama
+            $('#searchInput').on('keypress', function(e) {
+                if (e.which === 13) {
+                    performSearch();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -18,7 +18,21 @@ const getPersonelZimmet = async (email) => {
   request.input("email", sql.NVarChar, email)
 
   try {
-    const result = await request.query("SELECT * FROM [dbo].[v_PersonelZimmet] WHERE PersonelMail = @email")
+    const result = await request.query(`
+      SELECT 
+        Ürün,
+        Marka,
+        Model,
+        SeriNo,
+        Imei1,
+        PersonelMail,
+        CASE 
+          WHEN ISDATE(ZimmetTarihi) = 1 THEN CONVERT(datetime, ZimmetTarihi, 104)
+          ELSE NULL
+        END AS ZimmetTarihi
+      FROM [dbo].[v_PersonelZimmet]
+      WHERE PersonelMail = @email
+    `)
     return result.recordset
   } catch (err) {
     console.error("MSSQL zimmet sorgu hatası:", err)

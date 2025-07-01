@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
+
+                        <div class="clearfix"></div>
+
+                </div>
+                <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                <!-- end Topbar -->
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/ikyonetim">Ana Sayfa</a></li>
+                                        <li class="breadcrumb-item"><a href="/ikyonetim/sozluk">Sözlük</a></li>
+                                        <li class="breadcrumb-item active">Kelime Düzenle</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Kelime Düzenle</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-3">Kelime Bilgileri</h4>
+
+                                    <form id="editSozlukForm">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kelime" class="form-label">Kelime <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="kelime" name="kelime" value="<%= sozluk.kelime %>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kategori" class="form-label">Kategori</label>
+                                                    <input type="text" class="form-control" id="kategori" name="kategori" value="<%= sozluk.kategori %>">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="anlam" class="form-label">Anlam <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="anlam" name="anlam" rows="4" required><%= sozluk.anlam %></textarea>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="aktif" name="aktif" <%= sozluk.aktif ? 'checked' : '' %>>
+                                                <label class="form-check-label" for="aktif">Aktif</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="mdi mdi-content-save"></i> Güncelle
+                                            </button>
+                                            <a href="/ikyonetim/sozluk" class="btn btn-light ms-1">İptal</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-3">Kelime Detayları</h4>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <tr>
+                                                <td><strong>Harf:</strong></td>
+                                                <td><%= sozluk.harf %></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Oluşturan:</strong></td>
+                                                <td><%= sozluk.olusturanKullanici %></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Oluşturma Tarihi:</strong></td>
+                                                <td><%= new Date(sozluk.olusturmaTarihi).toLocaleDateString('tr-TR') %></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Güncelleme Tarihi:</strong></td>
+                                                <td><%= new Date(sozluk.guncellemeTarihi).toLocaleDateString('tr-TR') %></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                </div>
+                <!-- container -->
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("partials/scripts") %>
+    <script>
+        $(document).ready(function() {
+            $('#editSozlukForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    kelime: $('#kelime').val().trim(),
+                    anlam: $('#anlam').val().trim(),
+                    kategori: $('#kategori').val().trim(),
+                    aktif: $('#aktif').is(':checked')
+                };
+
+                // Validation
+                if (!formData.kelime || !formData.anlam) {
+                    alert('Kelime ve anlam alanları zorunludur!');
+                    return;
+                }
+
+                // Submit
+                $.ajax({
+                    url: '/ikyonetim/sozluk/edit/<%= sozluk._id %>',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Kelime başarıyla güncellendi!');
+                            window.location.href = '/ikyonetim/sozluk';
+                        } else {
+                            alert('Hata: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        const response = xhr.responseJSON;
+                        alert('Hata: ' + (response ? response.message : 'Bir hata oluştu!'));
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

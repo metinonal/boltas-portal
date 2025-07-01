@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Kontrol Paneli</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("partials/css") %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid"
+    data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <%- include("partials/logo") %>
+
+                <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                    <!--- Sidemenu -->
+                    <%- include("partials/sidemenu") %>
+                        <!-- End Sidebar -->
+
+                        <div class="clearfix"></div>
+
+                </div>
+                <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Topbar Start -->
+                <%- include("partials/topbar") %>
+                <!-- end Topbar -->
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/ikyonetim">Ana Sayfa</a></li>
+                                        <li class="breadcrumb-item"><a href="/ikyonetim/sozluk">Sözlük</a></li>
+                                        <li class="breadcrumb-item active">Yeni Kelime</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Yeni Kelime Ekle</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-3">Kelime Bilgileri</h4>
+
+                                    <div id="alertContainer"></div>
+
+                                    <form id="addSozlukForm">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kelime" class="form-label">Kelime <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="kelime" name="kelime" required>
+                                                    <small class="form-text text-muted">Sözlüğe eklenecek kelimeyi girin</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kategori" class="form-label">Kategori</label>
+                                                    <input type="text" class="form-control" id="kategori" name="kategori" value="Genel">
+                                                    <small class="form-text text-muted">Kelime kategorisi (opsiyonel)</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <label for="anlam" class="form-label">Anlam <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" id="anlam" name="anlam" rows="4" required></textarea>
+                                            <small class="form-text text-muted">Kelimenin anlamını detaylı olarak açıklayın</small>
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button type="submit" class="btn btn-success" id="submitBtn">
+                                                <i class="mdi mdi-content-save"></i> Kelime Ekle
+                                            </button>
+                                            <a href="/ikyonetim/sozluk" class="btn btn-light ms-1">İptal</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-3">Bilgilendirme</h4>
+                                    
+                                    <div class="alert alert-info" role="alert">
+                                        <h4 class="alert-heading">Dikkat Edilecekler</h4>
+                                        <ul class="mb-0">
+                                            <li>Kelime alanı zorunludur</li>
+                                            <li>Anlam alanı zorunludur</li>
+                                            <li>Aynı kelime tekrar eklenemez</li>
+                                            <li>Harf otomatik olarak belirlenir</li>
+                                            <li>Kategori belirtilmezse "Genel" olarak kaydedilir</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end row -->
+
+                </div>
+                <!-- container -->
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("partials/scripts") %>
+    <script>
+        $(document).ready(function() {
+            // Alert gösterme fonksiyonu
+            function showAlert(type, message) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                $('#alertContainer').html(alertHtml);
+                
+                // 3 saniye sonra otomatik kapat
+                setTimeout(function() {
+                    $('.alert').fadeOut();
+                }, 3000);
+            }
+
+            $('#addSozlukForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    kelime: $('#kelime').val().trim(),
+                    anlam: $('#anlam').val().trim(),
+                    kategori: $('#kategori').val().trim()
+                };
+
+                // Validation
+                if (!formData.kelime || !formData.anlam) {
+                    showAlert('danger', 'Kelime ve anlam alanları zorunludur!');
+                    return;
+                }
+
+                // Button loading state
+                const submitBtn = $('#submitBtn');
+                const originalText = submitBtn.html();
+                submitBtn.html('<i class="mdi mdi-loading mdi-spin"></i> Kaydediliyor...').prop('disabled', true);
+
+                // Submit
+                $.ajax({
+                    url: '/ikyonetim/sozluk/add',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            showAlert('success', response.message);
+                            setTimeout(function() {
+                                window.location.href = '/ikyonetim/sozluk';
+                            }, 1500);
+                        } else {
+                            showAlert('danger', response.message);
+                            submitBtn.html(originalText).prop('disabled', false);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('AJAX Error:', xhr);
+                        const response = xhr.responseJSON;
+                        const errorMessage = response ? response.message : 'Bir hata oluştu!';
+                        showAlert('danger', errorMessage);
+                        submitBtn.html(originalText).prop('disabled', false);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
