@@ -262,6 +262,10 @@
             <p class="text-muted mb-0">Üzerinize kayıtlı ürünlerin listesi</p>
           </div>
           <div class="text-end">
+            <button type="button" class="btn btn-outline-primary me-2" onclick="printZimmetForm()">
+              <i class="mdi mdi-printer me-1"></i>
+              Zimmet Formunu Yazdır
+            </button>
             <span class="badge bg-primary-subtle text-primary fs-6 px-3 py-2">
               <i class="mdi mdi-package me-1"></i>
               <%= zimmetler.length %> Ürün
@@ -447,6 +451,218 @@
     <!-- END wrapper -->
 
     <%- include("partials/scripts") %>
+    <script>
+function printZimmetForm() {
+  const user = <%- JSON.stringify(user) %>;
+  const zimmetler = <%- JSON.stringify(zimmetler) %>;
+
+  const printWindow = window.open('', '_blank', 'width=900,height=1000');
+  const today = new Date().toLocaleDateString('tr-TR');
+  const formNo = 'ZMT' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
+
+  const html = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Zimmet Formu</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #000;
+    }
+    .wrapper {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      padding: 20px;
+    }
+    h1 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .logo {
+      text-align: right;
+    }
+    .info-table {
+      margin-top: 20px;
+      width: 100%;
+    }
+    .info-table td {
+      padding: 4px;
+    }
+    .info-label {
+      font-weight: bold;
+      width: 100px;
+    }
+    table.zimmet-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 10px;
+    }
+    .zimmet-table td {
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+      border-left: none;
+      border-right: none;
+      padding: 5px;
+    }
+    .zimmet-table th {
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+      border-left: none;
+      border-right: none;
+      background: #fff;
+      padding: 8px 5px;
+      text-align: center;
+    }
+    .declaration {
+      font-size: 9px;
+      margin-top: auto;
+      text-align: justify;
+      padding: 20px;
+    }
+    .signature-section {
+      margin-top: 10px;
+      padding: 0 20px;
+    }
+    .signature-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9px;
+    }
+    .signature-table td {
+      border: none;
+      border-top: 1px solid #000;
+      border-bottom: 1px solid #000;
+      border-right: 1px solid #000;
+      padding: 2px 4px;
+      height: 24px;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .signature-table td.left-edge {
+      border-left: none;
+    }
+    .signature-table td.right-edge {
+      border-right: none;
+    }
+    .footer-bar {
+      font-size: 8px;
+      display: flex;
+      justify-content: space-between;
+      border-top: 3px solid #000;
+      padding: 8px 20px 6px;
+      margin-top: 10px;
+      background: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+  <div class="content">
+    <div class="header">
+      <div><h1>ZİMMET FORMU</h1></div>
+      <div class="logo">
+        <img src="https://localhost/admin-assets/img/logo.jpg" alt="BOLTAS" height="35"><br>
+        <span style="font-size:10px;">${formNo}</span>
+      </div>
+    </div>
+
+    <table class="info-table">
+      <tr><td class="info-label">Ad Soyad</td><td>: ${user.displayName || ''}</td></tr>
+      <tr><td class="info-label">Bölüm</td><td>: ${user.Departman || ''}</td></tr>
+      <tr><td class="info-label">Görev</td><td>: ${user.Unvan || ''}</td></tr>
+    </table>
+
+    <table class="zimmet-table">
+      <thead>
+        <tr>
+          <th>Ürün</th>
+          <th>Marka</th>
+          <th>Model</th>
+          <th>Seri No</th>
+          <th>Zimmet Tarihi</th>
+          <th>Zimmet Yapan</th>
+          <th>İade Tarihi</th>
+          <th>İade Alan</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${zimmetler.map(z => `
+        <tr>
+          <td>${z.Ürün || ''}</td>
+          <td>${z.Marka || ''}</td>
+          <td>${z.Model || ''}</td>
+          <td>${z.SeriNo || ''}</td>
+          <td>${z.ZimmetTarih ? new Date(z.ZimmetTarih).toLocaleDateString('tr-TR') : ''}</td>
+          <td>${z.ZimmetYapan || ''}</td>
+          <td>${z.IadeTarih ? new Date(z.IadeTarih).toLocaleDateString('tr-TR') : ''}</td>
+          <td>${z.IadeAlan || ''}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="declaration">
+    Zimmetime aldığım / zimmetime verilen yukarıda detayı yazılı ekipmanın zimmetimde kaldığı sürece sorumluluğu tarafıma ait olup ekipmanda oluşabilecek herhangi bir hasar, kaybolma, çalınma, bozulma vb. durumlarda Bilgi Teknolojileri Birimini bilgilendireceğimi, ekipmanı üçüncü bir tarafa devretmeyeceğimi ve değişiklik yapmayacağımı, ekipmanın tahliye veya iliştirilmiş olabileceği başka bir araç ve ekipmanın sökümü ve geri teslimiyle ilgili Bilgi Teknolojileri Birimini bilgilendireceğimi ve geri teslimini sağlayacağımı beyan ve taahhüt ederim.
+  </div>
+
+  <div class="signature-section">
+    <table class="signature-table">
+      <tbody>
+        <tr>
+          <td class="left-edge" colspan="3"><strong>Teslim Alan</strong></td>
+          <td colspan="3" class="right-edge"><strong>Teslim Eden</strong></td>
+        </tr>
+        <tr>
+          <td class="left-edge"><strong>Tarih</strong></td>
+          <td><strong>Ad Soyad</strong></td>
+          <td><strong>İmza</strong></td>
+          <td><strong>Tarih</strong></td>
+          <td><strong>Ad Soyad</strong></td>
+          <td class="right-edge"><strong>İmza</strong></td>
+        </tr>
+        <tr>
+          <td class="left-edge"></td><td></td><td></td>
+          <td></td><td></td><td class="right-edge"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer-bar">
+    <div>BT.FR033</div>
+    <div>MAVİ</div>
+    <div>MAVİ</div>
+    <div>R:00</div>
+    <div>10 YIL</div>
+    <div>T:${today}</div>
+  </div>
+</div>
+</body>
+</html>
+  `;
+
+  printWindow.document.write(html);
+  printWindow.document.close();
+  printWindow.onload = () => setTimeout(() => printWindow.print(), 500);
+}
+
+
+</script>
 
 </body>
 </html>
