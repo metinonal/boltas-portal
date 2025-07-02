@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+    <html lang="tr">
+
+    <head>
+        <meta charset="utf-8">
+        <title>PDF Ayır | Boltas Portal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+        <meta content="Coderthemes" name="author">
+
+        <%- include("../partials/css") %>
+
+        <style>
+            .upload-area {
+                border: 2px dashed #dee2e6;
+                border-radius: 10px;
+                padding: 3rem;
+                text-align: center;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .upload-area:hover {
+                border-color: #007bff;
+                background-color: #f8f9fa;
+            }
+            .upload-area.dragover {
+                border-color: #007bff;
+                background-color: #e3f2fd;
+            }
+            .page-preview {
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                background: white;
+            }
+            .page-canvas {
+                max-width: 100%;
+                height: auto;
+                border: 1px solid #eee;
+                border-radius: 4px;
+            }
+            .progress-container {
+                display: none;
+            }
+            .btn-download {
+                min-width: 120px;
+            }
+            .page-thumbnail {
+                width: 100%;
+                max-width: 200px;
+                height: 250px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f8f9fa;
+                margin: 0 auto;
+            }
+        </style>
+
+    </head>
+
+    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    <%- include("../partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <%- include("../partials/topnav") %>
+
+                    
+                    <div class="container-fluid px-4">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Başlık -->
+                                <!-- <div class="d-flex align-items-center mb-4 mt-4">
+                                    <a href="/pdf-araclari" class="btn btn-outline-secondary me-3">
+                                        <i class="fas fa-arrow-left"></i> Geri
+                                    </a>
+                                    <div>
+                                        <h4 class="mb-0">
+                                            <i class="fas fa-cut text-danger me-2"></i>
+                                            PDF Ayır
+                                        </h4>
+                                        <p class="text-muted mb-0">PDF dosyanızı sayfa sayfa ayırın ve indirin</p>
+                                    </div>
+                                </div> -->
+            
+                                <!-- Upload Alanı -->
+                                <div class="card border-0 shadow-sm mb-4 mt-4" id="uploadCard">
+                                    <div class="card-header bg-gradient-success">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h4 class="mb-0">
+                                                    <i class="fas fa-object-group me-2"></i>
+                                                    PDF Ayır
+                                                </h4>
+                                                <p class="mb-0 mt-2">PDF dosyanızı birden fazla parçalara ayırın.</p>
+                                            </div>
+                                            <a href="/pdf-araclari" class="btn btn-light">
+                                                <i class="fas fa-arrow-left me-1"></i>
+                                                Geri Dön
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="upload-area" id="uploadArea">
+                                            <div class="mb-3">
+                                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                            </div>
+                                            <h5>PDF Dosyanızı Yükleyin</h5>
+                                            <p class="text-muted mb-3">Dosyayı buraya sürükleyip bırakın veya tıklayarak seçin</p>
+                                            <input type="file" id="pdfInput" accept=".pdf" class="d-none">
+                                            <button type="button" class="btn btn-primary" onclick="document.getElementById('pdfInput').click()">
+                                                <i class="fas fa-folder-open me-2"></i>Dosya Seç
+                                            </button>
+                                            <div class="mt-3">
+                                                <small class="text-muted">Maksimum dosya boyutu: 50MB</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- Progress -->
+                                <div class="progress-container">
+                                    <div class="card border-0 shadow-sm mb-4">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="spinner-border spinner-border-sm text-primary me-3" role="status"></div>
+                                                <div>
+                                                    <h6 class="mb-0">PDF İşleniyor...</h6>
+                                                    <small class="text-muted">Lütfen bekleyin</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- PDF Bilgileri -->
+                                <div class="card border-0 shadow-sm mb-4 d-none" id="pdfInfoCard">
+                                    
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            PDF Bilgileri
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Dosya Adı:</strong> <span id="fileName"></span></p>
+                                                <p><strong>Dosya Boyutu:</strong> <span id="fileSize"></span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Toplam Sayfa:</strong> <span id="pageCount"></span></p>
+                                                <p><strong>Durum:</strong> <span class="badge bg-success">Hazır</span></p>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-success me-2" id="downloadAllBtn">
+                                                <i class="fas fa-file-archive me-2"></i>ZIP Olarak İndir
+                                            </button>
+                                            <button class="btn btn-outline-primary" id="selectAllBtn">
+                                                <i class="fas fa-check-square me-2"></i>Tümünü Seç
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <!-- Sayfa Önizlemeleri -->
+                                <div id="pagesContainer" class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- content -->
+
+                <!-- Footer Start -->
+                <%- include("../partials/footer") %>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+        <%- include("../partials/scripts") %>
+
+        <!-- PDF.js, PDF-lib ve JSZip kütüphaneleri -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+        <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+        <script>
+            // PDF.js worker'ını ayarla
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            
+            let pdfDoc = null;
+            let pdfBytes = null;
+            let pdfJsDoc = null;
+            let originalFileName = '';
+            
+            // Upload area event listeners
+            const uploadArea = document.getElementById('uploadArea');
+            const pdfInput = document.getElementById('pdfInput');
+            
+            uploadArea.addEventListener('click', () => pdfInput.click());
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+            pdfInput.addEventListener('change', handleFileSelect);
+            
+            function handleDragOver(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            }
+            
+            function handleDragLeave(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            }
+            
+            function handleDrop(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type === 'application/pdf') {
+                    processPDF(files[0]);
+                } else {
+                    alert('Lütfen geçerli bir PDF dosyası seçin.');
+                }
+            }
+            
+            function handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file && file.type === 'application/pdf') {
+                    processPDF(file);
+                } else {
+                    alert('Lütfen geçerli bir PDF dosyası seçin.');
+                }
+            }
+            
+            function getFileNameWithoutExtension(fileName) {
+                return fileName.replace(/\.[^/.]+$/, "");
+            }
+            
+            async function processPDF(file) {
+                try {
+                    // Progress göster
+                    document.querySelector('.progress-container').style.display = 'block';
+                    document.getElementById('uploadCard').style.display = 'none';
+                    
+                    // Dosya adını kaydet (uzantısız)
+                    originalFileName = getFileNameWithoutExtension(file.name);
+                    
+                    // Dosya bilgilerini göster
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                    
+                    // PDF'i yükle
+                    const arrayBuffer = await file.arrayBuffer();
+                    pdfBytes = new Uint8Array(arrayBuffer);
+                    
+                    // PDF-lib ile yükle (ayırma için)
+                    pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+                    
+                    // PDF.js ile yükle (önizleme için)
+                    pdfJsDoc = await pdfjsLib.getDocument(arrayBuffer).promise;
+                    
+                    const pageCount = pdfDoc.getPageCount();
+                    document.getElementById('pageCount').textContent = pageCount;
+                    
+                    // Progress gizle, bilgileri göster
+                    document.querySelector('.progress-container').style.display = 'none';
+                    document.getElementById('pdfInfoCard').classList.remove('d-none');
+                    
+                    // Sayfa önizlemelerini oluştur
+                    await createPagePreviews();
+                    
+                } catch (error) {
+                    console.error('PDF işleme hatası:', error);
+                    alert('PDF dosyası işlenirken bir hata oluştu: ' + error.message);
+                    resetInterface();
+                }
+            }
+            
+            async function createPagePreviews() {
+                const container = document.getElementById('pagesContainer');
+                container.innerHTML = '';
+                
+                const pageCount = pdfDoc.getPageCount();
+                
+                for (let i = 0; i < pageCount; i++) {
+                    const pageDiv = document.createElement('div');
+                    pageDiv.className = 'col-lg-3 col-md-4 col-sm-6 mb-4';
+                    
+                    pageDiv.innerHTML = `
+                        <div class="page-preview">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Sayfa ${i + 1}</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input page-checkbox" type="checkbox" id="page${i}" checked>
+                                    <label class="form-check-label" for="page${i}"></label>
+                                </div>
+                            </div>
+                            <div class="text-center mb-3">
+                                <div class="page-thumbnail" id="thumbnail${i}">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Yükleniyor...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary btn-sm btn-download w-100" onclick="downloadPage(${i})">
+                                <i class="fas fa-download me-1"></i>İndir
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(pageDiv);
+                    
+                    // Sayfa önizlemesini oluştur
+                    await createPageThumbnail(i);
+                }
+            }
+            
+            async function createPageThumbnail(pageIndex) {
+                try {
+                    const page = await pdfJsDoc.getPage(pageIndex + 1);
+                    const scale = 0.5;
+                    const viewport = page.getViewport({ scale });
+                    
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.className = 'page-canvas';
+                    
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    await page.render(renderContext).promise;
+                    
+                    const thumbnailDiv = document.getElementById(`thumbnail${pageIndex}`);
+                    thumbnailDiv.innerHTML = '';
+                    thumbnailDiv.appendChild(canvas);
+                    
+                } catch (error) {
+                    console.error(`Sayfa ${pageIndex + 1} önizlemesi oluşturulamadı:`, error);
+                    const thumbnailDiv = document.getElementById(`thumbnail${pageIndex}`);
+                    thumbnailDiv.innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                            <p class="mt-2 mb-0 small">Sayfa ${pageIndex + 1}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            async function downloadPage(pageIndex) {
+                try {
+                    const newPdf = await PDFLib.PDFDocument.create();
+                    const [copiedPage] = await newPdf.copyPages(pdfDoc, [pageIndex]);
+                    newPdf.addPage(copiedPage);
+                    
+                    const pdfBytes = await newPdf.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/octet-stream' }); // MIME type değiştirildi
+                    const url = URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${originalFileName}-${pageIndex + 1}.pdf`;
+                    a.style.display = 'none'; // Gizli link
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                } catch (error) {
+                    console.error('Sayfa indirme hatası:', error);
+                    alert('Sayfa indirilirken bir hata oluştu: ' + error.message);
+                }
+            }
+            
+            async function createPDFBlob(pageIndex) {
+                const newPdf = await PDFLib.PDFDocument.create();
+                const [copiedPage] = await newPdf.copyPages(pdfDoc, [pageIndex]);
+                newPdf.addPage(copiedPage);
+                
+                const pdfBytes = await newPdf.save();
+                return new Blob([pdfBytes], { type: 'application/octet-stream' });
+            }
+            
+            document.getElementById('downloadAllBtn').addEventListener('click', async () => {
+                const checkboxes = document.querySelectorAll('.page-checkbox:checked');
+                
+                if (checkboxes.length === 0) {
+                    alert('Lütfen en az bir sayfa seçin.');
+                    return;
+                }
+                
+                // Buton durumunu değiştir
+                const btn = document.getElementById('downloadAllBtn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ZIP Hazırlanıyor...';
+                btn.disabled = true;
+                
+                try {
+                    const zip = new JSZip();
+                    
+                    // Seçili sayfaları ZIP'e ekle
+                    for (let i = 0; i < checkboxes.length; i++) {
+                        const pageIndex = parseInt(checkboxes[i].id.replace('page', ''));
+                        const pdfBlob = await createPDFBlob(pageIndex);
+                        const fileName = `${originalFileName}-${pageIndex + 1}.pdf`;
+                        
+                        // Blob'u ArrayBuffer'a çevir
+                        const arrayBuffer = await pdfBlob.arrayBuffer();
+                        zip.file(fileName, arrayBuffer);
+                        
+                        // Progress göster
+                        btn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i>İşleniyor... (${i + 1}/${checkboxes.length})`;
+                    }
+                    
+                    // ZIP dosyasını oluştur ve indir
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ZIP Oluşturuluyor...';
+                    const zipBlob = await zip.generateAsync({ type: 'blob' });
+                    
+                    const url = URL.createObjectURL(zipBlob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${originalFileName}-sayfalar.zip`;
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    
+                } catch (error) {
+                    console.error('ZIP oluşturma hatası:', error);
+                    alert('ZIP dosyası oluşturulurken bir hata oluştu: ' + error.message);
+                } finally {
+                    // Buton durumunu eski haline getir
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            });
+            
+            document.getElementById('selectAllBtn').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.page-checkbox');
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                
+                checkboxes.forEach(cb => cb.checked = !allChecked);
+                
+                const btn = document.getElementById('selectAllBtn');
+                if (allChecked) {
+                    btn.innerHTML = '<i class="fas fa-check-square me-2"></i>Tümünü Seç';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-square me-2"></i>Seçimi Kaldır';
+                }
+            });
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            function resetInterface() {
+                document.querySelector('.progress-container').style.display = 'none';
+                document.getElementById('uploadCard').style.display = 'block';
+                document.getElementById('pdfInfoCard').classList.add('d-none');
+                document.getElementById('pagesContainer').innerHTML = '';
+                pdfDoc = null;
+                pdfBytes = null;
+                pdfJsDoc = null;
+                originalFileName = '';
+                pdfInput.value = '';
+            }
+        </script>
+
+    </body>
+</html>

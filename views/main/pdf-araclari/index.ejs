@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+    <html lang="tr">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Ana Sayfa | Boltas Portal</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+        <meta content="Coderthemes" name="author">
+
+        <%- include("../partials/css") %>
+
+        <style>
+            .pdf-tool-card {
+                transition: all 0.3s ease;
+                border: none;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .pdf-tool-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            }
+            .tool-icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            .coming-soon {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+            .coming-soon:hover {
+                transform: none;
+            }
+        </style>
+
+    </head>
+
+    <body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+        <!-- Begin page -->
+        <div class="wrapper">
+
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    <%- include("../partials/topbar") %>
+                    <!-- end Topbar -->
+
+                    <%- include("../partials/topnav") %>
+
+                    
+                    <div class="container-fluid px-4">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card border-0 shadow-sm mt-4">
+                                    <div class="card-header bg-gradient-primary">
+                                        <h4 class="mb-0">
+                                            <i class="fas fa-file-pdf me-2"></i>
+                                            PDF Araçları
+                                        </h4>
+                                        <p class="mb-0 mt-2">PDF dosyalarınızı düzenlemek için gerekli araçlar</p>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <div class="row g-4">
+                                            <!-- PDF Ayır -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <a href="/pdf-araclari/pdf-ayir" class="text-decoration-none">
+                                                    <div class="card pdf-tool-card h-100 text-center p-4">
+                                                        <div class="tool-icon text-danger">
+                                                            <i class="fas fa-cut"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-dark">PDF Ayır</h5>
+                                                        <p class="card-text text-muted">PDF dosyanızı sayfa sayfa ayırın</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+            
+                                            <!-- PDF Birleştir -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <a href="/pdf-araclari/pdf-birlestir" class="text-decoration-none">
+                                                    <div class="card pdf-tool-card h-100 text-center p-4">
+                                                        <div class="tool-icon text-success">
+                                                            <i class="fas fa-object-group"></i>
+                                                        </div>
+                                                        <h5 class="card-title text-dark">PDF Birleştir</h5>
+                                                        <p class="card-text text-muted">Birden fazla PDF'i birleştirin</p>
+                                                    </div>
+                                                </a>
+                                            </div>
+            
+                                            <!-- PDF Sıkıştır -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-info">
+                                                        <i class="fas fa-compress-alt"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">PDF Sıkıştır</h5>
+                                                    <p class="card-text text-muted">PDF boyutunu küçültün</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+            
+                                            <!-- PDF'den Resim -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-warning">
+                                                        <i class="fas fa-image"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">PDF'den Resim</h5>
+                                                    <p class="card-text text-muted">PDF sayfalarını resme çevirin</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+            
+                                            <!-- Resimden PDF -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-primary">
+                                                        <i class="fas fa-file-image"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">Resimden PDF</h5>
+                                                    <p class="card-text text-muted">Resimleri PDF'e çevirin</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+            
+                                            <!-- PDF Döndür -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-secondary">
+                                                        <i class="fas fa-redo-alt"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">PDF Döndür</h5>
+                                                    <p class="card-text text-muted">PDF sayfalarını döndürün</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+            
+                                            <!-- PDF Şifre Koy -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-dark">
+                                                        <i class="fas fa-lock"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">PDF Şifre Koy</h5>
+                                                    <p class="card-text text-muted">PDF'inizi şifreyle koruyun</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+            
+                                            <!-- PDF Şifre Kaldır -->
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="card pdf-tool-card h-100 text-center p-4 coming-soon">
+                                                    <div class="tool-icon text-success">
+                                                        <i class="fas fa-unlock"></i>
+                                                    </div>
+                                                    <h5 class="card-title text-dark">PDF Şifre Kaldır</h5>
+                                                    <p class="card-text text-muted">PDF şifresini kaldırın</p>
+                                                    <small class="text-warning">Yakında</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- content -->
+
+                <!-- Footer Start -->
+                <%- include("../partials/footer") %>
+                <!-- end Footer -->
+
+            </div>
+
+            <!-- ============================================================== -->
+            <!-- End Page content -->
+            <!-- ============================================================== -->
+
+
+        </div>
+        <!-- END wrapper -->
+
+       
+
+        <%- include("../partials/scripts") %>
+
+    </body>
+</html>

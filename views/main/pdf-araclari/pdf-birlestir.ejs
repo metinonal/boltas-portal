@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>PDF Birleştir | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("../partials/css") %>
+
+    <style>
+        .upload-area {
+                border: 2px dashed #dee2e6;
+                border-radius: 10px;
+                padding: 3rem;
+                text-align: center;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .upload-area:hover {
+                border-color: #007bff;
+                background-color: #f8f9fa;
+            }
+            .upload-area.dragover {
+                border-color: #007bff;
+                background-color: #e3f2fd;
+            }
+        
+        /* Grid Layout for PDFs */
+        #pdfItems {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 10px 0;
+        }
+        
+        @media (min-width: 576px) {
+            #pdfItems {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            #pdfItems {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            #pdfItems {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .pdf-item {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            user-select: none;
+            position: relative;
+            cursor: move;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 200px;
+        }
+        
+        .pdf-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+            border-color: #007bff;
+        }
+        
+        .pdf-item.sortable-chosen {
+            background: #fff3cd !important;
+            border-color: #ffc107 !important;
+            transform: rotate(3deg) scale(1.05);
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .pdf-item.sortable-ghost {
+            opacity: 0.3 !important;
+            background: #e3f2fd !important;
+            border-color: #2196f3 !important;
+            transform: scale(0.95);
+        }
+        
+        .pdf-item.sortable-drag {
+            background: #d1ecf1 !important;
+            border-color: #bee5eb !important;
+            transform: rotate(-2deg);
+        }
+        
+        .pdf-item.sortable-fallback {
+            background: #fff3cd !important;
+            border: 2px dashed #ffc107 !important;
+            opacity: 0.8 !important;
+        }
+        
+        .pdf-checkbox {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 18px;
+            height: 18px;
+            z-index: 10;
+        }
+        
+        .drag-handle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: grab;
+            color: #6c757d;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            background: rgba(255,255,255,0.8);
+            z-index: 10;
+        }
+        
+        .drag-handle:hover {
+            color: #495057;
+            background: rgba(248,249,250,0.9);
+        }
+        
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        
+        .pdf-preview {
+            width: 80px;
+            height: 100px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            margin: 10px 0;
+        }
+        
+        .pdf-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+        }
+        
+        .pdf-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            word-break: break-word;
+            line-height: 1.3;
+        }
+        
+        .pdf-pages {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+        
+        .remove-btn {
+            border: 1px solid #dc3545;
+            color: #dc3545;
+            background: white;
+            transition: all 0.2s ease;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        
+        .remove-btn:hover {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+            transform: scale(1.05);
+        }
+        
+        .progress-container {
+            display: none;
+        }
+        
+        .upload-progress {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .btn-merge {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+        
+        .btn-merge:hover {
+            background: linear-gradient(45deg, #218838, #1ea085);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .btn-merge:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .bulk-actions {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .merge-section {
+            /* background: linear-gradient(135deg, #28a745, #20c997); */
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: white;
+            /* box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); */
+        }
+
+        #mergeBtn{
+            color: white;
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+        
+        .merge-section h6 {
+            color: white;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        /* Sortable animasyonları */
+        .sortable-animation {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        
+        /* Responsive düzenlemeler */
+        @media (max-width: 575px) {
+            .pdf-item {
+                min-height: 180px;
+            }
+            .pdf-preview {
+                width: 60px;
+                height: 80px;
+            }
+            .merge-section {
+                padding: 15px;
+            }
+            .btn-merge {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm mt-4">
+                                <div class="card-header bg-gradient-success">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">
+                                                <i class="fas fa-object-group me-2"></i>
+                                                PDF Birleştir
+                                            </h4>
+                                            <p class="mb-0 mt-2">Birden fazla PDF dosyasını tek dosya halinde birleştirin</p>
+                                        </div>
+                                        <a href="/pdf-araclari" class="btn btn-light">
+                                            <i class="fas fa-arrow-left me-1"></i>
+                                            Geri Dön
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    
+                                    <!-- Upload Area -->
+                                    <div class="upload-area mb-4" id="uploadArea">
+                                        <div class="upload-content">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                            <h5>PDF Dosyalarını Buraya Sürükleyin</h5>
+                                            <p class="text-muted mb-3">veya dosya seçmek için tıklayın</p>
+                                            <button type="button" class="btn btn-primary" id="selectFiles">
+                                                <i class="fas fa-folder-open me-1"></i>
+                                                Dosya Seç
+                                            </button>
+                                            <input type="file" id="fileInput" multiple accept=".pdf" style="display: none;">
+                                            <p class="text-muted mt-2 mb-0">
+                                                <small>Birden fazla PDF dosyası seçebilirsiniz</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upload Progress -->
+                                    <div class="upload-progress" id="uploadProgress">
+                                        <div class="text-center mb-3">
+                                            <h6 id="uploadText">Dosyalar yükleniyor...</h6>
+                                        </div>
+                                        <div class="progress" style="height: 15px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                                                 id="uploadProgressBar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- PDF List -->
+                                    <div id="pdfList" style="display: none;">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-th-large me-2"></i>
+                                                Yüklenen PDF Dosyaları (<span id="pdfCount">0</span>)
+                                            </h5>
+                                            <small class="text-muted">
+                                                <i class="fas fa-arrows-alt me-1"></i>
+                                                <strong>Sürükleyerek</strong> sıralayın
+                                            </small>
+                                        </div>
+
+                                        <!-- Merge Section - Yukarıda -->
+                                        <div class="merge-section" id="mergeSection">
+                                            <button class="btn btn-light btn-lg px-4" id="mergeBtn">
+                                                <i class="fas fa-object-group me-2"></i>
+                                                PDF'leri Birleştir
+                                            </button>
+                                        </div>
+
+                                        <!-- Progress - Merge Section'ın altında -->
+                                        <div class="progress-container mb-4" id="progressContainer">
+                                            <div class="text-center mb-3">
+                                                <h5 id="progressText">PDF'ler birleştiriliyor...</h5>
+                                            </div>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                                     id="progressBar" role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bulk Actions -->
+                                        <div class="bulk-actions">
+                                            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                                <div>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm me-2" id="selectAllBtn">
+                                                        <i class="fas fa-check-square me-1"></i>
+                                                        Tümünü Seç
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm" id="deselectAllBtn">
+                                                        <i class="fas fa-square me-1"></i>
+                                                        Seçimi Kaldır
+                                                    </button>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-danger btn-sm" id="deleteSelectedBtn">
+                                                    <i class="fas fa-trash me-1"></i>
+                                                    Seçilenleri Sil
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- PDF Grid -->
+                                        <div id="pdfItems"></div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+    <!-- Sortable.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <script>
+        // PDF.js worker ayarı
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let uploadedPDFs = [];
+        let sortable;
+
+        // DOM elementleri
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFiles = document.getElementById('selectFiles');
+        const pdfList = document.getElementById('pdfList');
+        const pdfItems = document.getElementById('pdfItems');
+        const pdfCount = document.getElementById('pdfCount');
+        const mergeBtn = document.getElementById('mergeBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const uploadProgress = document.getElementById('uploadProgress');
+        const uploadProgressBar = document.getElementById('uploadProgressBar');
+        const uploadText = document.getElementById('uploadText');
+        const selectAllBtn = document.getElementById('selectAllBtn');
+        const deselectAllBtn = document.getElementById('deselectAllBtn');
+        const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
+
+        // Event listeners
+        selectFiles.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFiles);
+        mergeBtn.addEventListener('click', mergePDFs);
+        selectAllBtn.addEventListener('click', selectAllPDFs);
+        deselectAllBtn.addEventListener('click', deselectAllPDFs);
+        deleteSelectedBtn.addEventListener('click', deleteSelectedPDFs);
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
+            if (files.length > 0) {
+                processFiles(files);
+            } else {
+                alert('Lütfen sadece PDF dosyaları seçin.');
+            }
+        });
+
+        function handleFiles(e) {
+            const files = Array.from(e.target.files);
+            processFiles(files);
+        }
+
+        async function processFiles(files) {
+            if (files.length === 0) return;
+
+            uploadProgress.style.display = 'block';
+            uploadProgressBar.style.width = '0%';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const progress = ((i + 1) / files.length) * 100;
+                uploadProgressBar.style.width = `${progress}%`;
+                uploadText.textContent = `${file.name} işleniyor... (${i + 1}/${files.length})`;
+
+                if (file.type === 'application/pdf') {
+                    try {
+                        const arrayBuffer = await file.arrayBuffer();
+                        const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                        
+                        const pdfData = {
+                            id: Date.now() + Math.random(),
+                            name: file.name.replace('.pdf', ''),
+                            file: file,
+                            pageCount: pdf.numPages,
+                            preview: await generatePreview(pdf),
+                            selected: false
+                        };
+                        
+                        uploadedPDFs.push(pdfData);
+                        addPDFToList(pdfData);
+                        updatePDFCount();
+                    } catch (error) {
+                        console.error('PDF işleme hatası:', error);
+                        alert(`${file.name} dosyası işlenirken hata oluştu.`);
+                    }
+                }
+
+                // Kısa bekleme
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            uploadProgress.style.display = 'none';
+            
+            if (uploadedPDFs.length > 0) {
+                pdfList.style.display = 'block';
+                initSortable();
+            }
+
+            // File input'u temizle
+            fileInput.value = '';
+        }
+
+        async function generatePreview(pdf) {
+            try {
+                const page = await pdf.getPage(1);
+                const viewport = page.getViewport({ scale: 0.4 });
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                return canvas.toDataURL();
+            } catch (error) {
+                console.error('Önizleme oluşturma hatası:', error);
+                return null;
+            }
+        }
+
+        function addPDFToList(pdfData) {
+            const pdfItem = document.createElement('div');
+            pdfItem.className = 'pdf-item sortable-animation';
+            pdfItem.dataset.id = pdfData.id;
+            
+            pdfItem.innerHTML = `
+                <input type="checkbox" class="form-check-input pdf-checkbox" data-id="${pdfData.id}">
+                <div class="drag-handle" title="Sürükleyerek sıralayın">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
+                <div class="pdf-preview">
+                    ${pdfData.preview ? 
+                        `<img src="${pdfData.preview}" alt="Önizleme" style="max-width: 100%; max-height: 100%; object-fit: contain;">` :
+                        '<i class="fas fa-file-pdf fa-2x text-danger"></i>'
+                    }
+                </div>
+                <div class="pdf-info">
+                    <div class="pdf-name">${pdfData.name}</div>
+                    <div class="pdf-pages">${pdfData.pageCount} sayfa</div>
+                    <button type="button" class="btn remove-btn" data-id="${pdfData.id}" title="Sil">
+                        <i class="fas fa-trash me-1"></i>
+                        Sil
+                    </button>
+                </div>
+            `;
+            
+            // Checkbox event listener
+            const checkbox = pdfItem.querySelector('.pdf-checkbox');
+            checkbox.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const pdf = uploadedPDFs.find(p => p.id == e.target.dataset.id);
+                if (pdf) {
+                    pdf.selected = e.target.checked;
+                }
+            });
+            
+            // Remove button event listener
+            const removeBtn = pdfItem.querySelector('.remove-btn');
+            removeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                removePDF(pdfData.id);
+            });
+            
+            pdfItems.appendChild(pdfItem);
+        }
+
+        function initSortable() {
+            if (sortable) {
+                sortable.destroy();
+            }
+            
+            sortable = new Sortable(pdfItems, {
+                animation: 300,
+                ghostClass: 'sortable-ghost',
+                chosenClass: 'sortable-chosen',
+                dragClass: 'sortable-drag',
+                fallbackClass: 'sortable-fallback',
+                forceFallback: false,
+                fallbackTolerance: 3,
+                scroll: true,
+                scrollSensitivity: 100,
+                scrollSpeed: 20,
+                delay: 0,
+                delayOnTouchStart: true,
+                touchStartThreshold: 5,
+                filter: '.pdf-checkbox, .remove-btn',
+                preventOnFilter: false,
+                onStart: function(evt) {
+                    console.log('Sürükleme başladı:', evt.item.dataset.id);
+                    evt.item.style.cursor = 'grabbing';
+                    document.body.style.cursor = 'grabbing';
+                },
+                onEnd: function(evt) {
+                    console.log('Sürükleme bitti');
+                    evt.item.style.cursor = '';
+                    document.body.style.cursor = '';
+                    
+                    // Sıralamayı güncelle
+                    const newOrder = Array.from(pdfItems.children).map(item => item.dataset.id);
+                    const newUploadedPDFs = [];
+                    
+                    newOrder.forEach(id => {
+                        const pdf = uploadedPDFs.find(p => p.id == id);
+                        if (pdf) newUploadedPDFs.push(pdf);
+                    });
+                    
+                    uploadedPDFs = newUploadedPDFs;
+                    console.log('Yeni sıralama:', uploadedPDFs.map(p => p.name));
+                },
+                onMove: function(evt) {
+                    // Checkbox ve remove button'a tıklandığında sürüklemeyi engelle
+                    return !evt.related.classList.contains('pdf-checkbox') && 
+                           !evt.related.classList.contains('remove-btn');
+                }
+            });
+        }
+
+        function selectAllPDFs() {
+            uploadedPDFs.forEach(pdf => pdf.selected = true);
+            document.querySelectorAll('.pdf-checkbox').forEach(checkbox => {
+                checkbox.checked = true;
+            });
+        }
+
+        function deselectAllPDFs() {
+            uploadedPDFs.forEach(pdf => pdf.selected = false);
+            document.querySelectorAll('.pdf-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+        }
+
+        function deleteSelectedPDFs() {
+            const selectedPDFs = uploadedPDFs.filter(pdf => pdf.selected);
+            if (selectedPDFs.length === 0) {
+                alert('Lütfen silinecek PDF\'leri seçin.');
+                return;
+            }
+
+            if (confirm(`${selectedPDFs.length} PDF dosyası silinecek. Emin misiniz?`)) {
+                selectedPDFs.forEach(pdf => {
+                    removePDF(pdf.id);
+                });
+            }
+        }
+
+        function removePDF(id) {
+            console.log('PDF siliniyor:', id);
+            uploadedPDFs = uploadedPDFs.filter(pdf => pdf.id != id);
+            const pdfItem = document.querySelector(`[data-id="${id}"]`);
+            if (pdfItem) {
+                pdfItem.style.transform = 'scale(0)';
+                pdfItem.style.opacity = '0';
+                setTimeout(() => {
+                    pdfItem.remove();
+                }, 300);
+            }
+            
+            updatePDFCount();
+            
+            if (uploadedPDFs.length === 0) {
+                pdfList.style.display = 'none';
+            }
+        }
+
+        function updatePDFCount() {
+            pdfCount.textContent = uploadedPDFs.length;
+        }
+
+        async function mergePDFs() {
+            if (uploadedPDFs.length < 2) {
+                alert('En az 2 PDF dosyası seçmelisiniz.');
+                return;
+            }
+
+            try {
+                mergeBtn.disabled = true;
+                progressContainer.style.display = 'block';
+                progressText.textContent = 'PDF\'ler birleştiriliyor...';
+                progressBar.style.width = '0%';
+                
+                const mergedPdf = await PDFLib.PDFDocument.create();
+                
+                for (let i = 0; i < uploadedPDFs.length; i++) {
+                    const pdfData = uploadedPDFs[i];
+                    const progress = ((i + 1) / uploadedPDFs.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressText.textContent = `${pdfData.name} ekleniyor... (${i + 1}/${uploadedPDFs.length})`;
+                    
+                    try {
+                        // Her seferinde File objesinden yeni ArrayBuffer oluştur
+                        const freshArrayBuffer = await pdfData.file.arrayBuffer();
+                        
+                        // Şifreli PDF'ler için ignoreEncryption: true kullan
+                        const pdf = await PDFLib.PDFDocument.load(freshArrayBuffer, { 
+                            ignoreEncryption: true 
+                        });
+                        
+                        const pageCount = pdf.getPageCount();
+                        const pageIndices = Array.from({length: pageCount}, (_, i) => i);
+                        const pages = await mergedPdf.copyPages(pdf, pageIndices);
+                        pages.forEach((page) => mergedPdf.addPage(page));
+                        
+                        console.log(`${pdfData.name} başarıyla eklendi (${pageCount} sayfa)`);
+                    } catch (pdfError) {
+                        console.error(`${pdfData.name} eklenirken hata:`, pdfError);
+                        
+                        // Şifreli PDF hatası için özel mesaj
+                        if (pdfError.message.includes('encrypted')) {
+                            console.warn(`${pdfData.name} şifreli bir PDF, atlanıyor...`);
+                            continue; // Bu PDF'i atla, diğerlerine devam et
+                        }
+                        
+                        throw new Error(`${pdfData.name} dosyası eklenirken hata oluştu: ${pdfError.message}`);
+                    }
+                    
+                    // UI güncellemesi için kısa bekleme
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                
+                progressText.textContent = 'PDF hazırlanıyor...';
+                progressBar.style.width = '100%';
+                
+                const pdfBytes = await mergedPdf.save();
+                
+                // İndir
+                const blob = new Blob([pdfBytes], { type: 'application/octet-stream' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'birlestirilmis-pdf.pdf';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                progressText.textContent = 'Tamamlandı!';
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    mergeBtn.disabled = false;
+                    progressBar.style.width = '0%';
+                }, 2000);
+                
+            } catch (error) {
+                console.error('PDF birleştirme hatası:', error);
+                alert('PDF birleştirme sırasında hata oluştu: ' + error.message);
+                progressContainer.style.display = 'none';
+                mergeBtn.disabled = false;
+                progressBar.style.width = '0%';
+            }
+        }
+    </script>
+
+</body>
+</html>

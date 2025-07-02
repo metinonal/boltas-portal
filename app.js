@@ -108,6 +108,7 @@ const indexRoutes = require("./routes/main/indexRoutes")
 const phoneRoutes = require("./routes/main/phoneRoutes")
 const marketplaceRoutes = require("./routes/main/marketplaceRoutes")
 const sozlukRoutes = require("./routes/main/sozlukRoutes")
+const pdfRoutes = require("./routes/main/pdfRoutes")
 
 //Middleware ler
 
@@ -129,6 +130,7 @@ app.use("/", menuRoutes)
 app.use("/", phoneRoutes)
 app.use("/pazaryeri", marketplaceRoutes)
 app.use("/sozluk", sozlukRoutes)
+app.use("/pdf-araclari", pdfRoutes)
 app.use("/", indexRoutes)
 
 // Global hata yakalayıcı
