@@ -20,3 +20,10 @@ exports.index = (req, res) => {
     })
   }
   
+  exports.pdfSikistir = (req, res) => {
+    res.render("main/pdf-araclari/pdf-sikistir", {
+      title: "PDF Sıkıştır",
+      user: req.session.user,
+    })
+  }
+  

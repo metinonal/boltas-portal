@@ -11,4 +11,7 @@ router.get("/pdf-ayir", pdfController.pdfAyir)
 // PDF birleştirme sayfası
 router.get("/pdf-birlestir", pdfController.pdfBirlestir)
 
+// PDF sıkıştırma sayfası
+router.get("/pdf-sikistir", pdfController.pdfSikistir)
+
 module.exports = router;

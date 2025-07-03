@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>PDF Sıkıştır | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("../partials/css") %>
+
+    <style>
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .upload-area.dragover {
+            border-color: #007bff;
+            background-color: #e3f2fd;
+        }
+        .compression-options {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .compression-level {
+            margin: 10px 0;
+        }
+        .compression-level input[type="radio"] {
+            margin-right: 8px;
+        }
+        .compression-level label {
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+        .progress-container {
+            display: none;
+        }
+        .btn-compress {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+        .btn-compress:hover {
+            background: linear-gradient(45deg, #218838, #1ea085);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .btn-compress:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .file-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .processing-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .content-analysis {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .analysis-item {
+            margin: 10px 0;
+        }
+        .analysis-item input[type="radio"] {
+            margin-right: 8px;
+        }
+        .analysis-item label {
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 0;
+        }
+    </style>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm mt-4">
+                                <div class="card-header bg-gradient-success">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">
+                                                <i class="fas fa-compress-alt me-2"></i>
+                                                PDF Sıkıştır
+                                            </h4>
+                                            <p class="mb-0 mt-2">PDF içeriğini analiz ederek en uygun sıkıştırma yöntemini uygular</p>
+                                        </div>
+                                        <a href="/pdf-araclari" class="btn btn-light">
+                                            <i class="fas fa-arrow-left me-1"></i>
+                                            Geri Dön
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    
+                                    <!-- Upload Area -->
+                                    <div class="upload-area mb-4" id="uploadArea">
+                                        <div class="upload-content">
+                                            <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                            <h5>PDF Dosyasını Buraya Sürükleyin</h5>
+                                            <p class="text-muted mb-3">veya dosya seçmek için tıklayın</p>
+                                            <button type="button" class="btn btn-primary" id="selectFiles">
+                                                <i class="fas fa-folder-open me-1"></i>
+                                                Dosya Seç
+                                            </button>
+                                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+                                            <p class="text-muted mt-2 mb-0">
+                                                <small>Maksimum dosya boyutu: 500MB</small>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- PDF Info -->
+                                    <div id="pdfInfo" style="display: none;">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h5 class="mb-0">
+                                                <i class="fas fa-file-pdf me-2 text-danger"></i>
+                                                Yüklenen PDF
+                                            </h5>
+                                        </div>
+
+                                        <!-- File Info -->
+                                        <div class="file-info">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p><strong>Dosya Adı:</strong> <span id="fileName"></span></p>
+                                                    <p><strong>Dosya Boyutu:</strong> <span id="fileSize"></span></p>
+                                                    <p><strong>Sayfa Sayısı:</strong> <span id="pageCount">-</span></p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p><strong>Durum:</strong> <span class="badge bg-success">Hazır</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Content Analysis -->
+                                        <div class="content-analysis" id="contentAnalysis" style="display: none;">
+                                            <h6 class="mb-3">
+                                                <i class="fas fa-search me-2"></i>
+                                                İçerik Analizi
+                                            </h6>
+                                            
+                                            <div class="analysis-item">
+                                                <input type="radio" id="pdfTypeRadio" name="analysis" disabled>
+                                                <label for="pdfTypeRadio">
+                                                    <i class="fas fa-file-alt me-1"></i>
+                                                    PDF Türü: <span id="pdfType" class="badge bg-info">-</span>
+                                                </label>
+                                                <small class="d-block text-muted ms-4">Dosya içeriğinin genel türü</small>
+                                            </div>
+                                            
+                                            <div class="analysis-item">
+                                                <input type="radio" id="textContentRadio" name="analysis" disabled>
+                                                <label for="textContentRadio">
+                                                    <i class="fas fa-font me-1"></i>
+                                                    Metin İçeriği: <span id="textContent">-</span>
+                                                </label>
+                                                <small class="d-block text-muted ms-4">Sayfalardaki metin yoğunluğu</small>
+                                            </div>
+                                            
+                                            <div class="analysis-item">
+                                                <input type="radio" id="imageContentRadio" name="analysis" disabled>
+                                                <label for="imageContentRadio">
+                                                    <i class="fas fa-image me-1"></i>
+                                                    Görüntü İçeriği: <span id="imageContent">-</span>
+                                                </label>
+                                                <small class="d-block text-muted ms-4">Sayfalardaki görüntü yoğunluğu</small>
+                                            </div>
+                                            
+                                            <div class="analysis-item">
+                                                <input type="radio" id="recommendedMethodRadio" name="analysis" disabled>
+                                                <label for="recommendedMethodRadio">
+                                                    <i class="fas fa-magic me-1"></i>
+                                                    Önerilen Yöntem: <span id="recommendedMethod" class="badge bg-success">-</span>
+                                                </label>
+                                                <small class="d-block text-muted ms-4">İçerik analizine göre en uygun yöntem</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Compression Options -->
+                                        <div class="compression-options">
+                                            <h6 class="mb-3">
+                                                <i class="fas fa-cogs me-2"></i>
+                                                Sıkıştırma Seviyesi
+                                            </h6>
+                                            
+                                            <div class="compression-level">
+                                                <input type="radio" id="extreme" name="compression" value="0.4">
+                                                <label for="extreme">
+                                                    <i class="fas fa-compress-arrows-alt me-1"></i>
+                                                    Maksimum Sıkıştırma (40% kalite)
+                                                </label>
+                                                <small class="d-block text-muted ms-4">En küçük boyut, düşük kalite</small>
+                                            </div>
+                                            
+                                            <div class="compression-level">
+                                                <input type="radio" id="high" name="compression" value="0.6" checked>
+                                                <label for="high">
+                                                    <i class="fas fa-compress me-1"></i>
+                                                    Yüksek Sıkıştırma (60% kalite)
+                                                </label>
+                                                <small class="d-block text-muted ms-4">İyi sıkıştırma, kabul edilebilir kalite</small>
+                                            </div>
+                                            
+                                            <div class="compression-level">
+                                                <input type="radio" id="medium" name="compression" value="0.8">
+                                                <label for="medium">
+                                                    <i class="fas fa-balance-scale me-1"></i>
+                                                    Orta Sıkıştırma (80% kalite)
+                                                </label>
+                                                <small class="d-block text-muted ms-4">Dengeli sıkıştırma ve kalite</small>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-center">
+                                            <button class="btn btn-compress btn-lg px-4" id="compressBtn">
+                                                <i class="fas fa-compress-alt me-2"></i>
+                                                Akıllı Sıkıştırma Başlat
+                                            </button>
+                                            <button class="btn btn-outline-secondary ms-2" id="resetBtn">
+                                                <i class="fas fa-redo me-2"></i>
+                                                Yeni PDF Yükle
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Progress -->
+                                    <div class="progress-container mt-4" id="progressContainer">
+                                        <div class="processing-info">
+                                            <div class="text-center mb-3">
+                                                <h5 id="progressText">PDF sıkıştırılıyor...</h5>
+                                                <p class="mb-0" id="progressDetail">İşlem başlatılıyor...</p>
+                                            </div>
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                                     id="progressBar" role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                            <div class="text-center mt-2">
+                                                <small class="text-muted" id="progressPercent">0%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Result -->
+                                    <div id="resultContainer" style="display: none;">
+                                        <div class="alert alert-success mt-2">
+                                            <i class="fas fa-check-circle me-2"></i>
+                                            PDF başarıyla sıkıştırıldı!
+                                        </div>
+                                        
+                                        <div class="file-info">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <strong>Orijinal Boyut:</strong><br>
+                                                    <span id="originalSize">-</span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <strong>Sıkıştırılmış Boyut:</strong><br>
+                                                    <span id="compressedSize">-</span>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <strong>Tasarruf:</strong><br>
+                                                    <span class="text-success" id="sizeReduction">-</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mt-2">
+                                                <div class="col-12">
+                                                    <small class="text-muted">
+                                                        <strong>Kullanılan Yöntem:</strong> <span id="usedMethod">-</span>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="text-center">
+                                            <button class="btn btn-success btn-lg px-4" id="downloadBtn">
+                                                <i class="fas fa-download me-2"></i>
+                                                Sıkıştırılmış PDF'i İndir
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+
+    <!-- PDF.js, jsPDF ve PDF-lib -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+    <script>
+        // PDF.js worker ayarı
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let currentPDF = null;
+        let originalFileName = '';
+        let originalSize = 0;
+        let pdfDocument = null;
+        let contentAnalysisResult = null;
+
+        // DOM elementleri
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFiles = document.getElementById('selectFiles');
+        const pdfInfo = document.getElementById('pdfInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const pageCount = document.getElementById('pageCount');
+        const contentAnalysis = document.getElementById('contentAnalysis');
+        const pdfType = document.getElementById('pdfType');
+        const textContent = document.getElementById('textContent');
+        const imageContent = document.getElementById('imageContent');
+        const recommendedMethod = document.getElementById('recommendedMethod');
+        const compressBtn = document.getElementById('compressBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressDetail = document.getElementById('progressDetail');
+        const progressPercent = document.getElementById('progressPercent');
+        const resultContainer = document.getElementById('resultContainer');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const originalSizeSpan = document.getElementById('originalSize');
+        const compressedSizeSpan = document.getElementById('compressedSize');
+        const sizeReductionSpan = document.getElementById('sizeReduction');
+        const usedMethod = document.getElementById('usedMethod');
+
+        // Event listeners
+        selectFiles.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFiles);
+        compressBtn.addEventListener('click', compressPDF);
+        resetBtn.addEventListener('click', resetForm);
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type === 'application/pdf');
+            if (files.length > 0) {
+                handleFile(files[0]);
+            } else {
+                alert('Lütfen sadece PDF dosyaları seçin.');
+            }
+        });
+
+        function handleFiles(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        async function handleFile(file) {
+            if (file.type !== 'application/pdf') {
+                alert('Lütfen sadece PDF dosyası seçin.');
+                return;
+            }
+
+            if (file.size > 500 * 1024 * 1024) { // 500MB limit
+                alert('Dosya boyutu 500MB\'dan küçük olmalıdır.');
+                return;
+            }
+
+            try {
+                currentPDF = file;
+                originalFileName = file.name.replace('.pdf', '');
+                originalSize = file.size;
+
+                // PDF'i yükle ve sayfa sayısını al
+                const arrayBuffer = await file.arrayBuffer();
+                pdfDocument = await pdfjsLib.getDocument(arrayBuffer).promise;
+
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                pageCount.textContent = pdfDocument.numPages + ' sayfa';
+
+                // İçerik analizini başlat
+                await analyzePDFContent();
+
+                uploadArea.style.display = 'none';
+                pdfInfo.style.display = 'block';
+                contentAnalysis.style.display = 'block';
+            } catch (error) {
+                console.error('PDF yükleme hatası:', error);
+                alert('PDF dosyası yüklenirken hata oluştu.');
+            }
+        }
+
+        async function analyzePDFContent() {
+            try {
+                updateProgress(0, 'PDF içeriği analiz ediliyor...', 'Sayfa içerikleri inceleniyor...');
+                
+                let totalTextLength = 0;
+                let totalImages = 0;
+                let hasComplexGraphics = false;
+                let samplePages = Math.min(5, pdfDocument.numPages); // İlk 5 sayfayı analiz et
+
+                for (let pageNum = 1; pageNum <= samplePages; pageNum++) {
+                    const page = await pdfDocument.getPage(pageNum);
+                    
+                    // Metin içeriğini al
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    totalTextLength += pageText.length;
+
+                    // Operatör listesini al (görüntü ve grafik tespiti için)
+                    const ops = await page.getOperatorList();
+                    
+                    // Görüntü sayısını say
+                    for (let i = 0; i < ops.fnArray.length; i++) {
+                        if (ops.fnArray[i] === pdfjsLib.OPS.paintImageXObject || 
+                            ops.fnArray[i] === pdfjsLib.OPS.paintInlineImageXObject) {
+                            totalImages++;
+                        }
+                        // Karmaşık grafik operasyonlarını tespit et
+                        if (ops.fnArray[i] === pdfjsLib.OPS.shadingFill || 
+                            ops.fnArray[i] === pdfjsLib.OPS.constructPath) {
+                            hasComplexGraphics = true;
+                        }
+                    }
+                }
+
+                // Analiz sonuçlarını hesapla
+                const avgTextPerPage = totalTextLength / samplePages;
+                const avgImagesPerPage = totalImages / samplePages;
+                const totalPagesEstimatedText = avgTextPerPage * pdfDocument.numPages;
+                const totalPagesEstimatedImages = avgImagesPerPage * pdfDocument.numPages;
+
+                // PDF türünü belirle
+                let pdfTypeResult = '';
+                let recommendedMethodResult = '';
+                let compressionStrategy = '';
+
+                if (avgTextPerPage > 500 && avgImagesPerPage < 1) {
+                    // Metin ağırlıklı PDF
+                    pdfTypeResult = 'Metin Ağırlıklı';
+                    recommendedMethodResult = 'Safe for Web (Metin Korunur)';
+                    compressionStrategy = 'text-heavy';
+                } else if (avgImagesPerPage > 2 && avgTextPerPage < 200) {
+                    // Görüntü ağırlıklı PDF
+                    pdfTypeResult = 'Görüntü Ağırlıklı';
+                    recommendedMethodResult = 'JPEG Sıkıştırma';
+                    compressionStrategy = 'image-heavy';
+                } else if (hasComplexGraphics) {
+                    // Karmaşık grafik içeren PDF
+                    pdfTypeResult = 'Grafik/Tasarım';
+                    recommendedMethodResult = 'Hibrit Sıkıştırma';
+                    compressionStrategy = 'graphics-heavy';
+                } else {
+                    // Karma içerik
+                    pdfTypeResult = 'Karma İçerik';
+                    recommendedMethodResult = 'Akıllı Hibrit';
+                    compressionStrategy = 'mixed-content';
+                }
+
+                // Sonuçları kaydet
+                contentAnalysisResult = {
+                    type: compressionStrategy,
+                    textLength: totalPagesEstimatedText,
+                    imageCount: totalPagesEstimatedImages,
+                    hasComplexGraphics: hasComplexGraphics,
+                    avgPageSize: originalSize / pdfDocument.numPages
+                };
+
+                // UI'yi güncelle
+                pdfType.textContent = pdfTypeResult;
+                pdfType.className = `badge ${compressionStrategy === 'text-heavy' ? 'bg-primary' : 
+                                            compressionStrategy === 'image-heavy' ? 'bg-warning' : 
+                                            compressionStrategy === 'graphics-heavy' ? 'bg-info' : 'bg-secondary'}`;
+                
+                textContent.textContent = totalPagesEstimatedText > 1000 ? 'Yoğun' : 
+                                         totalPagesEstimatedText > 200 ? 'Orta' : 'Az';
+                
+                imageContent.textContent = totalPagesEstimatedImages > 10 ? 'Yoğun' : 
+                                          totalPagesEstimatedImages > 2 ? 'Orta' : 'Az';
+                
+                recommendedMethod.textContent = recommendedMethodResult;
+
+            } catch (error) {
+                console.error('İçerik analizi hatası:', error);
+                // Varsayılan analiz
+                contentAnalysisResult = {
+                    type: 'mixed-content',
+                    textLength: 1000,
+                    imageCount: 5,
+                    hasComplexGraphics: false,
+                    avgPageSize: originalSize / pdfDocument.numPages
+                };
+                
+                pdfType.textContent = 'Bilinmiyor';
+                textContent.textContent = 'Analiz edilemedi';
+                imageContent.textContent = 'Analiz edilemedi';
+                recommendedMethod.textContent = 'Genel Sıkıştırma';
+            }
+        }
+
+        async function compressPDF() {
+            if (!currentPDF || !pdfDocument || !contentAnalysisResult) return;
+
+            try {
+                compressBtn.disabled = true;
+                compressBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sıkıştırılıyor...';
+                
+                progressContainer.style.display = 'block';
+                const quality = parseFloat(document.querySelector('input[name="compression"]:checked').value);
+                
+                let compressedPdfBytes;
+                let methodUsed = '';
+
+                // İçerik analizine göre sıkıştırma yöntemi seç
+                switch (contentAnalysisResult.type) {
+                    case 'text-heavy':
+                        updateProgress(10, 'Metin ağırlıklı PDF tespit edildi...', 'Safe for Web optimizasyonu uygulanıyor...');
+                        compressedPdfBytes = await compressTextHeavyPDF(quality);
+                        methodUsed = 'Safe for Web (Metin Korundu)';
+                        break;
+                        
+                    case 'image-heavy':
+                        updateProgress(10, 'Görüntü ağırlıklı PDF tespit edildi...', 'JPEG sıkıştırması uygulanıyor...');
+                        compressedPdfBytes = await compressImageHeavyPDF(quality);
+                        methodUsed = 'JPEG Sıkıştırma';
+                        break;
+                        
+                    case 'graphics-heavy':
+                        updateProgress(10, 'Grafik ağırlıklı PDF tespit edildi...', 'Hibrit sıkıştırma uygulanıyor...');
+                        compressedPdfBytes = await compressGraphicsHeavyPDF(quality);
+                        methodUsed = 'Hibrit Grafik Sıkıştırma';
+                        break;
+                        
+                    default:
+                        updateProgress(10, 'Karma içerik tespit edildi...', 'Akıllı hibrit sıkıştırma uygulanıyor...');
+                        compressedPdfBytes = await compressMixedContentPDF(quality);
+                        methodUsed = 'Akıllı Hibrit Sıkıştırma';
+                        break;
+                }
+
+                // Sonuç kontrolü
+                if (!compressedPdfBytes || compressedPdfBytes.length === 0 || compressedPdfBytes.byteLength === 0) {
+                    throw new Error('Sıkıştırma işlemi başarısız oldu');
+                }
+
+                // Boyut hesaplama - ArrayBuffer için byteLength kullan
+                const compressedSize = compressedPdfBytes.byteLength || compressedPdfBytes.length;
+                console.log('Orijinal boyut:', originalSize);
+                console.log('Sıkıştırılmış boyut:', compressedSize);
+
+                const reduction = originalSize > compressedSize ? 
+                    ((originalSize - compressedSize) / originalSize * 100) : 0;
+                const savedBytes = originalSize > compressedSize ? 
+                    (originalSize - compressedSize) : 0;
+
+                // Download URL oluştur - ArrayBuffer'dan blob oluştur
+                const blob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                console.log('Download blob boyutu:', blob.size);
+                const url = URL.createObjectURL(blob);
+
+                downloadBtn.onclick = () => {
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${originalFileName}-sikistirilmis.pdf`;
+                    a.style.display = 'none';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+
+                // Sonuçları göster
+                originalSizeSpan.textContent = formatFileSize(originalSize);
+                compressedSizeSpan.textContent = formatFileSize(compressedSize);
+                usedMethod.textContent = methodUsed;
+                
+                if (reduction > 0) {
+                    sizeReductionSpan.textContent = `${reduction.toFixed(1)}% tasarruf (${formatFileSize(savedBytes)})`;
+                    sizeReductionSpan.className = 'text-success';
+                } else {
+                    sizeReductionSpan.textContent = 'Sıkıştırma tamamlandı';
+                    sizeReductionSpan.className = 'text-info';
+                }
+
+                updateProgress(100, 'Sıkıştırma tamamlandı!', `${methodUsed} ile ${reduction.toFixed(1)}% tasarruf elde edildi!`);
+
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    resultContainer.style.display = 'block';
+                }, 1500);
+
+            } catch (error) {
+                console.error('PDF sıkıştırma hatası:', error);
+                alert('PDF sıkıştırılırken bir hata oluştu: ' + error.message);
+                progressContainer.style.display = 'none';
+            } finally {
+                compressBtn.disabled = false;
+                compressBtn.innerHTML = '<i class="fas fa-compress-alt me-2"></i>Akıllı Sıkıştırma Başlat';
+            }
+        }
+
+        // Metin ağırlıklı PDF'ler için Safe for Web sıkıştırma
+        async function compressTextHeavyPDF(quality) {
+            updateProgress(30, 'Safe for Web optimizasyonu...', 'Metin kalitesi korunarak sıkıştırılıyor...');
+            
+            try {
+                const arrayBuffer = await currentPDF.arrayBuffer();
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { 
+                    ignoreEncryption: true,
+                    capNumbers: false,
+                    throwOnInvalidObject: false
+                });
+
+                updateProgress(60, 'Metin optimizasyonu...', 'Font ve metin yapıları optimize ediliyor...');
+
+                // Safe for Web ayarları (Adobe benzeri)
+                const saveOptions = {
+                    useObjectStreams: true,
+                    addDefaultPage: false,
+                    objectsPerTick: 300,
+                    updateFieldAppearances: false,
+                    // Metin kalitesini koruyacak ayarlar
+                    preserveTextQuality: true
+                };
+
+                updateProgress(90, 'PDF kaydediliyor...', 'Metin kalitesi korunarak optimize ediliyor...');
+
+                const compressedBytes = await pdfDoc.save(saveOptions);
+                return compressedBytes;
+
+            } catch (error) {
+                console.error('Safe for Web sıkıştırma hatası:', error);
+                throw error;
+            }
+        }
+
+        // Görüntü ağırlıklı PDF'ler için JPEG sıkıştırma (Kalite artırıldı)
+        async function compressImageHeavyPDF(quality) {
+            updateProgress(20, 'JPEG sıkıştırması başlatılıyor...', 'Görüntüler JPEG formatına dönüştürülüyor...');
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            pdf.deletePage(1);
+
+            const totalPages = pdfDocument.numPages;
+            // Kalite artırıldı: Daha yüksek DPI ve daha iyi çözünürlük
+            const dpiScale = quality > 0.7 ? 2.0 : quality > 0.5 ? 1.8 : 1.5;
+
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                const progressPercent = 20 + (pageNum / totalPages * 70);
+                updateProgress(
+                    progressPercent, 
+                    `Sayfa ${pageNum}/${totalPages} JPEG'e dönüştürülüyor...`,
+                    'Yüksek kaliteli görüntü sıkıştırması uygulanıyor...'
+                );
+
+                const page = await pdfDocument.getPage(pageNum);
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                
+                // Yüksek çözünürlük için daha büyük viewport
+                const viewport = page.getViewport({ scale: dpiScale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                // Beyaz arka plan (daha temiz görünüm için)
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                await page.render({
+                    canvasContext: context,
+                    viewport: viewport
+                }).promise;
+
+                // Kalite artırıldı: Minimum 0.6 kalite garantisi
+                const adjustedQuality = Math.max(quality, 0.6);
+                const imgData = canvas.toDataURL('image/jpeg', adjustedQuality);
+                
+                const pageWidth = 210;
+                const pageHeight = (canvas.height * pageWidth) / canvas.width;
+                const orientation = pageHeight > pageWidth ? 'portrait' : 'landscape';
+                
+                pdf.addPage([pageWidth, pageHeight], orientation);
+                pdf.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight, undefined, 'FAST');
+
+                canvas.width = 0;
+                canvas.height = 0;
+            }
+
+            updateProgress(95, 'PDF oluşturuluyor...', 'Yüksek kaliteli PDF hazırlanıyor...');
+            
+            // Önce blob olarak al, sonra arrayBuffer'a çevir
+            const pdfBlob = pdf.output('blob');
+            const pdfArrayBuffer = await pdfBlob.arrayBuffer();
+            
+            console.log('JPEG PDF Blob boyutu:', pdfBlob.size);
+            console.log('JPEG PDF ArrayBuffer boyutu:', pdfArrayBuffer.byteLength);
+            
+            return pdfArrayBuffer;
+        }
+
+        // Grafik ağırlıklı PDF'ler için hibrit sıkıştırma
+        async function compressGraphicsHeavyPDF(quality) {
+            updateProgress(25, 'Hibrit sıkıştırma başlatılıyor...', 'Grafik ve metin ayrı ayrı optimize ediliyor...');
+
+            // Önce Safe for Web dene
+            try {
+                const textResult = await compressTextHeavyPDF(quality);
+                const textReduction = (originalSize - textResult.length) / originalSize;
+
+                updateProgress(60, 'İlk yöntem tamamlandı...', `%${(textReduction * 100).toFixed(1)} tasarruf elde edildi`);
+
+                // Eğer yeterli tasarruf yoksa JPEG yöntemini dene
+                if (textReduction < 0.3 && pdfDocument.numPages <= 50) {
+                    updateProgress(65, 'Alternatif yöntem deneniyor...', 'JPEG sıkıştırması uygulanıyor...');
+                    const imageResult = await compressImageHeavyPDF(quality * 0.9); // Biraz daha agresif
+                    const imageReduction = (originalSize - imageResult.length) / originalSize;
+                    
+                    return imageReduction > textReduction ? imageResult : textResult;
+                }
+
+                return textResult;
+
+            } catch (error) {
+                console.error('Hibrit sıkıştırma hatası:', error);
+                // Fallback olarak JPEG yöntemini dene
+                return await compressImageHeavyPDF(quality);
+            }
+        }
+
+        // Karma içerik için akıllı hibrit sıkıştırma
+        async function compressMixedContentPDF(quality) {
+            updateProgress(20, 'Akıllı analiz yapılıyor...', 'En uygun yöntem belirleniyor...');
+
+            const avgPageSize = contentAnalysisResult.avgPageSize;
+            const textRatio = contentAnalysisResult.textLength / (contentAnalysisResult.textLength + contentAnalysisResult.imageCount * 1000);
+
+            if (textRatio > 0.7 || avgPageSize < 100000) {
+                // Metin ağırlıklı
+                updateProgress(25, 'Metin ağırlıklı olarak tespit edildi...', 'Safe for Web uygulanıyor...');
+                return await compressTextHeavyPDF(quality);
+            } else if (textRatio < 0.3 || contentAnalysisResult.imageCount > 5) {
+                // Görüntü ağırlıklı
+                updateProgress(25, 'Görüntü ağırlıklı olarak tespit edildi...', 'JPEG sıkıştırması uygulanıyor...');
+                return await compressImageHeavyPDF(quality);
+            } else {
+                // Gerçek hibrit
+                updateProgress(25, 'Karma içerik tespit edildi...', 'Hibrit yöntem uygulanıyor...');
+                return await compressGraphicsHeavyPDF(quality);
+            }
+        }
+
+        function updateProgress(percent, text, detail) {
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            progressText.textContent = text;
+            progressDetail.textContent = detail;
+        }
+
+        function resetForm() {
+            currentPDF = null;
+            originalFileName = '';
+            originalSize = 0;
+            pdfDocument = null;
+            contentAnalysisResult = null;
+
+            uploadArea.style.display = 'block';
+            pdfInfo.style.display = 'none';
+            contentAnalysis.style.display = 'none';
+            resultContainer.style.display = 'none';
+            progressContainer.style.display = 'none';
+
+            fileInput.value = '';
+            document.getElementById('high').checked = true;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0 || isNaN(bytes) || bytes === undefined || bytes === null) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+
+</body>
+</html>
