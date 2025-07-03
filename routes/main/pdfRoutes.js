@@ -14,4 +14,11 @@ router.get("/pdf-birlestir", pdfController.pdfBirlestir)
 // PDF sıkıştırma sayfası
 router.get("/pdf-sikistir", pdfController.pdfSikistir)
 
+// PDF'ten resim çıkarma
+router.get("/pdf-resim-cikar", pdfController.pdfResimCikar)
+
+// Resimden PDF oluşturma
+router.get("/resim-pdf", pdfController.resimPdf)
+
+
 module.exports = router;

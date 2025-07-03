@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Resimden PDF Oluştur | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("../partials/css") %>
+
+    <style>
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background-color: #f8f9fa;
+        }
+        .upload-area.dragover {
+            border-color: #007bff;
+            background-color: #e3f2fd;
+        }
+        .progress-container {
+            display: none;
+        }
+        .images-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .image-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: move;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .image-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        .image-item.sortable-chosen {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        .image-item.sortable-ghost {
+            opacity: 0.3;
+        }
+        .image-preview {
+            max-width: 100%;
+            max-height: 120px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .drag-handle {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: grab;
+            color: #6c757d;
+            padding: 5px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.8);
+        }
+        .drag-handle:hover {
+            color: #495057;
+            background: rgba(248,249,250,0.9);
+        }
+        .page-settings {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+        .btn-create {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 30px;
+            font-size: 16px;
+        }
+        .btn-create:hover {
+            background: linear-gradient(45deg, #218838, #1ea085);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .btn-create:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .order-info {
+            background: #e3f2fd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #bbdefb;
+        }
+    </style>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm mt-4">
+                                <div class="card-header bg-gradient-success">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h4 class="mb-0">
+                                                <i class="fas fa-file-pdf me-2"></i>
+                                                Resimden PDF Oluştur
+                                            </h4>
+                                            <p class="mb-0 mt-2">Resim dosyalarınızdan tek bir PDF oluşturun</p>
+                                        </div>
+                                        <a href="/pdf-araclari" class="btn btn-light">
+                                            <i class="fas fa-arrow-left me-1"></i>
+                                            Geri Dön
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <!-- Upload Area -->
+                                            <div class="upload-area mb-4" id="uploadArea">
+                                                <div class="upload-content">
+                                                    <i class="fas fa-cloud-upload-alt fa-3x text-primary mb-3"></i>
+                                                    <h5>Resim Dosyalarını Buraya Sürükleyin</h5>
+                                                    <p class="text-muted mb-3">veya dosya seçmek için tıklayın (Çoklu seçim yapabilirsiniz)</p>
+                                                    <button type="button" class="btn btn-primary" id="selectFiles">
+                                                        <i class="fas fa-folder-open me-1"></i>
+                                                        Resim Seç
+                                                    </button>
+                                                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                                                    <p class="text-muted mt-2 mb-0">
+                                                        <small>Desteklenen formatlar: JPG, PNG, GIF, BMP - Maksimum 50 resim</small>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Order Info -->
+                                            <div id="orderInfo" class="order-info" style="display: none;">
+                                                <i class="fas fa-info-circle me-2"></i>
+                                                <strong>İpucu:</strong> Resimleri sürükleyerek sırasını değiştirebilirsiniz.
+                                            </div>
+
+                                            <!-- Images Container -->
+                                            <div id="imagesContainer" class="images-container"></div>
+
+                                            <!-- Action Buttons -->
+                                            <div id="actionButtons" class="mt-4 text-center" style="display: none;">
+                                                <button type="button" class="btn btn-create btn-lg px-4" id="createBtn">
+                                                    <i class="fas fa-file-pdf me-2"></i>
+                                                    PDF Oluştur
+                                                </button>
+                                                <button type="button" class="btn btn-outline-secondary ms-2" id="clearBtn">
+                                                    <i class="fas fa-trash me-2"></i>
+                                                    Tümünü Temizle
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <!-- Page Settings -->
+                                            <div class="page-settings">
+                                                <h6 class="mb-3">
+                                                    <i class="fas fa-cog me-2"></i>
+                                                    PDF Ayarları
+                                                </h6>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Boyutu</label>
+                                                    <select class="form-select" id="pageSize">
+                                                        <option value="A4">A4 (210 x 297 mm)</option>
+                                                        <option value="A3">A3 (297 x 420 mm)</option>
+                                                        <option value="Letter">Letter (216 x 279 mm)</option>
+                                                        <option value="Legal">Legal (216 x 356 mm)</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Yönü</label>
+                                                    <select class="form-select" id="orientation">
+                                                        <option value="portrait">Dikey</option>
+                                                        <option value="landscape">Yatay</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Resim Yerleştirme</label>
+                                                    <select class="form-select" id="imageLayout">
+                                                        <option value="fit">Sayfaya Sığdır</option>
+                                                        <option value="fill">Sayfayı Doldur</option>
+                                                        <option value="center">Ortala</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kenar Boşluğu (mm)</label>
+                                                    <input type="number" class="form-control" id="margin" value="10" min="0" max="50">
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="oneImagePerPage" checked>
+                                                    <label class="form-check-label" for="oneImagePerPage">
+                                                        Her sayfada bir resim
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- Info Alert -->
+                                            <div class="alert alert-info">
+                                                <h6><i class="fas fa-info-circle me-2"></i>Bilgi</h6>
+                                                <ul class="mb-0">
+                                                    <li>Maksimum dosya boyutu: 10MB (her resim)</li>
+                                                    <li>Maksimum 50 resim ekleyebilirsiniz</li>
+                                                    <li>Resim sırası değiştirilebilir</li>
+                                                    <li>Tüm popüler formatlar desteklenir</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Progress -->
+                                    <div class="progress-container mt-4" id="progressContainer">
+                                        <div class="text-center mb-3">
+                                            <h5 id="progressText">PDF oluşturuluyor...</h5>
+                                            <p class="mb-0" id="progressDetail">Resimler işleniyor...</p>
+                                        </div>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                                 id="progressBar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <div class="text-center mt-2">
+                                            <small class="text-muted" id="progressPercent">0%</small>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+
+    <!-- PDF-lib ve Sortable -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+    <script>
+        let selectedImages = [];
+        let sortable = null;
+
+        // DOM elementleri
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectFiles = document.getElementById('selectFiles');
+        const orderInfo = document.getElementById('orderInfo');
+        const imagesContainer = document.getElementById('imagesContainer');
+        const actionButtons = document.getElementById('actionButtons');
+        const createBtn = document.getElementById('createBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressDetail = document.getElementById('progressDetail');
+        const progressPercent = document.getElementById('progressPercent');
+
+        // Event listeners
+        selectFiles.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFiles);
+        createBtn.addEventListener('click', createPDF);
+        clearBtn.addEventListener('click', clearAllImages);
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            if (!uploadArea.contains(e.relatedTarget)) {
+                uploadArea.classList.remove('dragover');
+            }
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+            if (files.length > 0) {
+                processFiles(files);
+            } else {
+                alert('Lütfen sadece resim dosyaları seçin.');
+            }
+        });
+
+        function handleFiles(e) {
+            const files = Array.from(e.target.files);
+            processFiles(files);
+        }
+
+        function processFiles(files) {
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                alert('Lütfen sadece resim dosyaları seçin.');
+                return;
+            }
+
+            if (selectedImages.length + imageFiles.length > 50) {
+                alert('Maksimum 50 resim ekleyebilirsiniz.');
+                return;
+            }
+
+            for (const file of imageFiles) {
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`${file.name} dosyası 10MB'dan büyük.`);
+                    continue;
+                }
+
+                addImage(file);
+            }
+        }
+
+        function addImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageInfo = {
+                    file: file,
+                    name: file.name,
+                    size: file.size,
+                    dataUrl: e.target.result,
+                    id: Date.now() + Math.random()
+                };
+
+                selectedImages.push(imageInfo);
+                renderImages();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderImages() {
+            imagesContainer.innerHTML = '';
+
+            selectedImages.forEach((imageInfo, index) => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-item';
+                imageItem.dataset.id = imageInfo.id;
+                
+                imageItem.innerHTML = `
+                    <div class="drag-handle" title="Sürükleyerek sıralayın">
+                        <i class="fas fa-grip-vertical"></i>
+                    </div>
+                    <img src="${imageInfo.dataUrl}" alt="${imageInfo.name}" class="image-preview">
+                    <div class="mt-2">
+                        <h6 class="mb-1">${imageInfo.name}</h6>
+                        <small class="text-muted">${formatFileSize(imageInfo.size)}</small>
+                        <div class="mt-2">
+                            <button type="button" class="btn btn-sm btn-danger" onclick="removeImage(${index})">
+                                <i class="mdi mdi-delete"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                imagesContainer.appendChild(imageItem);
+            });
+
+            // Sortable'ı yeniden başlat
+            if (sortable) {
+                sortable.destroy();
+            }
+            
+            if (selectedImages.length > 0) {
+                sortable = Sortable.create(imagesContainer, {
+                    animation: 300,
+                    ghostClass: 'sortable-ghost',
+                    chosenClass: 'sortable-chosen',
+                    onEnd: function(evt) {
+                        const item = selectedImages.splice(evt.oldIndex, 1)[0];
+                        selectedImages.splice(evt.newIndex, 0, item);
+                    }
+                });
+
+                orderInfo.style.display = 'block';
+                actionButtons.style.display = 'block';
+            } else {
+                orderInfo.style.display = 'none';
+                actionButtons.style.display = 'none';
+            }
+        }
+
+        function removeImage(index) {
+            selectedImages.splice(index, 1);
+            renderImages();
+        }
+
+        function clearAllImages() {
+            selectedImages = [];
+            fileInput.value = '';
+            renderImages();
+        }
+
+        async function createPDF() {
+            if (selectedImages.length === 0) {
+                alert('Lütfen en az bir resim seçin.');
+                return;
+            }
+
+            createBtn.disabled = true;
+            createBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Oluşturuluyor...';
+            progressContainer.style.display = 'block';
+
+            try {
+                updateProgress(10, 'PDF oluşturuluyor...', 'Başlatılıyor...');
+
+                const pdfDoc = await PDFLib.PDFDocument.create();
+                
+                // Ayarları al
+                const pageSize = document.getElementById('pageSize').value;
+                const orientation = document.getElementById('orientation').value;
+                const imageLayout = document.getElementById('imageLayout').value;
+                const margin = parseInt(document.getElementById('margin').value);
+
+                // Sayfa boyutlarını belirle
+                let pageWidth, pageHeight;
+                switch (pageSize) {
+                    case 'A4':
+                        pageWidth = 595.28;
+                        pageHeight = 841.89;
+                        break;
+                    case 'A3':
+                        pageWidth = 841.89;
+                        pageHeight = 1190.55;
+                        break;
+                    case 'Letter':
+                        pageWidth = 612;
+                        pageHeight = 792;
+                        break;
+                    case 'Legal':
+                        pageWidth = 612;
+                        pageHeight = 1008;
+                        break;
+                }
+
+                if (orientation === 'landscape') {
+                    [pageWidth, pageHeight] = [pageHeight, pageWidth];
+                }
+
+                const marginPoints = margin * 2.83465; // mm to points
+                const availableWidth = pageWidth - (marginPoints * 2);
+                const availableHeight = pageHeight - (marginPoints * 2);
+
+                for (let i = 0; i < selectedImages.length; i++) {
+                    const progressPercent = 10 + ((i + 1) / selectedImages.length * 80);
+                    updateProgress(progressPercent, `Resim ${i + 1}/${selectedImages.length} ekleniyor...`, selectedImages[i].name);
+
+                    const imageInfo = selectedImages[i];
+                    
+                    // Resmi PDF'e gömme
+                    let image;
+                    const imageBytes = await imageInfo.file.arrayBuffer();
+                    
+                    if (imageInfo.file.type === 'image/jpeg' || imageInfo.file.type === 'image/jpg') {
+                        image = await pdfDoc.embedJpg(imageBytes);
+                    } else {
+                        image = await pdfDoc.embedPng(imageBytes);
+                    }
+
+                    const imageDims = image.scale(1);
+                    
+                    // Sayfa oluştur
+                    const page = pdfDoc.addPage([pageWidth, pageHeight]);
+                    
+                    // Resim boyutlarını hesapla
+                    let drawWidth, drawHeight, x, y;
+                    
+                    if (imageLayout === 'fit') {
+                        // Sayfaya sığdır
+                        const scaleX = availableWidth / imageDims.width;
+                        const scaleY = availableHeight / imageDims.height;
+                        const scale = Math.min(scaleX, scaleY);
+                        
+                        drawWidth = imageDims.width * scale;
+                        drawHeight = imageDims.height * scale;
+                        
+                        x = marginPoints + (availableWidth - drawWidth) / 2;
+                        y = marginPoints + (availableHeight - drawHeight) / 2;
+                    } else if (imageLayout === 'fill') {
+                        // Sayfayı doldur
+                        drawWidth = availableWidth;
+                        drawHeight = availableHeight;
+                        x = marginPoints;
+                        y = marginPoints;
+                    } else { // center
+                        // Orijinal boyutta ortala
+                        drawWidth = Math.min(imageDims.width, availableWidth);
+                        drawHeight = Math.min(imageDims.height, availableHeight);
+                        
+                        x = marginPoints + (availableWidth - drawWidth) / 2;
+                        y = marginPoints + (availableHeight - drawHeight) / 2;
+                    }
+                    
+                    page.drawImage(image, {
+                        x: x,
+                        y: y,
+                        width: drawWidth,
+                        height: drawHeight,
+                    });
+
+                    // Kısa bekleme
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                updateProgress(95, 'PDF kaydediliyor...', 'Son işlemler...');
+
+                // PDF'i kaydet
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `resimlerden_pdf_${new Date().getTime()}.pdf`;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                URL.revokeObjectURL(url);
+
+                updateProgress(100, 'Tamamlandı!', 'PDF başarıyla oluşturuldu ve indirildi');
+                
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 2000);
+
+            } catch (error) {
+                console.error('PDF oluşturma hatası:', error);
+                alert('PDF oluşturulurken bir hata oluştu.');
+                progressContainer.style.display = 'none';
+            }
+
+            createBtn.disabled = false;
+            createBtn.innerHTML = '<i class="fas fa-file-pdf me-2"></i>PDF Oluştur';
+        }
+
+        function updateProgress(percent, text, detail) {
+            progressBar.style.width = percent + '%';
+            progressPercent.textContent = Math.round(percent) + '%';
+            progressText.textContent = text;
+            progressDetail.textContent = detail;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+
+</body>
+</html>
