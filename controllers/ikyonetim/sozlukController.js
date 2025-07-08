@@ -167,7 +167,7 @@ exports.postEditSozluk = async (req, res) => {
         anlam: anlam.trim(),
         harf: ilkHarf, // Manuel olarak set et
         kategori: kategori?.trim() || "Genel",
-        aktif: aktif === "on" || aktif === true,
+        aktif: true,
         guncellemeTarihi: new Date(),
       },
       { new: true },
@@ -194,11 +194,7 @@ exports.postEditSozluk = async (req, res) => {
 // Kelime silme
 exports.deleteSozluk = async (req, res) => {
   try {
-    const sozluk = await Sozluk.findByIdAndUpdate(
-      req.params.id,
-      { aktif: false, guncellemeTarihi: new Date() },
-      { new: true },
-    )
+    const sozluk = await Sozluk.findByIdAndDelete(req.params.id)
 
     if (!sozluk) {
       return res.status(404).json({
@@ -209,13 +205,14 @@ exports.deleteSozluk = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Kelime başarıyla silindi",
+      message: "Kelime kalıcı olarak silindi",
     })
   } catch (error) {
     console.error("Kelime silme hatası:", error)
     res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
   }
 }
+
 
 // Toplu işlemler
 exports.bulkActions = async (req, res) => {
@@ -232,13 +229,19 @@ exports.bulkActions = async (req, res) => {
     let result
     switch (action) {
       case "delete":
-        result = await Sozluk.updateMany({ _id: { $in: ids } }, { aktif: false, guncellemeTarihi: new Date() })
+        result = await Sozluk.deleteMany({ _id: { $in: ids } }) // <-- kalıcı silme
         break
       case "activate":
-        result = await Sozluk.updateMany({ _id: { $in: ids } }, { aktif: true, guncellemeTarihi: new Date() })
+        result = await Sozluk.updateMany(
+          { _id: { $in: ids } },
+          { aktif: true, guncellemeTarihi: new Date() }
+        )
         break
       case "deactivate":
-        result = await Sozluk.updateMany({ _id: { $in: ids } }, { aktif: false, guncellemeTarihi: new Date() })
+        result = await Sozluk.updateMany(
+          { _id: { $in: ids } },
+          { aktif: false, guncellemeTarihi: new Date() }
+        )
         break
       default:
         return res.status(400).json({
@@ -249,11 +252,12 @@ exports.bulkActions = async (req, res) => {
 
     res.json({
       success: true,
-      message: `${result.modifiedCount} kayıt işlendi`,
-      count: result.modifiedCount,
+      message: `${result.deletedCount || result.modifiedCount} kayıt işlendi`,
+      count: result.deletedCount || result.modifiedCount,
     })
   } catch (error) {
     console.error("Toplu işlem hatası:", error)
     res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
   }
 }
+

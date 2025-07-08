@@ -252,7 +252,7 @@
                 "calorie": null
             },
             {
-                "name": "ETLİ PATATES GRATEN",
+                "name": "TAVUK SOTE",
                 "calorie": null
             },
             {
@@ -260,7 +260,7 @@
                 "calorie": null
             },
             {
-                "name": "KOMPOSTO",
+                "name": "BAKLAVA",
                 "calorie": null
             },
             {
@@ -268,7 +268,7 @@
                 "calorie": null
             },
             {
-                "name": "ZYT.BARBUNYA PİLAKİ",
+                "name": "ZYT.BRÜKSEL LAHANA",
                 "calorie": null
             },
             {
@@ -297,19 +297,19 @@
         "date": "2025-07-09",
         "meals": [
             {
-                "name": "EZOGELİN ÇORBA",
+                "name": "MERCİMEK ÇORBA",
                 "calorie": null
             },
             {
-                "name": "PİLİÇ TANTUNİ",
+                "name": "ETLİ NOHUT",
                 "calorie": null
             },
             {
-                "name": "BULGUR PİLAVI",
+                "name": "PİLAV",
                 "calorie": null
             },
             {
-                "name": "AYRAN",
+                "name": "MEYVE",
                 "calorie": null
             },
             {
@@ -317,23 +317,23 @@
                 "calorie": null
             },
             {
-                "name": "ZYT.TAZE FASULYE",
+                "name": "CACIK",
                 "calorie": null
             },
             {
-                "name": "MERCİMEK KÖFTESİ",
+                "name": "ISPANAK KAVURMA",
                 "calorie": null
             },
             {
-                "name": "ÇOBAN SALATA",
+                "name": "PATATES SALATA",
+                "calorie": null
+            },
+            {
+                "name": "K. LAHANA SALATASI",
                 "calorie": null
             },
             {
                 "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "K.LAHANA SALATA",
                 "calorie": null
             },
             {
@@ -350,7 +350,7 @@
                 "calorie": null
             },
             {
-                "name": "BİBER DOLMA",
+                "name": "GORDON BLUE",
                 "calorie": null
             },
             {
@@ -358,7 +358,7 @@
                 "calorie": null
             },
             {
-                "name": "MEYVE",
+                "name": "LİMONATA",
                 "calorie": null
             },
             {
@@ -366,7 +366,7 @@
                 "calorie": null
             },
             {
-                "name": "ZYT. TÜRLÜ",
+                "name": "ZYT. BARBUNYA",
                 "calorie": null
             },
             {
@@ -374,15 +374,15 @@
                 "calorie": null
             },
             {
-                "name": "PATATES SALATA",
+                "name": "AMERİKAN SALATA",
                 "calorie": null
             },
             {
-                "name": "NOHUT SALATA",
+                "name": "HAVUÇ SALATA",
                 "calorie": null
             },
             {
-                "name": "MEVSİM SALATA",
+                "name": "PANCAR TURŞUSU",
                 "calorie": null
             },
             {
