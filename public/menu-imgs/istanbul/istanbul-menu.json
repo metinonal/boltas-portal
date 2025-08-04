@@ -1,1088 +1,1030 @@
 [
     {
-        "date": "2025-07-01",
+        "date": "2025-08-01",
         "meals": [
             {
                 "name": "SEBZE ÇORBA",
-                "calorie": null
+                "calorie": 162
             },
             {
-                "name": "ETLİ NOHUT",
-                "calorie": null
+                "name": "ET DÖNER DÜRÜM",
+                "calorie": 373
             },
             {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
+                "name": "PATATES TAVA",
+                "calorie": 192
             },
             {
-                "name": "DONDURMA",
-                "calorie": null
+                "name": "MEŞRUBAT",
+                "calorie": 94
             },
             {
                 "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
+                "calorie": 120
             },
             {
-                "name": "ZYT.PATLICAN ŞAKŞUKA",
-                "calorie": null
-            },
-            {
-                "name": "ÇOBAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
+                "name": "ZYT.DEREOTLU KABAK",
+                "calorie": 140
             },
             {
                 "name": "HAVUÇ TARATOR",
-                "calorie": null
-            },
-            {
-                "name": "K.LAHANA SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-02",
-        "meals": [
-            {
-                "name": "DOMATES ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "KARIŞIK IZGARA",
-                "calorie": null
-            },
-            {
-                "name": "BULGUR PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.KABAK KALYE",
-                "calorie": null
-            },
-            {
-                "name": "PATATES SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "ISPANAK KAVURMA",
-                "calorie": null
+                "calorie": 152
             },
             {
                 "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ RENDE",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-03",
-        "meals": [
-            {
-                "name": "DÜĞÜN ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "KÖY USULÜ TAZE FASULYE",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "SUPANGLE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.BRÜKSEL LAHANA",
-                "calorie": null
-            },
-            {
-                "name": "ÇOBAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "İTALYAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ RENDE",
-                "calorie": null
-            },
-            {
-                "name": "PEMBE SULTAN",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-04",
-        "meals": [
-            {
-                "name": "AYRANAŞI ÇORBA(SOĞUK)",
-                "calorie": null
-            },
-            {
-                "name": "KIRKAĞAÇ KÖFTE",
-                "calorie": null
-            },
-            {
-                "name": "SPAGETTİ",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. BROKOLİ",
-                "calorie": null
-            },
-            {
-                "name": "NOHUT SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PANCAR TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-07",
-        "meals": [
-            {
-                "name": "MANTAR ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "KAYSERİ MANTI",
-                "calorie": null
-            },
-            {
-                "name": "SOSLU KARIŞIK KIZARTMA",
-                "calorie": null
-            },
-            {
-                "name": "KADAYIFLI MUHALLEBİ",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.KARIŞIK KIZARTMA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "CACIK",
-                "calorie": null
-            },
-            {
-                "name": "MEVSİM SALATA",
-                "calorie": null
-            },
-            {
-                "name": "TÜRLÜ TURŞU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-08",
-        "meals": [
-            {
-                "name": "AYRANAŞI ÇORBA(SOĞUK)",
-                "calorie": null
-            },
-            {
-                "name": "TAVUK SOTE",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "BAKLAVA",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.BRÜKSEL LAHANA",
-                "calorie": null
-            },
-            {
-                "name": "KISIR",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ SALATA",
-                "calorie": null
-            },
-            {
-                "name": "ACI BİBER TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-09",
-        "meals": [
-            {
-                "name": "MERCİMEK ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "ETLİ NOHUT",
-                "calorie": null
-            },
-            {
-                "name": "PİLAV",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "CACIK",
-                "calorie": null
-            },
-            {
-                "name": "ISPANAK KAVURMA",
-                "calorie": null
-            },
-            {
-                "name": "PATATES SALATA",
-                "calorie": null
-            },
-            {
-                "name": "K. LAHANA SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-10",
-        "meals": [
-            {
-                "name": "YAYLA ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "GORDON BLUE",
-                "calorie": null
-            },
-            {
-                "name": "SOSLU MAKARNA",
-                "calorie": null
-            },
-            {
-                "name": "LİMONATA",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. BARBUNYA",
-                "calorie": null
-            },
-            {
-                "name": "KIVIRCIK SALATA",
-                "calorie": null
-            },
-            {
-                "name": "AMERİKAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PANCAR TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-11",
-        "meals": [
-            {
-                "name": "ANADOLU ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "BAHÇIVAN KEBABI",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.ENGİNAR",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "ÇOBAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "KABAK KALYE",
-                "calorie": null
-            },
-            {
-                "name": "K.LAHANA SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-14",
-        "meals": [
-            {
-                "name": "TAVUKSUYU ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "KIYMALI NOHUT",
-                "calorie": null
-            },
-            {
-                "name": "ŞEHRİYELİ PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "CEVİZLİ BAKLAVA",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. KURU BÖRÜLCE",
-                "calorie": null
-            },
-            {
-                "name": "AMERİKAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "KARIŞIK MEVSİM SALATA",
-                "calorie": null
-            },
-            {
-                "name": "NANELİ CACIK",
-                "calorie": null
-            },
-            {
-                "name": "TÜRLÜ TURŞU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-15",
-        "meals": [
-            {
-                "name": "RESMİ TATİL",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-16",
-        "meals": [
-            {
-                "name": "ŞEHRİYE ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "İTALYAN MUSAKKA",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "ŞEKERPARE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ACILI EZME",
-                "calorie": null
-            },
-            {
-                "name": "PATATES SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "RENDE HAVUÇ",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PEMBE SULTAN",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-17",
-        "meals": [
-            {
-                "name": "DOMATES ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "KANAT IZGARA",
-                "calorie": null
-            },
-            {
-                "name": "BULGUR PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.BROKOLİ",
-                "calorie": null
-            },
-            {
-                "name": "GÖBEK SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ TARATOR",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL MERCİMEK SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "PANCAR TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-18",
-        "meals": [
-            {
-                "name": "MERCİMEK ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": " MANTAR SOTE",
-                "calorie": null
-            },
-            {
-                "name": "ERİŞTE KAVURMA",
-                "calorie": null
-            },
-            {
-                "name": "AYRAN",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.ISPANAK",
-                "calorie": null
-            },
-            {
-                "name": "KISIR",
-                "calorie": null
-            },
-            {
-                "name": "BUĞDAY SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ RENDE",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-21",
-        "meals": [
-            {
-                "name": "MANTAR ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "ETLİ KURU FASULYE",
-                "calorie": null
-            },
-            {
-                "name": "ŞEHRİYELİ PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "SOĞUK BAKLAVA",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. BAMYA",
-                "calorie": null
-            },
-            {
-                "name": "CACIK",
-                "calorie": null
-            },
-            {
-                "name": "ÇOBAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PEMBE SULTAN",
-                "calorie": null
-            },
-            {
-                "name": "ACI BİBER TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-22",
-        "meals": [
-            {
-                "name": "EZOGELİN ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "PATLICAN KARNIYARIK",
-                "calorie": null
-            },
-            {
-                "name": "BULGUR PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. BRÜKSEL LAHANA",
-                "calorie": null
-            },
-            {
-                "name": "NOHUT SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ TARATOR",
-                "calorie": null
-            },
-            {
-                "name": "PİYAZ",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-23",
-        "meals": [
-            {
-                "name": "SEBZE ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "YUFKALI RULO KÖFTE",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "AYRAN",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. ORBİT FASULYE",
-                "calorie": null
-            },
-            {
-                "name": "TÜRLÜ TURŞU",
-                "calorie": null
-            },
-            {
-                "name": "ARPA ŞEHRİYE SALATA",
-                "calorie": null
-            },
-            {
-                "name": "GÖBEK SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ RENDE",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-24",
-        "meals": [
-            {
-                "name": "AYRANAŞI ÇORBA(SOĞUK)",
-                "calorie": null
-            },
-            {
-                "name": "BEĞENDİLİ PİLİÇ SOTE",
-                "calorie": null
-            },
-            {
-                "name": "SOSLU MAKARNA",
-                "calorie": null
-            },
-            {
-                "name": "KEŞKÜL",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ŞAKŞUKA",
-                "calorie": null
-            },
-            {
-                "name": "MERCİMEK KÖFTE",
-                "calorie": null
-            },
-            {
-                "name": "TÜRLÜTURŞU",
-                "calorie": null
-            },
-            {
-                "name": "MEVSİM SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PEMBE SULTAN",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-25",
-        "meals": [
-            {
-                "name": "DOMATES ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "TİRE KEBABI-TIRNAK PİDELİ",
-                "calorie": null
-            },
-            {
-                "name": "ERİŞTE KAVURMA",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. BROKOLİ",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "KABAK KALYE",
-                "calorie": null
-            },
-            {
-                "name": "PATATES SALATA",
-                "calorie": null
-            },
-            {
-                "name": "ACI BİBER TURŞUSU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-28",
-        "meals": [
-            {
-                "name": "TAVUKSUYU ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "ETLİ NOHUT",
-                "calorie": null
-            },
-            {
-                "name": "PİRİNÇ PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "FIRIN SÜTLAÇ",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT. ISPANAK-HAVUÇ KAVURMA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "PANCARLI ŞEHRİYE SALATASI",
-                "calorie": null
-            },
-            {
-                "name": "MANTAR SALATA",
-                "calorie": null
-            },
-            {
-                "name": "TÜRLÜ TURŞU",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-29",
-        "meals": [
-            {
-                "name": "ALACA ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "EKŞİLİ KÖFTE",
-                "calorie": null
-            },
-            {
-                "name": "ARPA ŞEHRİYE PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "MEYVE",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.ORBİT FASULYE",
-                "calorie": null
-            },
-            {
-                "name": "CACIK",
-                "calorie": null
-            },
-            {
-                "name": "BİBER BORANİ",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ-K.LAHANA SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-30",
-        "meals": [
-            {
-                "name": "MERCİMEK ÇORBASI",
-                "calorie": null
-            },
-            {
-                "name": "BAGET HAŞLAMA",
-                "calorie": null
-            },
-            {
-                "name": "ERİŞTE KAVURMA",
-                "calorie": null
-            },
-            {
-                "name": "TULUMBA TATLISI",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.PATLICAN ŞAKŞUKA",
-                "calorie": null
-            },
-            {
-                "name": "ÇOBAN SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ TARATOR",
-                "calorie": null
-            },
-            {
-                "name": "K.LAHANA SALATA",
-                "calorie": null
-            },
-            {
-                "name": "YOĞURT",
-                "calorie": null
-            }
-        ]
-    },
-    {
-        "date": "2025-07-31",
-        "meals": [
-            {
-                "name": "YAYLA ÇORBA",
-                "calorie": null
-            },
-            {
-                "name": "YAZ TÜRLÜSÜ",
-                "calorie": null
-            },
-            {
-                "name": "BULGUR PİLAVI",
-                "calorie": null
-            },
-            {
-                "name": "DONDURMA",
-                "calorie": null
-            },
-            {
-                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
-                "calorie": null
-            },
-            {
-                "name": "ZYT.BİBER DOLMA",
-                "calorie": null
-            },
-            {
-                "name": "PİYAZ",
-                "calorie": null
+                "calorie": 52
             },
             {
                 "name": "KIRMIZI LAHANA SALATA",
-                "calorie": null
+                "calorie": 38
             },
             {
-                "name": "YEŞİL SALATA",
-                "calorie": null
-            },
-            {
-                "name": "HAVUÇ RENDE",
-                "calorie": null
+                "name": "PANCARLI KUSKUS SALATA",
+                "calorie": 176
             },
             {
                 "name": "YOĞURT",
-                "calorie": null
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-04",
+        "meals": [
+            {
+                "name": "ANADOLU ÇORBA",
+                "calorie": 234
+            },
+            {
+                "name": "SULTAN KEBABI",
+                "calorie": 309
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "SOĞUK BAKLAVA",
+                "calorie": 539
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. KABAK",
+                "calorie": 140
+            },
+            {
+                "name": "HAVUÇ RENDE",
+                "calorie": 46
+            },
+            {
+                "name": "ÇOBAN SALATA",
+                "calorie": 36
+            },
+            {
+                "name": "PEMBE SULTAN",
+                "calorie": 67
+            },
+            {
+                "name": "TÜRLÜ TURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-05",
+        "meals": [
+            {
+                "name": "AYRANAŞI SOĞUK ÇORBA",
+                "calorie": 205
+            },
+            {
+                "name": "TERBİYELİ SULU KÖFTE",
+                "calorie": 487
+            },
+            {
+                "name": "SOSLU MAKARNA",
+                "calorie": 360
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. EGE PİLAVI",
+                "calorie": 364
+            },
+            {
+                "name": "MAYDANOZLU HAVUÇ RENDE",
+                "calorie": 46
+            },
+            {
+                "name": "ÇOBAN SALATA",
+                "calorie": 36
+            },
+            {
+                "name": "KOMPOSTO",
+                "calorie": 150
+            },
+            {
+                "name": "K.LAHANA SALATASI",
+                "calorie": 38
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-06",
+        "meals": [
+            {
+                "name": "DÜĞÜN ÇORBA",
+                "calorie": 194
+            },
+            {
+                "name": "ETLİ TAZE FASULYE",
+                "calorie": 256
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "DONDURMA",
+                "calorie": 97
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "KABAK MÜCVER",
+                "calorie": 223
+            },
+            {
+                "name": "KISIR",
+                "calorie": 153
+            },
+            {
+                "name": "KARIŞIK MEVSİM SALATA",
+                "calorie": 65
+            },
+            {
+                "name": "NANELİ CACIK",
+                "calorie": 105
+            },
+            {
+                "name": "TÜRLÜ TURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-07",
+        "meals": [
+            {
+                "name": "BAKLİYAT ÇORBA",
+                "calorie": 232
+            },
+            {
+                "name": "KARIŞIK DOLMA",
+                "calorie": 309
+            },
+            {
+                "name": "PEYNİRLİ SU BÖREĞİ",
+                "calorie": 462
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. BEZELYE",
+                "calorie": 188
+            },
+            {
+                "name": "KIVIRCIK SALATA",
+                "calorie": 49
+            },
+            {
+                "name": "GARNİTÜRLÜ MAKARNA SALATA",
+                "calorie": 176
+            },
+            {
+                "name": "YEŞİL MERCİMEK SALATASI",
+                "calorie": 135
+            },
+            {
+                "name": "HAVUÇ-K.LAHANA SALATA",
+                "calorie": 55
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-08",
+        "meals": [
+            {
+                "name": "MANTAR ÇORBA",
+                "calorie": 179
+            },
+            {
+                "name": "KANAT IZGARA",
+                "calorie": 16
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "MEŞRUBAT",
+                "calorie": 94
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. KARIŞIK KIZARTMA",
+                "calorie": 209
+            },
+            {
+                "name": "CACIK",
+                "calorie": 105
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "HAVUÇ SALATA",
+                "calorie": 46
+            },
+            {
+                "name": "TÜRLÜ TURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-11",
+        "meals": [
+            {
+                "name": "AYRANAŞI ÇORBA(SOĞUK)",
+                "calorie": 205
+            },
+            {
+                "name": "ORMAN KEBABI",
+                "calorie": 389
+            },
+            {
+                "name": "BULGUR PİLAVI",
+                "calorie": 369
+            },
+            {
+                "name": "FIRIN SÜTLAÇ",
+                "calorie": 306
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT.BARBUNYA PİLAKİ",
+                "calorie": 265
+            },
+            {
+                "name": "MERCİMEK KÖFTESİ",
+                "calorie": 164
+            },
+            {
+                "name": "ÇOBAN SALATA",
+                "calorie": 36
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "K.LAHANA SALATA",
+                "calorie": 38
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-12",
+        "meals": [
+            {
+                "name": "MANTAR ÇORBA",
+                "calorie": 179
+            },
+            {
+                "name": "KÖZ PATLICANLI PİLİÇ SOTE",
+                "calorie": 402
+            },
+            {
+                "name": "BASMATİ PİLAV",
+                "calorie": 306
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. ŞAKŞUKA",
+                "calorie": 230
+            },
+            {
+                "name": "PATATES SALATASI",
+                "calorie": 114
+            },
+            {
+                "name": "GÖBEK SALATA",
+                "calorie": 43
+            },
+            {
+                "name": "KEREVİZ SALATASI",
+                "calorie": 81
+            },
+            {
+                "name": "ACI BİBER TURŞUSU",
+                "calorie": 16
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-13",
+        "meals": [
+            {
+                "name": "TAVUKSUYU ÇORBA",
+                "calorie": 189
+            },
+            {
+                "name": "ETLİ NOHUT ",
+                "calorie": 386
+            },
+            {
+                "name": "ŞEHRİYELİ PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "DONDURMA",
+                "calorie": 97
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": " KABAK MÜCVER",
+                "calorie": 223
+            },
+            {
+                "name": "CACIK",
+                "calorie": 105
+            },
+            {
+                "name": "RENDE HAVUÇ",
+                "calorie": 46
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "TÜRLÜ TURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-14",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBA",
+                "calorie": 209
+            },
+            {
+                "name": "PATLICAN KARNIYARIK",
+                "calorie": 320
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "AYRAN",
+                "calorie": 62
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT.BARBUNYA PİLAKİ",
+                "calorie": 265
+            },
+            {
+                "name": "KISIR",
+                "calorie": 153
+            },
+            {
+                "name": "BUĞDAY SALATASI",
+                "calorie": 184
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "HAVUÇ RENDE",
+                "calorie": 46
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-15",
+        "meals": [
+            {
+                "name": "AYRANAŞI ÇORBA (SOĞUK)",
+                "calorie": 205
+            },
+            {
+                "name": "KARIŞIK IZGARA",
+                "calorie": 429
+            },
+            {
+                "name": "ERİŞTE KAVURMA",
+                "calorie": 348
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ACILI EZME",
+                "calorie": 43
+            },
+            {
+                "name": "GÖBEK SALATA",
+                "calorie": 43
+            },
+            {
+                "name": "HAVUÇ TARATOR",
+                "calorie": 152
+            },
+            {
+                "name": "ZYT.BROKOLİ",
+                "calorie": 151
+            },
+            {
+                "name": "PANCAR TURŞUSU",
+                "calorie": 44
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-18",
+        "meals": [
+            {
+                "name": "SEBZE ÇORBA",
+                "calorie": 162
+            },
+            {
+                "name": "ÖZBEK MANTI",
+                "calorie": 388
+            },
+            {
+                "name": "İÇLİ KÖFTE",
+                "calorie": 349
+            },
+            {
+                "name": "ŞEKERPARE",
+                "calorie": 441
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. TAZE FASULYE",
+                "calorie": 146
+            },
+            {
+                "name": "KIVIRCIK SALATA",
+                "calorie": 49
+            },
+            {
+                "name": "ROKA-NANE SALATA",
+                "calorie": 26
+            },
+            {
+                "name": "MEVSİM SALATA",
+                "calorie": 65
+            },
+            {
+                "name": "PEMBE SULTAN",
+                "calorie": 67
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-19",
+        "meals": [
+            {
+                "name": "DÜĞÜN ÇORBA",
+                "calorie": 194
+            },
+            {
+                "name": "KIYMALI PATATES MUSAKKA",
+                "calorie": 264
+            },
+            {
+                "name": "2 ÇEŞİT SOS İLE PENNE",
+                "calorie": 360
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT.ŞAKŞUKA",
+                "calorie": 230
+            },
+            {
+                "name": "NOHUT SALATA",
+                "calorie": 125
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "HAVUÇ TARATOR",
+                "calorie": 152
+            },
+            {
+                "name": "ACI BİBER TURŞUSU",
+                "calorie": 16
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-20",
+        "meals": [
+            {
+                "name": "AYRANAŞI ÇORBA",
+                "calorie": 205
+            },
+            {
+                "name": "FIRIN TAVUK ",
+                "calorie": 481
+            },
+            {
+                "name": "BULGUR PİLAVI",
+                "calorie": 369
+            },
+            {
+                "name": "KAZANDİBİ",
+                "calorie": 275
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. ORBİT FASULYE",
+                "calorie": 305
+            },
+            {
+                "name": "MERCİMEK KÖFTESİ",
+                "calorie": 164
+            },
+            {
+                "name": "ARPA ŞEHRİYE SALATA",
+                "calorie": 168
+            },
+            {
+                "name": "GÖBEK SALATA",
+                "calorie": 43
+            },
+            {
+                "name": "HAVUÇ RENDE",
+                "calorie": 46
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-21",
+        "meals": [
+            {
+                "name": "MERCİMEK ÇORBA",
+                "calorie": 209
+            },
+            {
+                "name": "SOSLU KARIŞIK KIZARTMA",
+                "calorie": 247
+            },
+            {
+                "name": "SOSLU MAKARNA",
+                "calorie": 360
+            },
+            {
+                "name": "ELMALI TURTA",
+                "calorie": 442
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT.ENGİNAR",
+                "calorie": 206
+            },
+            {
+                "name": "ÇOBAN SALATA",
+                "calorie": 36
+            },
+            {
+                "name": "GÖBEK SALATA",
+                "calorie": 43
+            },
+            {
+                "name": "HAVUÇ TARATOR",
+                "calorie": 152
+            },
+            {
+                "name": "K.LAHANA SALATA",
+                "calorie": 38
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-22",
+        "meals": [
+            {
+                "name": "DOMATES ÇORBA",
+                "calorie": 163
+            },
+            {
+                "name": "KÖFTELİ ÇÖKERTME KEBABI",
+                "calorie": 409
+            },
+            {
+                "name": "ERİŞTE KAVURMA",
+                "calorie": 348
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. BARBUNYA PİLAKİ",
+                "calorie": 265
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "KABAK KALYE",
+                "calorie": 161
+            },
+            {
+                "name": "PATATES SALATA",
+                "calorie": 114
+            },
+            {
+                "name": "KOMPOSTO",
+                "calorie": 150
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-25",
+        "meals": [
+            {
+                "name": "TAVUKSUYU ŞEHRİYE ÇORBA",
+                "calorie": 189
+            },
+            {
+                "name": "ETLİ YAZ TÜRLÜSÜ",
+                "calorie": 327
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "FIRIN SÜTLAÇ",
+                "calorie": 30
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. BROKOLİ",
+                "calorie": 151
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "PANCARLI ŞEHRİYE SALATASI",
+                "calorie": 168
+            },
+            {
+                "name": "MANTAR SALATA",
+                "calorie": 76
+            },
+            {
+                "name": "KISIR",
+                "calorie": 153
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-26",
+        "meals": [
+            {
+                "name": "AYRANAŞI SOĞUK ÇORBA",
+                "calorie": 205
+            },
+            {
+                "name": "İZMİR KÖFTE",
+                "calorie": 486
+            },
+            {
+                "name": "SOSLU MAKARNA",
+                "calorie": 360
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. BİBER BORANİ",
+                "calorie": 131
+            },
+            {
+                "name": "CACIK",
+                "calorie": 105
+            },
+            {
+                "name": "TÜRLÜ TURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "HAVUÇ-K.LAHANA SALATA",
+                "calorie": 55
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-27",
+        "meals": [
+            {
+                "name": "SEBZE ÇORBA",
+                "calorie": 162
+            },
+            {
+                "name": "ETLİ BEZELYE",
+                "calorie": 348
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "KEŞKÜL",
+                "calorie": 286
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. ISPANAK",
+                "calorie": 74
+            },
+            {
+                "name": "PATATES SALATASI",
+                "calorie": 114
+            },
+            {
+                "name": "TÜRLÜTURŞU",
+                "calorie": 24
+            },
+            {
+                "name": "MEVSİM SALATA",
+                "calorie": 65
+            },
+            {
+                "name": "CACIK",
+                "calorie": 105
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-28",
+        "meals": [
+            {
+                "name": "EZOGELİN ÇORBA",
+                "calorie": 227
+            },
+            {
+                "name": "PİLİÇ FAJİTA",
+                "calorie": 588
+            },
+            {
+                "name": "ERİŞTE KAVURMA",
+                "calorie": 348
+            },
+            {
+                "name": "DONDURMA",
+                "calorie": 97
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT.BİBER DOLMA",
+                "calorie": 279
+            },
+            {
+                "name": "PİYAZ",
+                "calorie": 133
+            },
+            {
+                "name": "KIRMIZI LAHANA SALATA",
+                "calorie": 38
+            },
+            {
+                "name": "YEŞİL SALATA",
+                "calorie": 52
+            },
+            {
+                "name": "HAVUÇ RENDE",
+                "calorie": 46
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
+            }
+        ]
+    },
+    {
+        "date": "2025-08-29",
+        "meals": [
+            {
+                "name": "DÜĞÜN ÇORBA",
+                "calorie": 194
+            },
+            {
+                "name": "SEBZE GRATEN",
+                "calorie": 357
+            },
+            {
+                "name": "PİRİNÇ PİLAVI",
+                "calorie": 399
+            },
+            {
+                "name": "MEYVE",
+                "calorie": 60
+            },
+            {
+                "name": "SALATA VE ZEYTİNYAĞLI BÜFESİ",
+                "calorie": 120
+            },
+            {
+                "name": "ZYT. BARBUNYA PİLAKİ",
+                "calorie": 265
+            },
+            {
+                "name": "MERCİMEK KÖFTE",
+                "calorie": 164
+            },
+            {
+                "name": "NOHUT SALATASI",
+                "calorie": 125
+            },
+            {
+                "name": "KIVIRCIK SALATA",
+                "calorie": 49
+            },
+            {
+                "name": "KABAK TARATOR",
+                "calorie": 121
+            },
+            {
+                "name": "YOĞURT",
+                "calorie": 93
             }
         ]
     }
