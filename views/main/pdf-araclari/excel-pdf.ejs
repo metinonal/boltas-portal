@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Excel'den PDF | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Excel dosyalarını PDF formatına dönüştürün" name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("../partials/css") %>
+
+    <style>
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #fafafa;
+        }
+        .upload-area:hover {
+            border-color: #28a745;
+            background: #f0fff0;
+        }
+        .upload-area.dragover {
+            border-color: #28a745;
+            background: #f0fff0;
+        }
+        .upload-icon {
+            font-size: 3rem;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+        .file-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress {
+            height: 25px;
+            margin: 15px 0;
+        }
+        .settings-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .btn-convert {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #f5c6cb;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #c3e6cb;
+        }
+        .sheet-selector {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background: white;
+        }
+    </style>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm mt-4">
+                                <div class="card-header bg-gradient-success">
+                                    <h4 class="mb-0">
+                                        <i class="fas fa-file-excel me-2"></i>
+                                        Excel'den PDF Dönüştürücü
+                                    </h4>
+                                    <p class="mb-0 mt-2">Excel dosyalarınızı PDF formatına dönüştürün</p>
+                                </div>
+                                <div class="card-body p-4">
+                                    
+                                    <!-- Dosya Yükleme Alanı -->
+                                    <div class="upload-area" id="uploadArea">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-file-excel"></i>
+                                        </div>
+                                        <h5>Excel Dosyası Seçin</h5>
+                                        <p class="text-muted">Dosyayı buraya sürükleyin veya tıklayarak seçin</p>
+                                        <p class="small text-muted">Desteklenen formatlar: .xlsx, .xls (Maksimum 25MB)</p>
+                                        <input type="file" id="excelFile" accept=".xls,.xlsx" style="display: none;">
+                                    </div>
+
+                                    <!-- Dosya Bilgileri -->
+                                    <div id="fileInfo" class="file-info" style="display: none;">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong id="fileName"></strong>
+                                                <br>
+                                                <small class="text-muted" id="fileSize"></small>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" id="removeFile">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hata/Başarı Mesajları -->
+                                    <div id="errorMessage" class="error-message" style="display: none;"></div>
+                                    <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                                    <!-- İlerleme Çubuğu -->
+                                    <div id="progressContainer" style="display: none;">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                                 role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <div class="text-center">
+                                            <small class="text-muted" id="progressText">Dosya yükleniyor...</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dönüştürme Ayarları -->
+                                    <div class="settings-card" id="settingsCard" style="display: none;">
+                                        <h6 class="mb-3"><i class="fas fa-cog me-2"></i>Dönüştürme Ayarları</h6>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Yönü</label>
+                                                    <select class="form-select" id="pageOrientation">
+                                                        <option value="landscape">Yatay (Landscape)</option>
+                                                        <option value="portrait">Dikey (Portrait)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Boyutu</label>
+                                                    <select class="form-select" id="pageSize">
+                                                        <option value="A4">A4</option>
+                                                        <option value="A3">A3</option>
+                                                        <option value="A5">A5</option>
+                                                        <option value="Letter">Letter</option>
+                                                        <option value="Legal">Legal</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Ölçekleme (%)</label>
+                                                    <select class="form-select" id="scaling">
+                                                        <option value="100">100%</option>
+                                                        <option value="90">90%</option>
+                                                        <option value="80">80%</option>
+                                                        <option value="70">70%</option>
+                                                        <option value="60">60%</option>
+                                                        <option value="50">50%</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Sayfa Seçimi -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Dönüştürülecek Sayfalar</label>
+                                            <div class="sheet-selector" id="sheetSelector">
+                                                <div class="text-muted text-center py-3">
+                                                    <i class="fas fa-info-circle me-2"></i>
+                                                    Excel dosyası yüklendikten sonra sayfalar burada görünecek
+                                                </div>
+                                            </div>
+                                            <small class="text-muted">Hiçbiri seçilmezse tüm sayfalar dönüştürülür</small>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-success btn-convert" id="convertBtn">
+                                                <i class="fas fa-magic me-2"></i>
+                                                PDF'e Dönüştür
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+
+    <script>
+        $(document).ready(function() {
+            let selectedFile = null;
+            let excelSheets = [];
+
+            // Upload area click handler
+            $('#uploadArea').on('click', function() {
+                $('#excelFile').click();
+            });
+
+            // File input change handler
+            $('#excelFile').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileSelection(file);
+                }
+            });
+
+            // Drag and drop handlers
+            $('#uploadArea').on('dragover', function(e) {
+                e.preventDefault();
+                $(this).addClass('dragover');
+            });
+
+            $('#uploadArea').on('dragleave', function(e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+            });
+
+            $('#uploadArea').on('drop', function(e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+                
+                const files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    handleFileSelection(file);
+                }
+            });
+
+            // Remove file handler
+            $('#removeFile').on('click', function() {
+                selectedFile = null;
+                excelSheets = [];
+                $('#excelFile').val('');
+                $('#fileInfo').hide();
+                $('#settingsCard').hide();
+                $('#errorMessage').hide();
+                $('#successMessage').hide();
+            });
+
+            // Convert button handler
+            $('#convertBtn').on('click', function() {
+                if (!selectedFile) {
+                    showError('Lütfen bir Excel dosyası seçin.');
+                    return;
+                }
+
+                convertToPdf();
+            });
+
+            function handleFileSelection(file) {
+                // File validation
+                const allowedTypes = ['application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+                const allowedExtensions = ['.xls', '.xlsx'];
+                const maxSize = 25 * 1024 * 1024; // 25MB
+
+                const fileName = file.name.toLowerCase();
+                const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                if (!hasValidExtension) {
+                    showError('Sadece .xls ve .xlsx dosyaları desteklenmektedir.');
+                    return;
+                }
+
+                if (file.size > maxSize) {
+                    showError('Dosya boyutu 25MB\'dan büyük olamaz.');
+                    return;
+                }
+
+                selectedFile = file;
+                
+                // Show file info
+                $('#fileName').text(file.name);
+                $('#fileSize').text(formatFileSize(file.size));
+                $('#fileInfo').show();
+                $('#settingsCard').show();
+                $('#errorMessage').hide();
+                $('#successMessage').hide();
+
+                // Load Excel sheets (simulated - in real app you'd need to read the file)
+                loadExcelSheets(file);
+            }
+
+            function loadExcelSheets(file) {
+                // This is a simplified version - in a real app you'd need to read the Excel file
+                // For now, we'll show some common sheet names
+                const commonSheets = ['Sheet1', 'Sayfa1', 'Data', 'Veri', 'Tablo'];
+                excelSheets = commonSheets;
+                
+                let sheetHtml = '';
+                excelSheets.forEach(function(sheet, index) {
+                    sheetHtml += `
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="${sheet}" id="sheet${index}">
+                            <label class="form-check-label" for="sheet${index}">
+                                <i class="fas fa-table me-2"></i>${sheet}
+                            </label>
+                        </div>
+                    `;
+                });
+
+                if (sheetHtml) {
+                    $('#sheetSelector').html(sheetHtml);
+                } else {
+                    $('#sheetSelector').html(`
+                        <div class="text-muted text-center py-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Sayfa bulunamadı
+                        </div>
+                    `);
+                }
+            }
+
+            function convertToPdf() {
+                const formData = new FormData();
+                formData.append('excelFile', selectedFile);
+                formData.append('pageOrientation', $('#pageOrientation').val());
+                formData.append('pageSize', $('#pageSize').val());
+                formData.append('scaling', $('#scaling').val());
+
+                // Get selected sheets
+                const selectedSheets = [];
+                $('#sheetSelector input[type="checkbox"]:checked').each(function() {
+                    selectedSheets.push($(this).val());
+                });
+                formData.append('selectedSheets', JSON.stringify(selectedSheets));
+
+                // Show progress
+                $('#progressContainer').show();
+                $('#convertBtn').prop('disabled', true);
+                updateProgress(0, 'Dosya yükleniyor...');
+
+                $.ajax({
+                    url: '/pdf-araclari/api/excel-pdf',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    xhr: function() {
+                        const xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                const percentComplete = (e.loaded / e.total) * 50;
+                                updateProgress(percentComplete, 'Dosya yükleniyor...');
+                            }
+                        });
+                        return xhr;
+                    },
+                    success: function(data, status, xhr) {
+                        updateProgress(100, 'Dönüştürme tamamlandı!');
+                        
+                        // Create download link
+                        const blob = new Blob([data], { type: 'application/pdf' });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = selectedFile.name.replace(/\.[^/.]+$/, '') + '.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+
+                        showSuccess('PDF başarıyla oluşturuldu ve indirildi!');
+                        
+                        setTimeout(function() {
+                            $('#progressContainer').hide();
+                            $('#convertBtn').prop('disabled', false);
+                        }, 2000);
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = 'PDF dönüştürme işlemi başarısız oldu.';
+                        
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMessage = xhr.responseJSON.error;
+                        } else if (xhr.status === 413) {
+                            errorMessage = 'Dosya boyutu çok büyük.';
+                        } else if (xhr.status === 0) {
+                            errorMessage = 'Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.';
+                        }
+
+                        showError(errorMessage);
+                        $('#progressContainer').hide();
+                        $('#convertBtn').prop('disabled', false);
+                    }
+                });
+
+                // Simulate processing progress
+                setTimeout(() => updateProgress(75, 'PDF oluşturuluyor...'), 1000);
+            }
+
+            function updateProgress(percent, text) {
+                $('.progress-bar').css('width', percent + '%');
+                $('#progressText').text(text);
+            }
+
+            function showError(message) {
+                $('#errorMessage').text(message).show();
+                $('#successMessage').hide();
+            }
+
+            function showSuccess(message) {
+                $('#successMessage').text(message).show();
+                $('#errorMessage').hide();
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+
+</body>
+</html>

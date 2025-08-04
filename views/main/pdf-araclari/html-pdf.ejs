@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>HTML'den PDF | Boltas Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="HTML dosyalarını ve web sayfalarını PDF formatına dönüştürün" name="description">
+    <meta content="Coderthemes" name="author">
+
+    <%- include("../partials/css") %>
+
+    <style>
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #fafafa;
+        }
+        .upload-area:hover {
+            border-color: #fd7e14;
+            background: #fff8f0;
+        }
+        .upload-area.dragover {
+            border-color: #fd7e14;
+            background: #fff8f0;
+        }
+        .upload-icon {
+            font-size: 3rem;
+            color: #fd7e14;
+            margin-bottom: 1rem;
+        }
+        .file-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .progress {
+            height: 25px;
+            margin: 15px 0;
+        }
+        .settings-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .btn-convert {
+            background: linear-gradient(45deg, #fd7e14, #e55a00);
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #f5c6cb;
+        }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #c3e6cb;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            background: #f8f9fa;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        .nav-tabs .nav-link.active {
+            background: #fd7e14;
+            color: white;
+        }
+        .tab-content {
+            border: 1px solid #dee2e6;
+            border-radius: 0 5px 5px 5px;
+            padding: 20px;
+            background: white;
+        }
+        .code-editor {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            min-height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+    </style>
+
+</head>
+
+<body class="loading" data-layout-color="light" data-layout="topnav" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <!-- Begin page -->
+    <div class="wrapper">
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Topbar Start -->
+                <%- include("../partials/topbar") %>
+                <!-- end Topbar -->
+
+                <%- include("../partials/topnav") %>
+
+                
+                <div class="container-fluid px-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm mt-4">
+                                <div class="card-header bg-gradient-warning">
+                                    <h4 class="mb-0">
+                                        <i class="fas fa-code me-2"></i>
+                                        HTML'den PDF Dönüştürücü
+                                    </h4>
+                                    <p class="mb-0 mt-2">HTML dosyaları, web sayfaları ve HTML kodunu PDF formatına dönüştürün</p>
+                                </div>
+                                <div class="card-body p-4">
+                                    
+                                    <!-- Seçenekler -->
+                                    <ul class="nav nav-tabs" id="htmlTabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="file-tab" data-bs-toggle="tab" data-bs-target="#file-pane" type="button" role="tab">
+                                                <i class="fas fa-file-code me-2"></i>HTML Dosyası
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="url-tab" data-bs-toggle="tab" data-bs-target="#url-pane" type="button" role="tab">
+                                                <i class="fas fa-globe me-2"></i>Web Sayfası (URL)
+                                            </button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="code-tab" data-bs-toggle="tab" data-bs-target="#code-pane" type="button" role="tab">
+                                                <i class="fas fa-edit me-2"></i>HTML Kodu
+                                            </button>
+                                        </li>
+                                    </ul>
+
+                                    <div class="tab-content" id="htmlTabContent">
+                                        
+                                        <!-- HTML Dosyası Sekmesi -->
+                                        <div class="tab-pane fade show active" id="file-pane" role="tabpanel">
+                                            <!-- Dosya Yükleme Alanı -->
+                                            <div class="upload-area" id="uploadArea">
+                                                <div class="upload-icon">
+                                                    <i class="fas fa-file-code"></i>
+                                                </div>
+                                                <h5>HTML Dosyası Seçin</h5>
+                                                <p class="text-muted">Dosyayı buraya sürükleyin veya tıklayarak seçin</p>
+                                                <p class="small text-muted">Desteklenen formatlar: .html, .htm (Maksimum 10MB)</p>
+                                                <input type="file" id="htmlFile" accept=".html,.htm" style="display: none;">
+                                            </div>
+
+                                            <!-- Dosya Bilgileri -->
+                                            <div id="fileInfo" class="file-info" style="display: none;">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong id="fileName"></strong>
+                                                        <br>
+                                                        <small class="text-muted" id="fileSize"></small>
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" id="removeFile">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- URL Sekmesi -->
+                                        <div class="tab-pane fade" id="url-pane" role="tabpanel">
+                                            <div class="mb-3">
+                                                <label for="websiteUrl" class="form-label">Web Sayfası URL'si</label>
+                                                <input type="url" class="form-control" id="websiteUrl" placeholder="https://example.com">
+                                                <div class="form-text">Dönüştürmek istediğiniz web sayfasının tam URL'sini girin</div>
+                                            </div>
+                                            
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="waitForLoad">
+                                                <label class="form-check-label" for="waitForLoad">
+                                                    Sayfa tamamen yüklenene kadar bekle (yavaş sayfalar için)
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- HTML Kodu Sekmesi -->
+                                        <div class="tab-pane fade" id="code-pane" role="tabpanel">
+                                            <div class="mb-3">
+                                                <label for="htmlCode" class="form-label">HTML Kodu</label>
+                                                <textarea class="form-control code-editor" id="htmlCode" rows="15" placeholder="HTML kodunuzu buraya yapıştırın..."><!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Örnek Sayfa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        p { line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <h1>Merhaba Dünya!</h1>
+    <p>Bu bir örnek HTML sayfasıdır.</p>
+</body>
+</html></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Hata/Başarı Mesajları -->
+                                    <div id="errorMessage" class="error-message" style="display: none;"></div>
+                                    <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                                    <!-- İlerleme Çubuğu -->
+                                    <div id="progressContainer" style="display: none;">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" 
+                                                 role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                        <div class="text-center">
+                                            <small class="text-muted" id="progressText">İşlem başlatılıyor...</small>
+                                        </div>
+                                    </div>
+
+                                    <!-- Dönüştürme Ayarları -->
+                                    <div class="settings-card">
+                                        <h6 class="mb-3"><i class="fas fa-cog me-2"></i>PDF Ayarları</h6>
+                                        
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Boyutu</label>
+                                                    <select class="form-select" id="pageSize">
+                                                        <option value="A4">A4</option>
+                                                        <option value="A3">A3</option>
+                                                        <option value="A5">A5</option>
+                                                        <option value="Letter">Letter</option>
+                                                        <option value="Legal">Legal</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Sayfa Yönü</label>
+                                                    <select class="form-select" id="pageOrientation">
+                                                        <option value="portrait">Dikey</option>
+                                                        <option value="landscape">Yatay</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Kenar Boşlukları</label>
+                                                    <select class="form-select" id="margins">
+                                                        <option value="default">Varsayılan</option>
+                                                        <option value="none">Yok</option>
+                                                        <option value="minimum">Minimum</option>
+                                                        <option value="maximum">Maksimum</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <div class="form-check mt-4">
+                                                        <input class="form-check-input" type="checkbox" id="includeBackground" checked>
+                                                        <label class="form-check-label" for="includeBackground">
+                                                            Arka Plan Dahil
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center">
+                                            <button type="button" class="btn btn-warning btn-convert" id="convertBtn">
+                                                <i class="fas fa-magic me-2"></i>
+                                                PDF'e Dönüştür
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content -->
+
+            <!-- Footer Start -->
+            <%- include("../partials/footer") %>
+            <!-- end Footer -->
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+    <!-- END wrapper -->
+
+    <%- include("../partials/scripts") %>
+
+    <script>
+        $(document).ready(function() {
+            let selectedFile = null;
+
+            // Upload area click handler
+            $('#uploadArea').on('click', function() {
+                $('#htmlFile').click();
+            });
+
+            // File input change handler
+            $('#htmlFile').on('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileSelection(file);
+                }
+            });
+
+            // Drag and drop handlers
+            $('#uploadArea').on('dragover', function(e) {
+                e.preventDefault();
+                $(this).addClass('dragover');
+            });
+
+            $('#uploadArea').on('dragleave', function(e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+            });
+
+            $('#uploadArea').on('drop', function(e) {
+                e.preventDefault();
+                $(this).removeClass('dragover');
+                
+                const files = e.originalEvent.dataTransfer.files;
+                if (files.length > 0) {
+                    const file = files[0];
+                    handleFileSelection(file);
+                }
+            });
+
+            // Remove file handler
+            $('#removeFile').on('click', function() {
+                selectedFile = null;
+                $('#htmlFile').val('');
+                $('#fileInfo').hide();
+                $('#errorMessage').hide();
+                $('#successMessage').hide();
+            });
+
+            // Convert button handler
+            $('#convertBtn').on('click', function() {
+                const activeTab = $('.nav-link.active').attr('id');
+                
+                if (activeTab === 'file-tab') {
+                    convertFileToPDF();
+                } else if (activeTab === 'url-tab') {
+                    convertUrlToPDF();
+                } else if (activeTab === 'code-tab') {
+                    convertCodeToPDF();
+                }
+            });
+
+            function handleFileSelection(file) {
+                // File validation
+                const allowedExtensions = ['.html', '.htm'];
+                const maxSize = 10 * 1024 * 1024; // 10MB
+
+                const fileName = file.name.toLowerCase();
+                const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                if (!hasValidExtension) {
+                    showError('Sadece .html ve .htm dosyaları desteklenmektedir.');
+                    return;
+                }
+
+                if (file.size > maxSize) {
+                    showError('Dosya boyutu 10MB\'dan büyük olamaz.');
+                    return;
+                }
+
+                selectedFile = file;
+                
+                // Show file info
+                $('#fileName').text(file.name);
+                $('#fileSize').text(formatFileSize(file.size));
+                $('#fileInfo').show();
+                $('#errorMessage').hide();
+                $('#successMessage').hide();
+            }
+
+            function convertFileToPDF() {
+                if (!selectedFile) {
+                    showError('Lütfen bir HTML dosyası seçin.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('htmlFile', selectedFile);
+                formData.append('pageSize', $('#pageSize').val());
+                formData.append('pageOrientation', $('#pageOrientation').val());
+                formData.append('margins', $('#margins').val());
+                formData.append('includeBackground', $('#includeBackground').is(':checked'));
+
+                performConversion('/pdf-araclari/api/html-file-pdf', formData, selectedFile.name.replace(/\.[^/.]+$/, '') + '.pdf');
+            }
+
+            function convertUrlToPDF() {
+                const url = $('#websiteUrl').val().trim();
+                
+                if (!url) {
+                    showError('Lütfen bir URL girin.');
+                    return;
+                }
+
+                // URL validation
+                try {
+                    new URL(url);
+                } catch (e) {
+                    showError('Geçersiz URL formatı.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('url', url);
+                formData.append('pageSize', $('#pageSize').val());
+                formData.append('pageOrientation', $('#pageOrientation').val());
+                formData.append('margins', $('#margins').val());
+                formData.append('includeBackground', $('#includeBackground').is(':checked'));
+                formData.append('waitForLoad', $('#waitForLoad').is(':checked'));
+
+                const urlObj = new URL(url);
+                const filename = urlObj.hostname + '.pdf';
+
+                performConversion('/pdf-araclari/api/html-url-pdf', formData, filename);
+            }
+
+            function convertCodeToPDF() {
+                const htmlCode = $('#htmlCode').val().trim();
+                
+                if (!htmlCode) {
+                    showError('Lütfen HTML kodu girin.');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('htmlCode', htmlCode);
+                formData.append('pageSize', $('#pageSize').val());
+                formData.append('pageOrientation', $('#pageOrientation').val());
+                formData.append('margins', $('#margins').val());
+                formData.append('includeBackground', $('#includeBackground').is(':checked'));
+
+                performConversion('/pdf-araclari/api/html-code-pdf', formData, 'html-code.pdf');
+            }
+
+            function performConversion(url, formData, filename) {
+                // Show progress
+                $('#progressContainer').show();
+                $('#convertBtn').prop('disabled', true);
+                updateProgress(0, 'İşlem başlatılıyor...');
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    xhr: function() {
+                        const xhr = new window.XMLHttpRequest();
+                        xhr.upload.addEventListener('progress', function(e) {
+                            if (e.lengthComputable) {
+                                const percentComplete = (e.loaded / e.total) * 50;
+                                updateProgress(percentComplete, 'Yükleniyor...');
+                            }
+                        });
+                        return xhr;
+                    },
+                    success: function(data, status, xhr) {
+                        updateProgress(100, 'Dönüştürme tamamlandı!');
+                        
+                        // Create download link
+                        const blob = new Blob([data], { type: 'application/pdf' });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+
+                        showSuccess('PDF başarıyla oluşturuldu ve indirildi!');
+                        
+                        setTimeout(function() {
+                            $('#progressContainer').hide();
+                            $('#convertBtn').prop('disabled', false);
+                        }, 2000);
+                    },
+                    error: function(xhr, status, error) {
+                        let errorMessage = 'PDF dönüştürme işlemi başarısız oldu.';
+                        
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMessage = xhr.responseJSON.error;
+                        } else if (xhr.status === 413) {
+                            errorMessage = 'İçerik çok büyük.';
+                        } else if (xhr.status === 0) {
+                            errorMessage = 'Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.';
+                        }
+
+                        showError(errorMessage);
+                        $('#progressContainer').hide();
+                        $('#convertBtn').prop('disabled', false);
+                    }
+                });
+
+                // Simulate processing progress
+                setTimeout(() => updateProgress(25, 'İçerik işleniyor...'), 500);
+                setTimeout(() => updateProgress(75, 'PDF oluşturuluyor...'), 1500);
+            }
+
+            function updateProgress(percent, text) {
+                $('.progress-bar').css('width', percent + '%');
+                $('#progressText').text(text);
+            }
+
+            function showError(message) {
+                $('#errorMessage').text(message).show();
+                $('#successMessage').hide();
+            }
+
+            function showSuccess(message) {
+                $('#successMessage').text(message).show();
+                $('#errorMessage').hide();
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+        });
+    </script>
+
+</body>
+</html>
