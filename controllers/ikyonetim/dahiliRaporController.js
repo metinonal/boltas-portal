@@ -256,7 +256,7 @@ exports.downloadExcel = async (req, res) => {
         item.contact_user || 'N/A',
         item.src || 'N/A',
         callDate,
-        item.inboundCallCount || 0,
+        (item.answeredCallCount || 0) + (item.noAnsweredCallCount || 0) + (item.transferredCallCount || 0), // Toplam çağrı hesaplanmış
         item.outboundCallCount || 0,
         item.answeredCallCount || 0,
         item.noAnsweredCallCount || 0,
