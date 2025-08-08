@@ -102,6 +102,7 @@ const userController = require("./controllers/main/userController")
 const bilgiBankasiRoutes = require("./routes/ikyonetim/bilgiBankasiRoutes")
 const marketplaceAdminRoutes = require("./routes/ikyonetim/marketplaceAdminRoutes")
 const sozlukAdminRoutes = require("./routes/ikyonetim/sozlukRoutes")
+const dahiliRaporRoutes = require("./routes/ikyonetim/dahiliRaporRoutes");
 
 const menuRoutes = require("./routes/main/menuRoutes")
 const indexRoutes = require("./routes/main/indexRoutes")
@@ -124,6 +125,7 @@ app.use("/ikyonetim", sliderRoutes)
 app.use("/ikyonetim", documentRoutes)
 app.use("/ikyonetim", adminRoutes)
 app.use("/ikyonetim", userRoutes)
+app.use("/ikyonetim", dahiliRaporRoutes);
 app.use("/ikyonetim", marketplaceAdminRoutes)
 app.use("/ikyonetim/sozluk", sozlukAdminRoutes)
 app.use("/", menuRoutes)

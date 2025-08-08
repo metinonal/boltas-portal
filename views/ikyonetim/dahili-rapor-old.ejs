@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <title><%= title %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Dahili Rapor Sistemi" name="description" />
+    <meta content="Coderthemes" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <%- include('partials/css') %>
+    
+     Chart.js 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+     Date Range Picker 
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+    <style>
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card h3 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stats-card p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            height: 400px;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .date-filter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .btn-excel {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+        
+        .btn-excel:hover {
+            background: #218838;
+            border-color: #1e7e34;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+            border-radius: 10px;
+        }
+        
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        /* Tablo Stilleri */
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+        
+        .search-box input {
+            padding-left: 40px;
+            border-radius: 25px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pagination-select {
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            padding: 8px 12px;
+        }
+        
+        .user-row {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .user-row:hover {
+            background-color: #f8f9fa;
+            border-left-color: #667eea;
+        }
+        
+        .user-row.expanded {
+            background-color: #e3f2fd;
+            border-left-color: #2196f3;
+        }
+        
+        .detail-row {
+            background-color: #f8f9fa;
+            border-left: 4px solid #dee2e6;
+        }
+        
+        .detail-row td {
+            padding-left: 30px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .expand-icon {
+            transition: transform 0.3s ease;
+            margin-right: 8px;
+        }
+        
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+        
+        .badge {
+            font-size: 0.8rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .pagination-info {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .pagination-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .pagination-buttons button {
+            border: none;
+            background: #f8f9fa;
+            color: #6c757d;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-buttons button:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+        }
+        
+        .pagination-buttons button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .pagination-buttons button.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .date-inputs {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .chart-container {
+                height: 350px;
+                padding: 15px;
+            }
+            
+            .chart-wrapper {
+                height: 250px;
+            }
+            
+            .stats-card h3 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
+    <div class="wrapper">
+        <%- include('partials/sidemenu') %>
+        
+        <div class="content-page">
+            <div class="content">
+                <%- include('partials/topbar') %>
+                
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/ikyonetim">Ana Sayfa</a></li>
+                                        <li class="breadcrumb-item active">Dahili Rapor</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Dahili Rapor Sistemi</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                     Tarih Filtresi 
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="date-filter-card">
+                                <h5 class="mb-3"><i class="mdi mdi-calendar-range"></i> Tarih Aralığı Seçin</h5>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="filterType" class="form-label">Filtre Tipi</label>
+                                        <select class="form-select" id="filterType">
+                                            <option value="today">Bugün</option>
+                                            <option value="yesterday">Dün</option>
+                                            <option value="last7Days">Son 7 Gün</option>
+                                            <option value="last30Days">Son 30 Gün</option>
+                                            <option value="thisMonth">Bu Ay</option>
+                                            <option value="lastMonth">Geçen Ay</option>
+                                            <option value="custom">Özel Tarih Aralığı</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">&nbsp;</label>
+                                        <div>
+                                            <button type="button" class="btn btn-primary me-2" id="fetchDataBtn">
+                                                <i class="mdi mdi-magnify"></i> Verileri Getir
+                                            </button>
+                                            <button type="button" class="btn btn-excel" id="exportExcelBtn" style="display: none;">
+                                                <i class="mdi mdi-file-excel"></i> Excel İndir
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                 Özel tarih aralığı inputları 
+                                <div class="row mt-3 date-inputs" id="dateInputs">
+                                    <div class="col-md-6">
+                                        <label for="startDate" class="form-label">Başlangıç Tarihi</label>
+                                        <input type="date" class="form-control" id="startDate" value="">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="endDate" class="form-label">Bitiş Tarihi</label>
+                                        <input type="date" class="form-control" id="endDate" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     Debug Bilgisi 
+                    <div class="row" id="debugSection" style="display: none;">
+                        <div class="col-12">
+                            <div class="alert alert-warning">
+                                <h6>Debug Bilgisi:</h6>
+                                <div id="debugInfo" class="debug-info"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                     Loading Spinner 
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                        <p class="mt-3">Veriler yükleniyor, lütfen bekleyin...</p>
+                    </div>
+
+                     İstatistik Kartları 
+                    <div class="row" id="statsCards" style="display: none;">
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <h3 id="totalUsers">0</h3>
+                                <p><i class="mdi mdi-account-multiple"></i> Toplam Kullanıcı</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <h3 id="totalCalls">0</h3>
+                                <p><i class="mdi mdi-phone"></i> Toplam Çağrı</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <h3 id="answeredCalls">0</h3>
+                                <p><i class="mdi mdi-phone-check"></i> Cevaplanan Çağrı</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <h3 id="missedCalls">0</h3>
+                                <p><i class="mdi mdi-phone-missed"></i> Cevaplanmayan Çağrı</p>
+                            </div>
+                        </div>
+                    </div>
+
+                     Grafikler 
+                    <div class="row" id="chartsSection" style="display: none;">
+                        <div class="col-lg-6">
+                            <div class="chart-container">
+                                <h5 class="mb-3"><i class="mdi mdi-chart-pie"></i> Çağrı Dağılımı</h5>
+                                <div class="chart-wrapper">
+                                    <canvas id="callDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="chart-container">
+                                <h5 class="mb-3"><i class="mdi mdi-chart-bar"></i> Kullanıcı Bazlı Çağrılar</h5>
+                                <div class="chart-wrapper">
+                                    <canvas id="userCallsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     Veri Tablosu 
+                    <div class="row" id="dataTableSection" style="display: none;">
+                        <div class="col-12">
+                            <div class="data-table">
+                                <h5 class="mb-4"><i class="mdi mdi-table"></i> Detaylı Rapor</h5>
+                                
+                                 Tablo Kontrolleri 
+                                <div class="table-controls">
+                                    <div class="search-box">
+                                        <i class="mdi mdi-magnify"></i>
+                                        <input type="text" class="form-control" id="searchInput" placeholder="Personel ara...">
+                                    </div>
+                                    <div class="pagination-controls">
+                                        <span class="me-2">Sayfa başına:</span>
+                                        <select class="pagination-select" id="pageSize">
+                                            <option value="10">10</option>
+                                            <option value="50" selected>50</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="reportTable">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th width="25%">Kullanıcı Adı</th>
+                                                <th width="10%">Dahili No</th>
+                                                <th width="10%">Toplam Çağrı</th>
+                                                <th width="10%">Giden</th>
+                                                <th width="10%">Cevaplanan</th>
+                                                <th width="10%">Cevaplanmayan</th>
+                                                <th width="10%">Transfer</th>
+                                                <th width="15%">Toplam Süre (dk)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="reportTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                 Pagination 
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="pagination-info" id="paginationInfo"></div>
+                                    <div class="pagination-buttons" id="paginationButtons"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     Bilgi Mesajı 
+                    <div class="row" id="infoMessage">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="mdi mdi-information-outline"></i>
+                                <strong>Bilgi:</strong> Rapor verilerini görüntülemek için yukarıdan tarih aralığı seçin ve "Verileri Getir" butonuna tıklayın.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <%- include('partials/footer') %>
+        </div>
+    </div>
+
+    <%- include('partials/scripts') %>
+    
+    <script>
+        let currentData = null;
+        let filteredData = null;
+        let callDistributionChart = null;
+        let userCallsChart = null;
+        let currentPage = 1;
+        let pageSize = 50;
+        let expandedRows = new Set();
+
+        // Sayfa yüklendiğinde bugünün tarihini set et
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            
+            document.getElementById('startDate').value = today.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+            
+            // Event listeners
+            setupEventListeners();
+            
+            // Sayfa yüklendiğinde bugünün verilerini getir
+            fetchData();
+        });
+
+        function setupEventListeners() {
+            // Filtre tipi değişimi
+            document.getElementById('filterType').addEventListener('change', function() {
+                const filterType = this.value;
+                const dateInputs = document.getElementById('dateInputs');
+
+                if (filterType === 'custom') {
+                    dateInputs.style.display = 'block';
+                } else {
+                    dateInputs.style.display = 'none';
+                }
+            });
+
+            // Veri getirme
+            document.getElementById('fetchDataBtn').addEventListener('click', fetchData);
+            
+            // Arama
+            document.getElementById('searchInput').addEventListener('input', function() {
+                currentPage = 1;
+                filterAndDisplayData();
+            });
+            
+            // Sayfa boyutu değişimi
+            document.getElementById('pageSize').addEventListener('change', function() {
+                pageSize = parseInt(this.value);
+                currentPage = 1;
+                filterAndDisplayData();
+            });
+            
+            // Excel indirme
+            document.getElementById('exportExcelBtn').addEventListener('click', downloadExcel);
+        }
+
+        function fetchData() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const filterType = document.getElementById('filterType').value;
+
+            if (filterType === 'custom' && (!startDate || !endDate)) {
+                alert('Lütfen başlangıç ve bitiş tarihini seçin!');
+                return;
+            }
+
+            if (filterType === 'custom' && new Date(startDate) > new Date(endDate)) {
+                alert('Başlangıç tarihi bitiş tarihinden büyük olamaz!');
+                return;
+            }
+
+            // Loading göster
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('statsCards').style.display = 'none';
+            document.getElementById('chartsSection').style.display = 'none';
+            document.getElementById('dataTableSection').style.display = 'none';
+            document.getElementById('infoMessage').style.display = 'none';
+            document.getElementById('exportExcelBtn').style.display = 'none';
+            document.getElementById('debugSection').style.display = 'none';
+
+            // API'ye istek gönder
+            fetch('/ikyonetim/dahili-rapor/veri-cek', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    startDate: startDate,
+                    endDate: endDate,
+                    filterType: filterType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+                if (data.success && data.data) {
+                    currentData = data.data;
+                    filteredData = [...currentData];
+                    currentPage = 1;
+                    expandedRows.clear();
+                    displayData(data.data);
+                    document.getElementById('exportExcelBtn').style.display = 'inline-block';
+                } else {
+                    alert('Veri alınamadı: ' + (data.message || 'Bilinmeyen hata'));
+                }
+            })
+            .catch(error => {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                console.error('Error:', error);
+                alert('Veri alınırken bir hata oluştu: ' + error.message);
+            });
+        }
+
+        function displayData(data) {
+            if (!Array.isArray(data) || data.length === 0) {
+                alert('Seçilen tarih aralığında veri bulunamadı.');
+                return;
+            }
+
+            // Kullanıcı bazında verileri grupla
+            const userStats = groupDataByUser(data);
+
+            // İstatistikleri hesapla
+            const totalUsers = Object.keys(userStats).length;
+            const answeredCalls = data.reduce((sum, item) => sum + (item.answeredCallCount || 0), 0);
+            const missedCalls = data.reduce((sum, item) => sum + (item.noAnsweredCallCount || 0), 0);
+            const totalCalls = answeredCalls + missedCalls; // API'den değil, hesaplanmış toplam
+
+            // İstatistik kartlarını güncelle
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('totalCalls').textContent = totalCalls;
+            document.getElementById('answeredCalls').textContent = answeredCalls;
+            document.getElementById('missedCalls').textContent = missedCalls;
+
+            // Kartları göster
+            document.getElementById('statsCards').style.display = 'flex';
+
+            // Grafikleri oluştur
+            createCharts(data, userStats);
+            document.getElementById('chartsSection').style.display = 'flex';
+
+            // Tabloyu oluştur
+            filterAndDisplayData();
+            document.getElementById('dataTableSection').style.display = 'block';
+        }
+
+        function groupDataByUser(data) {
+            const userStats = {};
+            
+            data.forEach(item => {
+                const userName = item.contact_user || 'N/A';
+                
+                if (!userStats[userName]) {
+                    userStats[userName] = {
+                        userName: userName,
+                        src: item.src,
+                        totalInbound: 0,
+                        totalOutbound: 0,
+                        totalAnswered: 0,
+                        totalMissed: 0,
+                        totalTransferred: 0,
+                        totalInboundDuration: 0,
+                        totalOutboundDuration: 0,
+                        details: []
+                    };
+                }
+                
+                userStats[userName].totalInbound += item.inboundCallCount || 0;
+                userStats[userName].totalOutbound += item.outboundCallCount || 0;
+                userStats[userName].totalAnswered += item.answeredCallCount || 0;
+                userStats[userName].totalMissed += item.noAnsweredCallCount || 0;
+                userStats[userName].totalTransferred += item.transferredCallCount || 0;
+                userStats[userName].totalInboundDuration += item.inboundCallDuration || 0;
+                userStats[userName].totalOutboundDuration += item.outboundCallDuration || 0;
+                userStats[userName].details.push(item);
+            });
+            
+            return userStats;
+        }
+
+        function filterAndDisplayData() {
+            if (!currentData) return;
+            
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const userStats = groupDataByUser(currentData);
+            
+            // Filtreleme
+            filteredData = Object.values(userStats).filter(user => 
+                user.userName.toLowerCase().includes(searchTerm)
+            );
+            
+            // Sıralama (toplam çağrı sayısına göre)
+            filteredData.sort((a, b) => 
+                (b.totalAnswered + b.totalMissed + b.totalTransferred) - (a.totalAnswered + a.totalMissed + a.totalTransferred)
+            );
+            
+            displayTable();
+            displayPagination();
+        }
+
+        function displayTable() {
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = startIndex + pageSize;
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            pageData.forEach((user, index) => {
+                const globalIndex = startIndex + index;
+                const isExpanded = expandedRows.has(user.userName);
+                
+                // Ana satır
+                const row = tbody.insertRow();
+                row.className = `user-row ${isExpanded ? 'expanded' : ''}`;
+                row.setAttribute('data-user', user.userName);
+                row.onclick = () => toggleUserDetails(user.userName);
+                
+                const totalDuration = Math.round((user.totalInboundDuration + user.totalOutboundDuration) / 60);
+                // Toplam çağrı = cevaplanan + cevaplanmayan + transfer
+                const totalCalls = user.totalAnswered + user.totalMissed + user.totalTransferred;
+                
+                row.innerHTML = `
+                    <td>
+                        <i class="mdi mdi-chevron-right expand-icon ${isExpanded ? 'expanded' : ''}"></i>
+                        <strong>${user.userName}</strong>
+                    </td>
+                    <td><span class="badge bg-secondary">${user.src}</span></td>
+                    <td><span class="badge bg-info">${totalCalls}</span></td>
+                    <td><span class="badge bg-primary">${user.totalOutbound}</span></td>
+                    <td><span class="badge bg-success">${user.totalAnswered}</span></td>
+                    <td><span class="badge bg-danger">${user.totalMissed}</span></td>
+                    <td><span class="badge bg-warning">${user.totalTransferred}</span></td>
+                    <td><strong>${totalDuration} dk</strong></td>
+                `;
+                
+                // Detay satırları
+                if (isExpanded) {
+                    user.details.forEach(detail => {
+                        const detailRow = tbody.insertRow();
+                        detailRow.className = 'detail-row';
+                        
+                        const callDate = new Date(detail.callDate).toLocaleDateString('tr-TR');
+                        const detailDuration = Math.round((detail.inboundCallDuration + detail.outboundCallDuration) / 60);
+                        const detailTotalCalls = (detail.answeredCallCount || 0) + (detail.noAnsweredCallCount || 0) + (detail.transferredCallCount || 0);
+                        
+                        detailRow.innerHTML = `
+                            <td>${callDate}</td>
+                            <td>-</td>
+                            <td><span class="badge bg-info">${detailTotalCalls}</span></td>
+                            <td><span class="badge bg-primary">${detail.outboundCallCount || 0}</span></td>
+                            <td><span class="badge bg-success">${detail.answeredCallCount || 0}</span></td>
+                            <td><span class="badge bg-danger">${detail.noAnsweredCallCount || 0}</span></td>
+                            <td><span class="badge bg-warning">${detail.transferredCallCount || 0}</span></td>
+                            <td>${detailDuration} dk</td>
+                        `;
+                    });
+                }
+            });
+        }
+
+        function toggleUserDetails(userName) {
+            if (expandedRows.has(userName)) {
+                expandedRows.delete(userName);
+            } else {
+                expandedRows.add(userName);
+            }
+            displayTable();
+        }
+
+        function displayPagination() {
+            const totalPages = Math.ceil(filteredData.length / pageSize);
+            const startItem = (currentPage - 1) * pageSize + 1;
+            const endItem = Math.min(currentPage * pageSize, filteredData.length);
+            
+            // Pagination bilgisi
+            document.getElementById('paginationInfo').textContent = 
+                `${startItem}-${endItem} / ${filteredData.length} kayıt gösteriliyor`;
+            
+            // Pagination butonları
+            const buttonsContainer = document.getElementById('paginationButtons');
+            buttonsContainer.innerHTML = '';
+            
+            // Önceki sayfa
+            const prevBtn = document.createElement('button');
+            prevBtn.textContent = '‹';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayTable();
+                    displayPagination();
+                }
+            };
+            buttonsContainer.appendChild(prevBtn);
+            
+            // Sayfa numaraları
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.textContent = i;
+                pageBtn.className = i === currentPage ? 'active' : '';
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    displayTable();
+                    displayPagination();
+                };
+                buttonsContainer.appendChild(pageBtn);
+            }
+            
+            // Sonraki sayfa
+            const nextBtn = document.createElement('button');
+            nextBtn.textContent = '›';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayTable();
+                    displayPagination();
+                }
+            };
+            buttonsContainer.appendChild(nextBtn);
+        }
+
+        function createCharts(data, userStats) {
+            // Çağrı dağılımı grafiği
+            const ctx1 = document.getElementById('callDistributionChart').getContext('2d');
+            
+            if (callDistributionChart) {
+                callDistributionChart.destroy();
+            }
+
+            const totalAnswered = data.reduce((sum, item) => sum + (item.answeredCallCount || 0), 0);
+            const totalMissed = data.reduce((sum, item) => sum + (item.noAnsweredCallCount || 0), 0);
+
+            callDistributionChart = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cevaplanan Çağrılar', 'Cevaplanmayan Çağrılar'],
+                    datasets: [{
+                        data: [totalAnswered, totalMissed],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Kullanıcı bazlı çağrılar grafiği
+            const ctx2 = document.getElementById('userCallsChart').getContext('2d');
+            
+            if (userCallsChart) {
+                userCallsChart.destroy();
+            }
+
+            // En çok çağrı yapan ilk 10 kullanıcı
+            const sortedUsers = Object.values(userStats)
+                .sort((a, b) => (b.totalAnswered + b.totalMissed + b.totalTransferred) - (a.totalAnswered + a.totalMissed + a.totalTransferred))
+                .slice(0, 10);
+
+            userCallsChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: sortedUsers.map(user => user.userName.length > 15 ? 
+                        user.userName.substring(0, 15) + '...' : user.userName),
+                    datasets: [
+                        {
+                            label: 'Cevaplanan',
+                            data: sortedUsers.map(user => user.totalAnswered),
+                            backgroundColor: '#28a745',
+                            borderColor: '#1e7e34',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Cevaplanmayan',
+                            data: sortedUsers.map(user => user.totalMissed),
+                            backgroundColor: '#dc3545',
+                            borderColor: '#c82333',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#f0f0f0'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function downloadExcel() {
+            if (!currentData) {
+                alert('İndirilecek veri bulunamadı!');
+                return;
+            }
+
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/ikyonetim/dahili-rapor/excel-indir';
+
+            const startDateInput = document.createElement('input');
+            startDateInput.type = 'hidden';
+            startDateInput.name = 'startDate';
+            startDateInput.value = startDate;
+
+            const endDateInput = document.createElement('input');
+            endDateInput.type = 'hidden';
+            endDateInput.name = 'endDate';
+            endDateInput.value = endDate;
+
+            const dataInput = document.createElement('input');
+            dataInput.type = 'hidden';
+            dataInput.name = 'data';
+            dataInput.value = JSON.stringify(currentData);
+
+            form.appendChild(startDateInput);
+            form.appendChild(endDateInput);
+            form.appendChild(dataInput);
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+    </script>
+</body>
+</html>
