@@ -368,7 +368,7 @@
                                                 <button type="button" class="btn btn-primary me-2" id="fetchDataBtn">
                                                     <i class="mdi mdi-magnify"></i> Verileri Getir
                                                 </button>
-                                                <button type="button" class="btn btn-excel" id="exportExcelBtn" style="display: none;">
+                                                <button type="button" class="btn btn-success" id="exportExcelBtn" style="display: none;">
                                                     <i class="mdi mdi-file-excel"></i> Excel İndir
                                                 </button>
                                             </div>
@@ -964,42 +964,57 @@
             });
         }
 
-        function downloadExcel() {
-            if (!currentData) {
-                alert('İndirilecek veri bulunamadı!');
-                return;
-            }
+function downloadExcel() {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+    const filterType = document.getElementById('filterType').value;
 
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
+    if (!startDate || !endDate) {
+        alert('Tarih bilgileri eksik!');
+        return;
+    }
 
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/ikyonetim/dahili-rapor/excel-indir';
+    // Loading göster
+    const exportBtn = document.getElementById('exportExcelBtn');
+    const originalText = exportBtn.innerHTML;
+    exportBtn.innerHTML = '<i class="mdi mdi-loading mdi-spin"></i> Excel Hazırlanıyor...';
+    exportBtn.disabled = true;
 
-            const startDateInput = document.createElement('input');
-            startDateInput.type = 'hidden';
-            startDateInput.name = 'startDate';
-            startDateInput.value = startDate;
+    // Form oluştur ve gönder
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/ikyonetim/dahili-rapor/excel-indir';
 
-            const endDateInput = document.createElement('input');
-            endDateInput.type = 'hidden';
-            endDateInput.name = 'endDate';
-            endDateInput.value = endDate;
+    const startDateInput = document.createElement('input');
+    startDateInput.type = 'hidden';
+    startDateInput.name = 'startDate';
+    startDateInput.value = startDate;
 
-            const dataInput = document.createElement('input');
-            dataInput.type = 'hidden';
-            dataInput.name = 'data';
-            dataInput.value = JSON.stringify(currentData);
+    const endDateInput = document.createElement('input');
+    endDateInput.type = 'hidden';
+    endDateInput.name = 'endDate';
+    endDateInput.value = endDate;
 
-            form.appendChild(startDateInput);
-            form.appendChild(endDateInput);
-            form.appendChild(dataInput);
+    const filterTypeInput = document.createElement('input');
+    filterTypeInput.type = 'hidden';
+    filterTypeInput.name = 'filterType';
+    filterTypeInput.value = filterType;
 
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        }
+    form.appendChild(startDateInput);
+    form.appendChild(endDateInput);
+    form.appendChild(filterTypeInput);
+
+    document.body.appendChild(form);
+    
+    // Form submit işlemi tamamlandıktan sonra butonu eski haline getir
+    setTimeout(() => {
+        exportBtn.innerHTML = originalText;
+        exportBtn.disabled = false;
+    }, 3000);
+    
+    form.submit();
+    document.body.removeChild(form);
+}
     </script>
 
 </body>

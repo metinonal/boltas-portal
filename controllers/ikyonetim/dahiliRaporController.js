@@ -42,7 +42,7 @@ exports.getReportData = async (req, res) => {
 
     if (reportData && reportData.success) {
       // Gelen veriyi konsola yazdır (debug için)
-      console.log('API Response Data:', JSON.stringify(reportData.data, null, 2))
+      // console.log('API Response Data:', JSON.stringify(reportData.data, null, 2))
       
       res.json({
         success: true,
@@ -87,7 +87,7 @@ async function getReportDataFromApi(startDate, endDate) {
       }
     })
 
-    console.log('Full API Response:', JSON.stringify(response.data, null, 2))
+    // console.log('Full API Response:', JSON.stringify(response.data, null, 2))
 
     if (response.data && response.data.success) {
       // API'den gelen veri yapısını kontrol et
@@ -178,51 +178,49 @@ exports.downloadExcel = async (req, res) => {
   try {
     console.log('Excel download request body:', req.body)
     
-    const { startDate, endDate } = req.body
-    let { data } = req.body
+    const { startDate, endDate, filterType } = req.body
     
-    // Eğer data string olarak geldiyse JSON.parse yap
-    if (typeof data === 'string') {
-      try {
-        data = JSON.parse(data)
-        console.log('Data string\'den array\'e çevrildi, uzunluk:', data.length)
-      } catch (parseError) {
-        console.error('JSON parse hatası:', parseError)
-        data = null
-      }
+    if (!startDate || !endDate) {
+      return res.status(400).json({
+        success: false,
+        message: "Tarih bilgileri eksik"
+      })
     }
     
-    // Eğer data hala geçerli değilse, tarih bilgilerinden API'den çek
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      console.log('Veri frontend\'den gelmedi veya geçersiz, API\'den çekiliyor...')
-      
-      if (!startDate || !endDate) {
-        return res.status(400).json({
-          success: false,
-          message: "Tarih bilgileri eksik"
-        })
-      }
-      
-      const reportData = await getReportDataFromApi(startDate, endDate)
-      
-      if (reportData && reportData.success && Array.isArray(reportData.data)) {
-        data = reportData.data
-        console.log('API\'den veri çekildi, uzunluk:', data.length)
-      } else {
-        return res.status(400).json({
-          success: false,
-          message: "Excel için veri alınamadı"
-        })
-      }
+    console.log(`Excel için veri API'den çekiliyor: ${startDate} - ${endDate}`)
+    
+    // Veriyi doğrudan API'den çek
+    let reportData
+    
+    if (filterType === 'today') {
+      reportData = await getReportDataForToday()
+    } else if (filterType === 'yesterday') {
+      reportData = await getReportDataForYesterday()
+    } else if (filterType === 'last7Days') {
+      reportData = await getReportDataForLast7Days()
+    } else if (filterType === 'last30Days') {
+      reportData = await getReportDataForLast30Days()
+    } else if (filterType === 'thisMonth') {
+      reportData = await getReportDataForThisMonth()
+    } else if (filterType === 'lastMonth') {
+      reportData = await getReportDataForLastMonth()
+    } else if (filterType === 'custom') {
+      reportData = await getReportDataFromApi(startDate, endDate)
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: "Geçersiz filtreleme seçeneği"
+      })
     }
-
-    if (!data || !Array.isArray(data) || data.length === 0) {
+    
+    if (!reportData || !reportData.success || !Array.isArray(reportData.data) || reportData.data.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Excel için veri bulunamadı"
       })
     }
 
+    const data = reportData.data
     console.log(`Excel için ${data.length} adet veri işleniyor...`)
 
     const workbook = new ExcelJS.Workbook()
