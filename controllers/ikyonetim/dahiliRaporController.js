@@ -176,14 +176,54 @@ async function getReportDataForLastMonth() {
 
 exports.downloadExcel = async (req, res) => {
   try {
-    const { startDate, endDate, data } = req.body
+    console.log('Excel download request body:', req.body)
+    
+    const { startDate, endDate } = req.body
+    let { data } = req.body
+    
+    // Eğer data string olarak geldiyse JSON.parse yap
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data)
+        console.log('Data string\'den array\'e çevrildi, uzunluk:', data.length)
+      } catch (parseError) {
+        console.error('JSON parse hatası:', parseError)
+        data = null
+      }
+    }
+    
+    // Eğer data hala geçerli değilse, tarih bilgilerinden API'den çek
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      console.log('Veri frontend\'den gelmedi veya geçersiz, API\'den çekiliyor...')
+      
+      if (!startDate || !endDate) {
+        return res.status(400).json({
+          success: false,
+          message: "Tarih bilgileri eksik"
+        })
+      }
+      
+      const reportData = await getReportDataFromApi(startDate, endDate)
+      
+      if (reportData && reportData.success && Array.isArray(reportData.data)) {
+        data = reportData.data
+        console.log('API\'den veri çekildi, uzunluk:', data.length)
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "Excel için veri alınamadı"
+        })
+      }
+    }
 
-    if (!data || !Array.isArray(data)) {
+    if (!data || !Array.isArray(data) || data.length === 0) {
       return res.status(400).json({
         success: false,
         message: "Excel için veri bulunamadı"
       })
     }
+
+    console.log(`Excel için ${data.length} adet veri işleniyor...`)
 
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Dahili Rapor')
@@ -243,11 +283,13 @@ exports.downloadExcel = async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`)
     res.send(buffer)
 
+    console.log('Excel dosyası başarıyla oluşturuldu:', fileName)
+
   } catch (error) {
     console.error("Excel dosyası oluşturulurken hata:", error)
     res.status(500).json({
       success: false,
-      message: "Excel dosyası oluşturulamadı"
+      message: "Excel dosyası oluşturulamadı: " + error.message
     })
   }
 }
