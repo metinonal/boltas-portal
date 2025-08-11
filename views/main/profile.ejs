@@ -79,8 +79,8 @@
                                 <%= user.Departman?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
                               </p>
                               <p class="text-muted mb-1">
-                                <i class="mdi mdi-map-marker me-1"></i>
-                                <%= user.LOKASYON?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
+                                <i class="mdi mdi-phone me-1"></i>
+                                <%= user.CepTelefonu?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
                               </p>
                             </div>
                           </div>
@@ -135,32 +135,19 @@
           </div>
           
           <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small">Doğum Tarihi</label>
+            <label class="form-label fw-semibold text-muted small">İş Yeri</label>
             <p class="mb-0 fw-medium">
-              <%= new Date(user.DogumTarihi).toLocaleDateString('tr-TR') %>
+              Boltas
             </p>
           </div>
-          
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small">Yaka Rengi</label>
-            <p class="mb-0 fw-medium">
-              <%= user.YakaRengi?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
-            </p>
-          </div>
-          
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small">İşe Başlama Tarihi</label>
-            <p class="mb-0 fw-medium">
-              <%= new Date(user.IsYeriGirisTarihi).toLocaleDateString('tr-TR') %>
-            </p>
-          </div>
-          
+
           <div class="mb-0">
-            <label class="form-label fw-semibold text-muted small">Öğrenim Seviyesi</label>
+            <label class="form-label fw-semibold text-muted small">Dahili Numarası</label>
             <p class="mb-0 fw-medium">
-              <%= user.OgrenimSeviyesi?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
+              <%= user.DahiliNumarasi?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
             </p>
           </div>
+
         </div>
       </div>
     </div>
@@ -188,25 +175,14 @@
           </div>
           
           <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small">Ünvan Grubu</label>
+            <label class="form-label fw-semibold text-muted small">Ünvan</label>
             <p class="mb-0 fw-medium">
-              <%= user.UnvanGrubu?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
+              <%= user.Unvan?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
             </p>
           </div>
           
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-muted small">İş Yeri</label>
-            <p class="mb-0 fw-medium">
-              <%= user.IsyeriKisaAdi?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
-            </p>
-          </div>
           
-          <div class="mb-0">
-            <label class="form-label fw-semibold text-muted small">Lokasyon</label>
-            <p class="mb-0 fw-medium">
-              <%= user.LOKASYON?.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ') %>
-            </p>
-          </div>
+          
         </div>
       </div>
     </div>

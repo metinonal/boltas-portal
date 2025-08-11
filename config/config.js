@@ -20,7 +20,9 @@ const dbConfig = {
     options: {
         encrypt: true,
         trustServerCertificate: true,
-    }
+    },
+    requestTimeout: 30000,      // Sorgu zaman aşımı (ms)
+    connectionTimeout: 30000    // Bağlantı zaman aşımı (ms)
 };
 
 const connectMSSQL = async () => {
