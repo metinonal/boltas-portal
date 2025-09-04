@@ -13,10 +13,10 @@ const config = {
 
 /// --- SQL Server Ayarları --- ///
 const dbConfig = {
-    user: process.env.LDAP_USER,
-    password: process.env.LDAP_PASSWORD,
-    server: process.env.LDAP_SERVER,
-    database: process.env.LDAP_DATABASE,
+    user: process.env.MSSQL_USER,
+    password: process.env.MSSQL_PASSWORD,
+    server: process.env.MSSQL_SERVER,
+    database: process.env.MSSQL_DATABASE,
     options: {
         encrypt: true,
         trustServerCertificate: true,
