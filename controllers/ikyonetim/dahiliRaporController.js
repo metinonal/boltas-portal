@@ -1,5 +1,7 @@
 const axios = require("axios")
 const ExcelJS = require("exceljs")
+const ldap = require("ldapjs")
+require("dotenv").config()
 
 exports.getDahiliRaporPage = async (req, res) => {
   try {
@@ -172,6 +174,121 @@ async function getReportDataForLastMonth() {
   return getReportDataFromApi(formattedStartDate, formattedEndDate)
 }
 
+async function getUserInfoFromLDAP(dahiliNo) {
+  return new Promise((resolve, reject) => {
+    if (!dahiliNo || dahiliNo === "N/A") {
+      resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+      return
+    }
+
+    const client = ldap.createClient({
+      url: process.env.LDAP_URL,
+      timeout: 10000,
+      connectTimeout: 15000,
+      reconnect: false,
+    })
+
+    client.on("error", (err) => {
+      console.error("LDAP Client Hatası:", err.message)
+      resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+    })
+
+    // Service account ile bağlan (eğer varsa) veya anonymous bind dene
+    const bindDN = process.env.LDAP_SERVICE_USER || ""
+    const bindPassword = process.env.LDAP_SERVICE_PASSWORD || ""
+
+    const performBind = (username, password) => {
+      client.bind(username, password, (bindErr) => {
+        if (bindErr) {
+          console.error(`LDAP bind hatası (${username}):`, bindErr.message)
+          client.unbind()
+          resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+          return
+        }
+
+        const searchOptions = {
+          filter: `(&(objectClass=user)(physicalDeliveryOfficeName=${dahiliNo})(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`,
+          scope: "sub",
+          attributes: ["department", "title", "physicalDeliveryOfficeName", "displayName"],
+          sizeLimit: 1,
+        }
+        
+        // console.log("LDAP arama seçenekleri:", searchOptions)
+
+        client.search(process.env.LDAP_BASE_DN, searchOptions, (searchErr, searchRes) => {
+          if (searchErr) {
+            console.error("LDAP arama hatası:", searchErr.message, " | Dahili:", dahiliNo)
+            client.unbind()
+            resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+            return
+          }
+        
+          let userFound = false
+          let userData = { departman: "Bilinmiyor", unvan: "Bilinmiyor" }
+        
+          searchRes.on("searchEntry", (entry) => {
+            try {
+              userFound = true
+              const attributes = {}
+        
+              if (entry.attributes && Array.isArray(entry.attributes)) {
+                entry.attributes.forEach((attr) => {
+                  if (attr && attr.type && attr.values && attr.values.length > 0) {
+                    attributes[attr.type] = attr.values[0]
+                  }
+                })
+              }
+        
+              userData = {
+                departman: attributes.department || "Bilinmiyor",
+                unvan: attributes.title || "Bilinmiyor",
+              }
+            } catch (entryError) {
+              console.error("LDAP entry işleme hatası (Dahili:", dahiliNo, "):", entryError)
+            }
+          })
+        
+          searchRes.on("error", (err) => {
+            console.error(
+              "LDAP arama sonuç hatası (Dahili:",
+              dahiliNo,
+              ", Filter:",
+              searchOptions.filter,
+              "):",
+              err.message
+            )
+            client.unbind()
+            resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+          })
+        
+          searchRes.on("end", (result) => {
+            client.unbind()
+            resolve(userData)
+          })
+        })        
+      })
+    }
+
+    // Eğer service account bilgileri varsa onlarla bağlan, yoksa anonymous dene
+    if (bindDN && bindPassword) {
+      performBind(bindDN, bindPassword)
+    } else {
+      // Anonymous bind dene
+      performBind("", "")
+    }
+
+    // Timeout için güvenlik
+    setTimeout(() => {
+      try {
+        client.unbind()
+      } catch (e) {
+        // Ignore
+      }
+      resolve({ departman: "Bilinmiyor", unvan: "Bilinmiyor" })
+    }, 15000)
+  })
+}
+
 exports.downloadExcel = async (req, res) => {
   try {
     console.log("Excel download request body:", req.body)
@@ -187,7 +304,6 @@ exports.downloadExcel = async (req, res) => {
 
     console.log(`Excel için veri API'den çekiliyor: ${startDate} - ${endDate}`)
 
-    // Veriyi doğrudan API'den çek
     let reportData
 
     if (filterType === "today") {
@@ -223,14 +339,19 @@ exports.downloadExcel = async (req, res) => {
 
     const userStats = {}
 
-    data.forEach((item) => {
+    for (const item of data) {
       const userName = item.contact_user || "N/A"
       const dahiliNo = item.src || "N/A"
 
       if (!userStats[userName]) {
+        // LDAP'tan departman ve unvan bilgilerini çek
+        const ldapInfo = await getUserInfoFromLDAP(dahiliNo)
+
         userStats[userName] = {
           userName: userName,
           dahiliNo: dahiliNo,
+          departman: ldapInfo.departman,
+          unvan: ldapInfo.unvan,
           totalInbound: 0,
           totalOutbound: 0,
           totalAnswered: 0,
@@ -250,7 +371,7 @@ exports.downloadExcel = async (req, res) => {
       userStats[userName].totalTransferred += item.transferredCallCount || 0
       userStats[userName].totalInboundDuration += item.inboundCallDuration || 0
       userStats[userName].totalOutboundDuration += item.outboundCallDuration || 0
-    })
+    }
 
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet("Dahili Rapor")
@@ -258,6 +379,8 @@ exports.downloadExcel = async (req, res) => {
     worksheet.addRow([
       "Kullanıcı Adı",
       "Dahili No",
+      "Departman",
+      "Unvan",
       "Gelen Çağrı",
       "Giden Çağrı",
       "Cevaplanan",
@@ -268,7 +391,6 @@ exports.downloadExcel = async (req, res) => {
       "Cevap Verme Oranı (%)",
     ])
 
-    // Başlık stilini ayarla
     const headerRow = worksheet.getRow(1)
     headerRow.font = { bold: true }
     headerRow.fill = {
@@ -285,6 +407,8 @@ exports.downloadExcel = async (req, res) => {
       worksheet.addRow([
         user.userName,
         user.dahiliNo,
+        user.departman,
+        user.unvan,
         user.totalInbound,
         user.totalOutbound,
         user.totalAnswered,
@@ -296,15 +420,12 @@ exports.downloadExcel = async (req, res) => {
       ])
     })
 
-    // Sütun genişliklerini ayarla
     worksheet.columns.forEach((column) => {
       column.width = 15
     })
 
-    // Excel dosyasını buffer olarak oluştur
     const buffer = await workbook.xlsx.writeBuffer()
 
-    // Dosya adı
     const fileName = `dahili_rapor_${startDate}_${endDate}.xlsx`
 
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")

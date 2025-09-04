@@ -29,7 +29,7 @@ const authenticate = async (req, res) => {
 
 
   const client = ldap.createClient({
-    url: process.env.MSSQL_URL,
+    url: process.env.LDAP_URL,
     timeout: 10000,
     connectTimeout: 15000,
     reconnect: false,
