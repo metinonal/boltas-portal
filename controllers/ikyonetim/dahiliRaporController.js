@@ -1,11 +1,11 @@
-const axios = require('axios')
-const ExcelJS = require('exceljs')
+const axios = require("axios")
+const ExcelJS = require("exceljs")
 
 exports.getDahiliRaporPage = async (req, res) => {
   try {
     res.render("ikyonetim/dahili-rapor", {
       title: "Dahili Rapor Sistemi",
-      user: req.session.user
+      user: req.session.user,
     })
   } catch (err) {
     console.error("Dahili rapor sayfası görüntülenirken bir hata oluştu:", err)
@@ -19,48 +19,47 @@ exports.getReportData = async (req, res) => {
 
     let reportData
 
-    if (filterType === 'today') {
+    if (filterType === "today") {
       reportData = await getReportDataForToday()
-    } else if (filterType === 'yesterday') {
+    } else if (filterType === "yesterday") {
       reportData = await getReportDataForYesterday()
-    } else if (filterType === 'last7Days') {
+    } else if (filterType === "last7Days") {
       reportData = await getReportDataForLast7Days()
-    } else if (filterType === 'last30Days') {
+    } else if (filterType === "last30Days") {
       reportData = await getReportDataForLast30Days()
-    } else if (filterType === 'thisMonth') {
+    } else if (filterType === "thisMonth") {
       reportData = await getReportDataForThisMonth()
-    } else if (filterType === 'lastMonth') {
+    } else if (filterType === "lastMonth") {
       reportData = await getReportDataForLastMonth()
-    } else if (filterType === 'custom' && startDate && endDate) {
+    } else if (filterType === "custom" && startDate && endDate) {
       reportData = await getReportDataFromApi(startDate, endDate)
     } else {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz filtreleme seçeneği veya tarih aralığı"
+        message: "Geçersiz filtreleme seçeneği veya tarih aralığı",
       })
     }
 
     if (reportData && reportData.success) {
       // Gelen veriyi konsola yazdır (debug için)
       // console.log('API Response Data:', JSON.stringify(reportData.data, null, 2))
-      
+
       res.json({
         success: true,
         data: reportData.data,
-        message: "Veriler başarıyla alındı"
+        message: "Veriler başarıyla alındı",
       })
     } else {
       res.status(500).json({
         success: false,
-        message: "Veri alınamadı"
+        message: "Veri alınamadı",
       })
     }
-
   } catch (error) {
     console.error("Rapor verisi alınırken hata:", error)
     res.status(500).json({
       success: false,
-      message: "Veri alınırken bir hata oluştu: " + error.message
+      message: "Veri alınırken bir hata oluştu: " + error.message,
     })
   }
 }
@@ -72,19 +71,19 @@ async function getReportDataFromApi(startDate, endDate) {
     }
 
     // Tarihleri API formatına çevir
-    const formattedStartDate = new Date(startDate).toISOString().replace('Z', '+03:00')
-    const formattedEndDate = new Date(endDate + 'T23:59:59.999').toISOString().replace('Z', '+03:00')
+    const formattedStartDate = new Date(startDate).toISOString().replace("Z", "+03:00")
+    const formattedEndDate = new Date(endDate + "T23:59:59.999").toISOString().replace("Z", "+03:00")
 
     const apiUrl = `http://192.168.200.239:92/api/services/app/CCReport/GetUserStat?startDate=${encodeURIComponent(formattedStartDate)}&endDate=${encodeURIComponent(formattedEndDate)}`
 
-    console.log('API URL:', apiUrl)
+    console.log("API URL:", apiUrl)
 
     const response = await axios.get(apiUrl, {
       timeout: 30000,
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     })
 
     // console.log('Full API Response:', JSON.stringify(response.data, null, 2))
@@ -94,7 +93,7 @@ async function getReportDataFromApi(startDate, endDate) {
       let resultData = response.data.result
 
       // Eğer result bir object ise ve items property'si varsa
-      if (resultData && typeof resultData === 'object' && !Array.isArray(resultData)) {
+      if (resultData && typeof resultData === "object" && !Array.isArray(resultData)) {
         if (resultData.items && Array.isArray(resultData.items)) {
           resultData = resultData.items
         } else if (resultData.data && Array.isArray(resultData.data)) {
@@ -112,12 +111,11 @@ async function getReportDataFromApi(startDate, endDate) {
 
       return {
         success: true,
-        data: resultData
+        data: resultData,
       }
     } else {
       throw new Error("API'den veri alınamadı")
     }
-
   } catch (error) {
     console.error("API'den veri alınırken hata:", error)
     throw error
@@ -126,14 +124,14 @@ async function getReportDataFromApi(startDate, endDate) {
 
 async function getReportDataForToday() {
   const today = new Date()
-  const formattedDate = today.toISOString().split('T')[0]
+  const formattedDate = today.toISOString().split("T")[0]
   return getReportDataFromApi(formattedDate, formattedDate)
 }
 
 async function getReportDataForYesterday() {
   const today = new Date()
   today.setDate(today.getDate() - 1)
-  const formattedDate = today.toISOString().split('T')[0]
+  const formattedDate = today.toISOString().split("T")[0]
   return getReportDataFromApi(formattedDate, formattedDate)
 }
 
@@ -141,8 +139,8 @@ async function getReportDataForLast7Days() {
   const today = new Date()
   const startDate = new Date(today)
   startDate.setDate(today.getDate() - 6)
-  const formattedStartDate = startDate.toISOString().split('T')[0]
-  const formattedEndDate = today.toISOString().split('T')[0]
+  const formattedStartDate = startDate.toISOString().split("T")[0]
+  const formattedEndDate = today.toISOString().split("T")[0]
   return getReportDataFromApi(formattedStartDate, formattedEndDate)
 }
 
@@ -150,16 +148,16 @@ async function getReportDataForLast30Days() {
   const today = new Date()
   const startDate = new Date(today)
   startDate.setDate(today.getDate() - 29)
-  const formattedStartDate = startDate.toISOString().split('T')[0]
-  const formattedEndDate = today.toISOString().split('T')[0]
+  const formattedStartDate = startDate.toISOString().split("T")[0]
+  const formattedEndDate = today.toISOString().split("T")[0]
   return getReportDataFromApi(formattedStartDate, formattedEndDate)
 }
 
 async function getReportDataForThisMonth() {
   const today = new Date()
   const startDate = new Date(today.getFullYear(), today.getMonth(), 1)
-  const formattedStartDate = startDate.toISOString().split('T')[0]
-  const formattedEndDate = today.toISOString().split('T')[0]
+  const formattedStartDate = startDate.toISOString().split("T")[0]
+  const formattedEndDate = today.toISOString().split("T")[0]
   return getReportDataFromApi(formattedStartDate, formattedEndDate)
 }
 
@@ -169,105 +167,137 @@ async function getReportDataForLastMonth() {
   const startDate = new Date(today.getFullYear(), today.getMonth() - 1, 1)
   // Geçen ayın son günü
   const endDate = new Date(today.getFullYear(), today.getMonth(), 0)
-  const formattedStartDate = startDate.toISOString().split('T')[0]
-  const formattedEndDate = endDate.toISOString().split('T')[0]
+  const formattedStartDate = startDate.toISOString().split("T")[0]
+  const formattedEndDate = endDate.toISOString().split("T")[0]
   return getReportDataFromApi(formattedStartDate, formattedEndDate)
 }
 
 exports.downloadExcel = async (req, res) => {
   try {
-    console.log('Excel download request body:', req.body)
-    
+    console.log("Excel download request body:", req.body)
+
     const { startDate, endDate, filterType } = req.body
-    
+
     if (!startDate || !endDate) {
       return res.status(400).json({
         success: false,
-        message: "Tarih bilgileri eksik"
+        message: "Tarih bilgileri eksik",
       })
     }
-    
+
     console.log(`Excel için veri API'den çekiliyor: ${startDate} - ${endDate}`)
-    
+
     // Veriyi doğrudan API'den çek
     let reportData
-    
-    if (filterType === 'today') {
+
+    if (filterType === "today") {
       reportData = await getReportDataForToday()
-    } else if (filterType === 'yesterday') {
+    } else if (filterType === "yesterday") {
       reportData = await getReportDataForYesterday()
-    } else if (filterType === 'last7Days') {
+    } else if (filterType === "last7Days") {
       reportData = await getReportDataForLast7Days()
-    } else if (filterType === 'last30Days') {
+    } else if (filterType === "last30Days") {
       reportData = await getReportDataForLast30Days()
-    } else if (filterType === 'thisMonth') {
+    } else if (filterType === "thisMonth") {
       reportData = await getReportDataForThisMonth()
-    } else if (filterType === 'lastMonth') {
+    } else if (filterType === "lastMonth") {
       reportData = await getReportDataForLastMonth()
-    } else if (filterType === 'custom') {
+    } else if (filterType === "custom") {
       reportData = await getReportDataFromApi(startDate, endDate)
     } else {
       return res.status(400).json({
         success: false,
-        message: "Geçersiz filtreleme seçeneği"
+        message: "Geçersiz filtreleme seçeneği",
       })
     }
-    
+
     if (!reportData || !reportData.success || !Array.isArray(reportData.data) || reportData.data.length === 0) {
       return res.status(400).json({
         success: false,
-        message: "Excel için veri bulunamadı"
+        message: "Excel için veri bulunamadı",
       })
     }
 
     const data = reportData.data
     console.log(`Excel için ${data.length} adet veri işleniyor...`)
 
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Dahili Rapor')
+    const userStats = {}
 
-    // Başlık satırı - API field'larına göre güncellendi
+    data.forEach((item) => {
+      const userName = item.contact_user || "N/A"
+      const dahiliNo = item.src || "N/A"
+
+      if (!userStats[userName]) {
+        userStats[userName] = {
+          userName: userName,
+          dahiliNo: dahiliNo,
+          totalInbound: 0,
+          totalOutbound: 0,
+          totalAnswered: 0,
+          totalMissed: 0,
+          totalTransferred: 0,
+          totalInboundDuration: 0,
+          totalOutboundDuration: 0,
+        }
+      }
+
+      // Sum all values for each user
+      userStats[userName].totalInbound +=
+        (item.answeredCallCount || 0) + (item.noAnsweredCallCount || 0) + (item.transferredCallCount || 0)
+      userStats[userName].totalOutbound += item.outboundCallCount || 0
+      userStats[userName].totalAnswered += item.answeredCallCount || 0
+      userStats[userName].totalMissed += item.noAnsweredCallCount || 0
+      userStats[userName].totalTransferred += item.transferredCallCount || 0
+      userStats[userName].totalInboundDuration += item.inboundCallDuration || 0
+      userStats[userName].totalOutboundDuration += item.outboundCallDuration || 0
+    })
+
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet("Dahili Rapor")
+
     worksheet.addRow([
-      'Kullanıcı Adı', 
-      'Dahili No', 
-      'Tarih',
-      'Gelen Çağrı', 
-      'Giden Çağrı', 
-      'Cevaplanan', 
-      'Cevaplanmayan',
-      'Transfer Edilen',
-      'Gelen Çağrı Süresi (sn)',
-      'Giden Çağrı Süresi (sn)'
+      "Kullanıcı Adı",
+      "Dahili No",
+      "Gelen Çağrı",
+      "Giden Çağrı",
+      "Cevaplanan",
+      "Cevaplanmayan",
+      "Transfer Edilen",
+      "Gelen Çağrı Süresi (sn)",
+      "Giden Çağrı Süresi (sn)",
+      "Cevap Verme Oranı (%)",
     ])
 
     // Başlık stilini ayarla
     const headerRow = worksheet.getRow(1)
     headerRow.font = { bold: true }
     headerRow.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFE6E6FA' }
+      type: "pattern",
+      pattern: "solid",
+      fgColor: { argb: "FFE6E6FA" },
     }
 
-    // Veri satırları - API field'larına göre güncellendi
-    data.forEach(item => {
-      const callDate = new Date(item.callDate).toLocaleDateString('tr-TR')
+    Object.values(userStats).forEach((user) => {
+      // Calculate answer rate percentage
+      const totalIncomingCalls = user.totalAnswered + user.totalMissed
+      const answerRate = totalIncomingCalls > 0 ? ((user.totalAnswered / totalIncomingCalls) * 100).toFixed(2) : "0.00"
+
       worksheet.addRow([
-        item.contact_user || 'N/A',
-        item.src || 'N/A',
-        callDate,
-        (item.answeredCallCount || 0) + (item.noAnsweredCallCount || 0) + (item.transferredCallCount || 0), // Toplam çağrı hesaplanmış
-        item.outboundCallCount || 0,
-        item.answeredCallCount || 0,
-        item.noAnsweredCallCount || 0,
-        item.transferredCallCount || 0,
-        item.inboundCallDuration || 0,
-        item.outboundCallDuration || 0
+        user.userName,
+        user.dahiliNo,
+        user.totalInbound,
+        user.totalOutbound,
+        user.totalAnswered,
+        user.totalMissed,
+        user.totalTransferred,
+        user.totalInboundDuration,
+        user.totalOutboundDuration,
+        answerRate + "%",
       ])
     })
 
     // Sütun genişliklerini ayarla
-    worksheet.columns.forEach(column => {
+    worksheet.columns.forEach((column) => {
       column.width = 15
     })
 
@@ -277,17 +307,16 @@ exports.downloadExcel = async (req, res) => {
     // Dosya adı
     const fileName = `dahili_rapor_${startDate}_${endDate}.xlsx`
 
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`)
+    res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`)
     res.send(buffer)
 
-    console.log('Excel dosyası başarıyla oluşturuldu:', fileName)
-
+    console.log("Excel dosyası başarıyla oluşturuldu:", fileName)
   } catch (error) {
     console.error("Excel dosyası oluşturulurken hata:", error)
     res.status(500).json({
       success: false,
-      message: "Excel dosyası oluşturulamadı: " + error.message
+      message: "Excel dosyası oluşturulamadı: " + error.message,
     })
   }
 }
