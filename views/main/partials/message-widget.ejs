@@ -2,6 +2,11 @@
 <% if (user) { %>
     <script src="/socket.io/socket.io.js"></script>
     
+    <!-- Bildirim sesi için audio element eklendi -->
+    <audio id="notificationSound" preload="auto">
+      <source src="/admin-assets/zilsesi.mp3" type="audio/mpeg">
+    </audio>
+    
     <div id="messageWidget" class="message-widget">
       <!-- Widget Toggle Button -->
       <div id="messageToggle" class="message-toggle">
@@ -555,6 +560,21 @@
         right: -5px;
       }
     }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.6);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+      }
+    }
     </style>
     
     <script>
@@ -575,8 +595,63 @@
         this.loadChats();
         this.checkUnreadMessages();
         
+        this.requestNotificationPermission();
+        
         // Her 30 saniyede bir okunmamış mesaj sayısını kontrol et
         setInterval(() => this.checkUnreadMessages(), 30000);
+      }
+    
+      requestNotificationPermission() {
+        if ('Notification' in window && Notification.permission === 'default') {
+          Notification.requestPermission().then(permission => {
+            console.log('[v0] Bildirim izni:', permission);
+          });
+        }
+      }
+    
+      playNotificationSound() {
+        try {
+          const audio = document.getElementById('notificationSound');
+          if (audio) {
+            audio.currentTime = 0; // Sesi baştan başlat
+            audio.play().catch(error => {
+              console.log('[v0] Ses çalınamadı (kullanıcı etkileşimi gerekli):', error);
+            });
+          }
+        } catch (error) {
+          console.error('[v0] Bildirim sesi çalınırken hata:', error);
+        }
+      }
+    
+      showChromeNotification(senderName, message) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          try {
+            const notification = new Notification(`Yeni mesaj - ${senderName}`, {
+              body: message,
+              icon: '/admin-assets/images/logo-sm.png', // Logo varsa kullan
+              badge: '/admin-assets/images/logo-sm.png',
+              tag: 'message-notification',
+              requireInteraction: false,
+              silent: false
+            });
+    
+            // Bildirime tıklandığında widget'ı aç
+            notification.onclick = () => {
+              window.focus();
+              if (!this.isOpen) {
+                this.toggleWidget();
+              }
+              notification.close();
+            };
+    
+            // 5 saniye sonra bildirimi kapat
+            setTimeout(() => {
+              notification.close();
+            }, 5000);
+          } catch (error) {
+            console.error('[v0] Chrome bildirimi gösterilirken hata:', error);
+          }
+        }
       }
     
       initSocketEvents() {
@@ -584,16 +659,22 @@
         this.socket.on('newMessage', (data) => {
           console.log('[v0] Yeni mesaj alındı:', data);
           
-          // Eğer aktif sohbet bu mesajın göndereni ise mesajları yenile
+          this.playNotificationSound();
+          
+          // Gönderen kullanıcının adını bul
+          const sender = this.users.find(u => u.EMail === data.sender);
+          const senderName = sender && sender.Adi && sender.Soyadi ? 
+                            `${sender.Adi} ${sender.Soyadi}` : data.sender;
+          
+          // Chrome bildirimi göster
+          this.showChromeNotification(senderName, data.message);
+          
           if (this.currentChat === data.sender) {
             this.loadConversation(data.sender);
           }
           
-          // Sohbet listesini yenile
-          this.loadChats();
-          
-          // Okunmamış mesaj sayısını güncelle
-          this.checkUnreadMessages();
+          this.unreadCount++;
+          this.updateUnreadBadge(this.unreadCount);
         });
     
         // Mesaj gönderildiğinde onay
@@ -810,7 +891,8 @@
         
         await this.loadConversation(userEmail);
         
-        this.socket.emit('markAsRead', { sender: userEmail });
+        await this.markMessagesAsRead(userEmail);
+        this.loadChats();
       }
     
       async loadConversation(userEmail) {
@@ -875,11 +957,38 @@
     
       updateUnreadBadge(count) {
         const badge = document.getElementById('unreadBadge');
+        this.unreadCount = count; // Unread count'u güncelle
+        
         if (count > 0) {
           badge.textContent = count > 99 ? '99+' : count;
           badge.style.display = 'flex';
+          
+          const toggle = document.getElementById('messageToggle');
+          toggle.style.animation = 'pulse 2s infinite';
         } else {
           badge.style.display = 'none';
+          
+          const toggle = document.getElementById('messageToggle');
+          toggle.style.animation = 'none';
+        }
+      }
+    
+      async markMessagesAsRead(senderEmail) {
+        try {
+          const response = await fetch('/api/messages/mark-as-read', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ sender: senderEmail })
+          });
+          
+          if (response.ok) {
+            // Okunmamış mesaj sayısını güncelle
+            this.checkUnreadMessages();
+          }
+        } catch (error) {
+          console.error('Mesajlar okundu işaretlenirken hata:', error);
         }
       }
     }

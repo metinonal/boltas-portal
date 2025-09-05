@@ -21,4 +21,6 @@ router.get("/api/messages/conversation/:otherUser", messageController.getConvers
 // Okunmamış mesaj sayısı
 router.get("/api/messages/unread-count", messageController.getUnreadCount)
 
+router.post("/api/messages/mark-as-read", messageController.markAsRead)
+
 module.exports = router

@@ -87,8 +87,26 @@ exports.getConversation = async (req, res) => {
 
     const messages = await Message.find({ conversationId }).sort({ timestamp: 1 }).limit(50) // Son 50 mesaj
 
+    res.json(messages)
+  } catch (error) {
+    console.error("Konuşma getirilirken hata:", error)
+    res.status(500).json({ error: "Sunucu hatası" })
+  }
+}
+
+exports.markAsRead = async (req, res) => {
+  try {
+    const { sender } = req.body
+    const currentUser = req.session.user?.EMail
+
+    if (!currentUser) {
+      return res.status(401).json({ error: "Oturum bulunamadı" })
+    }
+
+    const conversationId = Message.createConversationId(currentUser, sender)
+
     // Okunmamış mesajları okundu olarak işaretle
-    await Message.updateMany(
+    const result = await Message.updateMany(
       {
         conversationId,
         receiver: currentUser,
@@ -97,9 +115,9 @@ exports.getConversation = async (req, res) => {
       { isRead: true },
     )
 
-    res.json(messages)
+    res.json({ success: true, modifiedCount: result.modifiedCount })
   } catch (error) {
-    console.error("Konuşma getirilirken hata:", error)
+    console.error("Mesajlar okundu işaretlenirken hata:", error)
     res.status(500).json({ error: "Sunucu hatası" })
   }
 }
