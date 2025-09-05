@@ -623,36 +623,36 @@
         }
       }
     
-      showChromeNotification(senderName, message) {
-        if ('Notification' in window && Notification.permission === 'granted') {
-          try {
-            const notification = new Notification(`Yeni mesaj - ${senderName}`, {
-              body: message,
-              icon: '/admin-assets/images/logo-sm.png', // Logo varsa kullan
-              badge: '/admin-assets/images/logo-sm.png',
-              tag: 'message-notification',
-              requireInteraction: false,
-              silent: false
-            });
+    //   showChromeNotification(senderName, message) {
+    //     if ('Notification' in window && Notification.permission === 'granted') {
+    //       try {
+    //         const notification = new Notification(`Yeni mesaj - ${senderName}`, {
+    //           body: message,
+    //           icon: '/admin-assets/images/logo-sm.png', // Logo varsa kullan
+    //           badge: '/admin-assets/images/logo-sm.png',
+    //           tag: 'message-notification',
+    //           requireInteraction: false,
+    //           silent: false
+    //         });
     
-            // Bildirime tıklandığında widget'ı aç
-            notification.onclick = () => {
-              window.focus();
-              if (!this.isOpen) {
-                this.toggleWidget();
-              }
-              notification.close();
-            };
+    //         // Bildirime tıklandığında widget'ı aç
+    //         notification.onclick = () => {
+    //           window.focus();
+    //           if (!this.isOpen) {
+    //             this.toggleWidget();
+    //           }
+    //           notification.close();
+    //         };
     
-            // 5 saniye sonra bildirimi kapat
-            setTimeout(() => {
-              notification.close();
-            }, 5000);
-          } catch (error) {
-            console.error('[v0] Chrome bildirimi gösterilirken hata:', error);
-          }
-        }
-      }
+    //         // 5 saniye sonra bildirimi kapat
+    //         setTimeout(() => {
+    //           notification.close();
+    //         }, 5000);
+    //       } catch (error) {
+    //         console.error('[v0] Chrome bildirimi gösterilirken hata:', error);
+    //       }
+    //     }
+    //   }
     
       initSocketEvents() {
         // Yeni mesaj geldiğinde
@@ -667,7 +667,7 @@
                             `${sender.Adi} ${sender.Soyadi}` : data.sender;
           
           // Chrome bildirimi göster
-          this.showChromeNotification(senderName, data.message);
+        //   this.showChromeNotification(senderName, data.message);
           
           if (this.currentChat === data.sender) {
             this.loadConversation(data.sender);
