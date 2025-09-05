@@ -27,7 +27,6 @@ const authenticate = async (req, res) => {
     searchEmail = loginUsername
   }
 
-
   const client = ldap.createClient({
     url: process.env.LDAP_URL,
     timeout: 10000,
@@ -73,7 +72,6 @@ const handleSuccessfulAuth = async (client, searchEmail, authenticatedUsername, 
     // Client'ı kapat, yeni bir bağlantı açacağız
     client.unbind()
 
-
     // 1. LDAP'tan kullanıcı bilgilerini al
     const user = await getUserFromLDAP(searchEmail, authenticatedUsername, password)
 
@@ -82,14 +80,50 @@ const handleSuccessfulAuth = async (client, searchEmail, authenticatedUsername, 
       return res.status(404).send("Kullanıcı LDAP veritabanında bulunamadı.")
     }
 
-
-    // 2. MongoDB'den rollerini al
+    // 2. MongoDB'den rollerini al veya oluştur
     let mongoUser = await RoleModel.findOne({ email: user.EMail })
 
-    // Eğer MongoDB'de yoksa otomatik oluştur
     if (!mongoUser) {
       console.log("MongoDB'de kullanıcı bulunamadı, oluşturuluyor:", user.EMail)
-      mongoUser = await RoleModel.create({ email: user.EMail, roles: ["member"] })
+      mongoUser = await RoleModel.create({
+        email: user.EMail,
+        roles: ["member"],
+        displayName: user.displayName,
+        Adi: user.Adi,
+        Soyadi: user.Soyadi,
+        Organizasyon: user.Organizasyon,
+        Departman: user.Departman,
+        Unvan: user.Unvan,
+        RaporlandigiYonetici: user.RaporlandigiYonetici,
+        RaporlandigiYoneticiEMail: user.RaporlandigiYoneticiEMail,
+        UstOrganizasyon: user.UstOrganizasyon,
+        OgrenimSeviyesi: user.OgrenimSeviyesi,
+        PersonelinKullandigiDil: user.PersonelinKullandigiDil,
+        CepTelefonu: user.CepTelefonu,
+        DahiliNumarasi: user.DahiliNumarasi,
+        lastLoginDate: new Date(),
+      })
+    } else {
+      // Mevcut kullanıcının LDAP bilgilerini güncelle
+      await RoleModel.updateOne(
+        { email: user.EMail },
+        {
+          displayName: user.displayName,
+          Adi: user.Adi,
+          Soyadi: user.Soyadi,
+          Organizasyon: user.Organizasyon,
+          Departman: user.Departman,
+          Unvan: user.Unvan,
+          RaporlandigiYonetici: user.RaporlandigiYonetici,
+          RaporlandigiYoneticiEMail: user.RaporlandigiYoneticiEMail,
+          UstOrganizasyon: user.UstOrganizasyon,
+          OgrenimSeviyesi: user.OgrenimSeviyesi,
+          PersonelinKullandigiDil: user.PersonelinKullandigiDil,
+          CepTelefonu: user.CepTelefonu,
+          DahiliNumarasi: user.DahiliNumarasi,
+          lastLoginDate: new Date(),
+        },
+      )
     }
 
     // 3. Session'a LDAP kullanıcı bilgisi ve roller yaz

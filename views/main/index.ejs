@@ -417,9 +417,7 @@
                                         </div>
                                     </div>
 
-
-
-                                    <div class="card mb-3 ">
+                                    <div class="card mb-3">
                                         <div class="card-header"><strong>Hava Durumu</strong></div>
                                         <div class="card-body">
                                             <label for="citySelect" class="form-label">Şehir Seçin:</label>
@@ -458,8 +456,7 @@
                                                             <tr>
                                                                 <td>
                                                                     <i class="uil uil-<%= currency.currencyCode %>"
-                                                                        style="color: #759e6f;"></i>&nbsp;&nbsp;<%=
-                                                                        currency.currencyCode %>
+                                                                        style="color: #759e6f;"></i>&nbsp;&nbsp;<%= currency.currencyCode %>
                                                                 </td>
                                                                 <td>
                                                                     <%= currency.forexBuying %>
@@ -469,13 +466,11 @@
                                                                 </td>
                                                             </tr>
                                                             <% } %>
-                                                                <% }) %>
+                                                        <% }) %>
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                             <!-- end row -->
@@ -499,7 +494,10 @@
     </div>
     <!-- END wrapper -->
 
-
+    <!-- Mesajlaşma widget'ını ekleme -->
+    <% if (currentPath !== '/login' && !currentPath.startsWith('/ikyonetim')) { %>
+        <%- include("partials/message-widget") %>
+    <% } %>
 
     <%- include("partials/scripts") %>
 

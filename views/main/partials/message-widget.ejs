@@ -1,0 +1,894 @@
+<!-- Mesajlaşma Widget'ı -->
+<% if (user) { %>
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <div id="messageWidget" class="message-widget">
+      <!-- Widget Toggle Button -->
+      <div id="messageToggle" class="message-toggle">
+        <i class="mdi mdi-message-text"></i>
+        <span id="unreadBadge" class="unread-badge" style="display: none;">0</span>
+      </div>
+    
+      <!-- Widget Content -->
+      <div id="messageContent" class="message-content" style="display: none;">
+        <!-- Ana sohbet listesi ekranı eklendi -->
+        <!-- Main Chat List Screen -->
+        <div id="chatListScreen" class="screen">
+          <!-- Header -->
+          <div class="message-header">
+            <h6 class="mb-0">Mesajlar</h6>
+            <div class="header-actions">
+              <button id="newChatBtn" class="btn-new-chat" title="Yeni Sohbet">
+                <i class="mdi mdi-plus"></i>
+              </button>
+              <button id="closeMessage" class="btn-close-message">
+                <i class="mdi mdi-close"></i>
+              </button>
+            </div>
+          </div>
+    
+          <!-- Chat List -->
+          <div id="chatList" class="chat-list">
+            <div id="chatListContent" class="chat-list-content">
+              <div class="loading-chats">Sohbetler yükleniyor...</div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Yeni sohbet ekranı eklendi -->
+        <!-- New Chat Screen -->
+        <div id="newChatScreen" class="screen" style="display: none;">
+          <!-- Header -->
+          <div class="message-header">
+            <button id="backToChats" class="btn-back">
+              <i class="mdi mdi-arrow-left"></i>
+            </button>
+            <h6 class="mb-0">Yeni Sohbet</h6>
+          </div>
+    
+          <!-- User List -->
+          <div class="user-list">
+            <div class="search-box">
+              <input type="text" id="userSearch" placeholder="Kullanıcı ara..." class="form-control form-control-sm">
+            </div>
+            <div id="userListContent" class="user-list-content">
+              <div class="loading-users">Kullanıcılar yükleniyor...</div>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Chat Area -->
+        <div id="chatArea" class="screen" style="display: none;">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <button id="backFromChat" class="btn-back">
+              <i class="mdi mdi-arrow-left"></i>
+            </button>
+            <span id="chatUserName" class="chat-user-name"></span>
+          </div>
+    
+          <!-- Messages -->
+          <div id="messagesContainer" class="messages-container">
+            <!-- Mesajlar buraya yüklenecek -->
+          </div>
+    
+          <!-- Message Input -->
+          <div class="message-input-area">
+            <div class="input-group">
+              <input type="text" id="messageInput" placeholder="Mesajınızı yazın..." class="form-control">
+              <button id="sendMessage" class="btn btn-primary">
+                <i class="mdi mdi-send"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <style>
+    .message-widget {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1050;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    
+    .message-toggle {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .message-toggle:hover {
+      background: linear-gradient(135deg, #0056b3, #004085);
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+    }
+    
+    .message-toggle i {
+      color: white;
+      font-size: 24px;
+    }
+    
+    .unread-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #dc3545;
+      color: white;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      border: 2px solid white;
+    }
+    
+    .message-content {
+      position: absolute;
+      bottom: 75px;
+      right: 0;
+      width: 380px;
+      height: 550px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      border: 1px solid #e9ecef;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .screen {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .message-header {
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 60px;
+    }
+    
+    .message-header h6 {
+      color: #495057;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .btn-new-chat {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border: none;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    .btn-new-chat:hover {
+      background: linear-gradient(135deg, #0056b3, #004085);
+      transform: scale(1.05);
+    }
+    
+    .btn-close-message {
+      background: none;
+      border: none;
+      color: #6c757d;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-close-message:hover {
+      color: #495057;
+      background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .chat-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .chat-list-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px;
+    }
+    
+    .chat-item {
+      padding: 14px 16px;
+      cursor: pointer;
+      border-radius: 12px;
+      margin: 4px 0;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .chat-item:hover {
+      background: #f8f9fa;
+      transform: translateX(2px);
+    }
+    
+    .chat-item:last-child {
+      border-bottom: none;
+    }
+    
+    .chat-avatar {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 14px;
+      font-size: 15px;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    }
+    
+    .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .chat-name {
+      font-weight: 600;
+      color: #495057;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    
+    .chat-last-message {
+      font-size: 13px;
+      color: #6c757d;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .chat-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    
+    .chat-time {
+      font-size: 11px;
+      color: #6c757d;
+      font-weight: 500;
+    }
+    
+    .chat-unread {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+    }
+    
+    .user-list {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    
+    .search-box {
+      padding: 16px 20px 12px;
+    }
+    
+    .search-box input {
+      border-radius: 20px;
+      border: 1px solid #e9ecef;
+      padding: 10px 16px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    .search-box input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    
+    .user-list-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px;
+    }
+    
+    .user-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-radius: 12px;
+      margin: 2px 0;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-item:hover {
+      background: #f8f9fa;
+      transform: translateX(2px);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 12px;
+      font-size: 14px;
+      box-shadow: 0 2px 6px rgba(40, 167, 69, 0.2);
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-weight: 500;
+      color: #495057;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+    
+    .chat-header {
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      align-items: center;
+      min-height: 60px;
+    }
+    
+    .btn-back {
+      background: none;
+      border: none;
+      color: #6c757d;
+      cursor: pointer;
+      padding: 8px;
+      margin-right: 12px;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-back:hover {
+      color: #495057;
+      background: rgba(108, 117, 125, 0.1);
+    }
+    
+    .chat-user-name {
+      font-weight: 600;
+      color: #495057;
+      font-size: 16px;
+    }
+    
+    #chatArea {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0; /* Important for flex child with overflow */
+    }
+    
+    .message-bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .message-sent {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
+      border-bottom-right-radius: 6px;
+    }
+    
+    .message-received {
+      align-self: flex-start;
+      background: #f1f3f4;
+      color: #495057;
+      border-bottom-left-radius: 6px;
+    }
+    
+    .message-time {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-top: 4px;
+      text-align: right;
+    }
+    
+    .message-input-area {
+      padding: 16px 20px;
+      border-top: 1px solid #e9ecef;
+      background: white;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+    
+    .message-input-area .input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .message-input-area input {
+      flex: 1;
+      border: 1px solid #e9ecef;
+      border-radius: 20px;
+      padding: 12px 16px;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    .message-input-area input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      outline: none;
+    }
+    
+    .message-input-area button {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      border: none;
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    }
+    
+    .message-input-area button:hover {
+      background: linear-gradient(135deg, #0056b3, #004085);
+      transform: scale(1.05);
+    }
+    
+    .loading-users, .loading-chats {
+      text-align: center;
+      padding: 40px 20px;
+      color: #6c757d;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 768px) {
+      .message-content {
+        width: 350px;
+        height: 500px;
+      }
+      
+      .message-widget {
+        bottom: 15px;
+        right: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .message-content {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        right: -10px;
+        bottom: 80px;
+      }
+      
+      .message-widget {
+        bottom: 10px;
+        right: 10px;
+      }
+      
+      .message-toggle {
+        width: 55px;
+        height: 55px;
+      }
+      
+      .message-toggle i {
+        font-size: 22px;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .message-content {
+        width: calc(100vw - 10px);
+        right: -5px;
+      }
+    }
+    </style>
+    
+    <script>
+    class MessageWidget {
+      constructor() {
+        this.isOpen = false;
+        this.currentChat = null;
+        this.users = [];
+        this.chats = [];
+        this.unreadCount = 0;
+        this.currentUserEmail = '<%= user.EMail %>';
+        
+        this.socket = io();
+        this.initSocketEvents();
+        
+        this.init();
+        this.loadUsers();
+        this.loadChats();
+        this.checkUnreadMessages();
+        
+        // Her 30 saniyede bir okunmamış mesaj sayısını kontrol et
+        setInterval(() => this.checkUnreadMessages(), 30000);
+      }
+    
+      initSocketEvents() {
+        // Yeni mesaj geldiğinde
+        this.socket.on('newMessage', (data) => {
+          console.log('[v0] Yeni mesaj alındı:', data);
+          
+          // Eğer aktif sohbet bu mesajın göndereni ise mesajları yenile
+          if (this.currentChat === data.sender) {
+            this.loadConversation(data.sender);
+          }
+          
+          // Sohbet listesini yenile
+          this.loadChats();
+          
+          // Okunmamış mesaj sayısını güncelle
+          this.checkUnreadMessages();
+        });
+    
+        // Mesaj gönderildiğinde onay
+        this.socket.on('messageReceived', (data) => {
+          console.log('[v0] Mesaj gönderildi onayı:', data);
+          
+          // Aktif sohbetteki mesajları yenile
+          if (this.currentChat === data.receiver) {
+            this.loadConversation(data.receiver);
+          }
+          
+          // Sohbet listesini yenile
+          this.loadChats();
+        });
+    
+        // Mesajlar okundu bilgisi
+        this.socket.on('messagesRead', (data) => {
+          console.log('[v0] Mesajlar okundu:', data);
+          
+          // Sohbet listesini yenile
+          this.loadChats();
+        });
+    
+        // Mesaj gönderme hatası
+        this.socket.on('messageError', (data) => {
+          console.error('[v0] Mesaj gönderme hatası:', data);
+          alert('Mesaj gönderilemedi: ' + data.error);
+        });
+    
+        // Bağlantı durumu
+        this.socket.on('connect', () => {
+          console.log('[v0] Socket.IO bağlantısı kuruldu');
+        });
+    
+        this.socket.on('disconnect', () => {
+          console.log('[v0] Socket.IO bağlantısı koptu');
+        });
+      }
+    
+      init() {
+        // Event listeners
+        document.getElementById('messageToggle').addEventListener('click', () => this.toggleWidget());
+        document.getElementById('closeMessage').addEventListener('click', () => this.closeWidget());
+        
+        document.getElementById('newChatBtn').addEventListener('click', () => this.showNewChatScreen());
+        document.getElementById('backToChats').addEventListener('click', () => this.showChatListScreen());
+        document.getElementById('backFromChat').addEventListener('click', () => this.showChatListScreen());
+        
+        document.getElementById('sendMessage').addEventListener('click', () => this.sendMessage());
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.sendMessage();
+        });
+        document.getElementById('userSearch').addEventListener('input', (e) => this.filterUsers(e.target.value));
+      }
+    
+      toggleWidget() {
+        this.isOpen = !this.isOpen;
+        const content = document.getElementById('messageContent');
+        content.style.display = this.isOpen ? 'flex' : 'none';
+        
+        if (this.isOpen) {
+          this.showChatListScreen();
+        }
+      }
+    
+      closeWidget() {
+        this.isOpen = false;
+        document.getElementById('messageContent').style.display = 'none';
+      }
+    
+      showChatListScreen() {
+        document.getElementById('chatListScreen').style.display = 'flex';
+        document.getElementById('newChatScreen').style.display = 'none';
+        document.getElementById('chatArea').style.display = 'none';
+        this.loadChats();
+      }
+    
+      showNewChatScreen() {
+        document.getElementById('chatListScreen').style.display = 'none';
+        document.getElementById('newChatScreen').style.display = 'flex';
+        document.getElementById('chatArea').style.display = 'none';
+      }
+    
+      showChatArea() {
+        document.getElementById('chatListScreen').style.display = 'none';
+        document.getElementById('newChatScreen').style.display = 'none';
+        document.getElementById('chatArea').style.display = 'flex';
+      }
+    
+      async loadUsers() {
+        try {
+          const response = await fetch('/api/messages/users');
+          if (response.ok) {
+            this.users = await response.json();
+            this.renderUsers();
+          }
+        } catch (error) {
+          console.error('Kullanıcılar yüklenirken hata:', error);
+        }
+      }
+    
+      async loadChats() {
+        try {
+          console.log('[v0] loadChats() çağrıldı');
+          const response = await fetch('/api/messages/conversations');
+          console.log('[v0] API response status:', response.status);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log('[v0] API response data:', data);
+            this.chats = data;
+            this.renderChats();
+          } else {
+            console.log('[v0] API response error:', response.statusText);
+          }
+        } catch (error) {
+          console.log('[v0] loadChats fetch error:', error);
+          console.error('Sohbetler yüklenirken hata:', error);
+        }
+      }
+    
+      renderChats() {
+        const chatListContent = document.getElementById('chatListContent');
+        
+        if (this.chats.length === 0) {
+          chatListContent.innerHTML = '<div class="loading-chats">Henüz sohbet yok.<br>Yeni sohbet başlatmak için + butonuna tıklayın.</div>';
+          return;
+        }
+    
+        chatListContent.innerHTML = this.chats.map(chat => {
+          const otherUser = chat.otherUser;
+          const displayName = otherUser.displayName || `${otherUser.Adi} ${otherUser.Soyadi}` || otherUser.EMail;
+          const initials = (otherUser.Adi && otherUser.Soyadi) ? 
+                          `${otherUser.Adi.charAt(0)}${otherUser.Soyadi.charAt(0)}` : 
+                          otherUser.EMail.charAt(0);
+          const lastMessage = chat.lastMessage ? chat.lastMessage.message : 'Henüz mesaj yok';
+          const time = chat.lastMessage ? 
+                      new Date(chat.lastMessage.timestamp).toLocaleTimeString('tr-TR', { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      }) : '';
+          
+          return `
+            <div class="chat-item" onclick="messageWidget.openChatFromList('${otherUser.EMail}')">
+              <div class="chat-avatar">
+                ${initials.toUpperCase()}
+              </div>
+              <div class="chat-info">
+                <div class="chat-name">${displayName}</div>
+                <div class="chat-last-message">${lastMessage}</div>
+              </div>
+              <div class="chat-meta">
+                ${time ? `<div class="chat-time">${time}</div>` : ''}
+                ${chat.unreadCount > 0 ? `<div class="chat-unread">${chat.unreadCount}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    
+      renderUsers(filteredUsers = null) {
+        const userListContent = document.getElementById('userListContent');
+        const usersToRender = filteredUsers || this.users;
+        
+        if (usersToRender.length === 0) {
+          userListContent.innerHTML = '<div class="loading-users">Kullanıcı bulunamadı</div>';
+          return;
+        }
+    
+        userListContent.innerHTML = usersToRender.map(user => {
+          const email = user.EMail || user.email || 'Bilinmeyen';
+          const displayName = (user.Adi && user.Soyadi) ? `${user.Adi} ${user.Soyadi}` : 
+                             user.displayName || email;
+          const initials = (user.Adi && user.Soyadi) ? 
+                          `${user.Adi.charAt(0)}${user.Soyadi.charAt(0)}` : 
+                          email.charAt(0);
+          
+          return `
+            <div class="user-item" onclick="messageWidget.openChat('${email}')">
+              <div class="user-avatar">
+                ${initials.toUpperCase()}
+              </div>
+              <div class="user-info">
+                <div class="user-name">${displayName}</div>
+                ${user.Departman ? `<div style="font-size: 12px; color: #6c757d;">${user.Departman}</div>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    
+      filterUsers(searchTerm) {
+        const filtered = this.users.filter(user => {
+          const email = user.EMail || user.email || '';
+          const name = (user.Adi && user.Soyadi) ? `${user.Adi} ${user.Soyadi}` : '';
+          const departman = user.Departman || '';
+          const searchText = `${email} ${name} ${departman}`.toLowerCase();
+          return searchText.includes(searchTerm.toLowerCase());
+        });
+        this.renderUsers(filtered);
+      }
+    
+      async openChatFromList(userEmail) {
+        await this.openChat(userEmail);
+      }
+    
+      async openChat(userEmail) {
+        this.currentChat = userEmail;
+        const user = this.users.find(u => u.EMail === userEmail);
+        const displayName = user && user.Adi && user.Soyadi ? 
+                           `${user.Adi} ${user.Soyadi}` : userEmail;
+        document.getElementById('chatUserName').textContent = displayName;
+        this.showChatArea();
+        
+        await this.loadConversation(userEmail);
+        
+        this.socket.emit('markAsRead', { sender: userEmail });
+      }
+    
+      async loadConversation(userEmail) {
+        try {
+          const response = await fetch(`/api/messages/conversation/${encodeURIComponent(userEmail)}`);
+          if (response.ok) {
+            const messages = await response.json();
+            this.renderMessages(messages);
+          }
+        } catch (error) {
+          console.error('Konuşma yüklenirken hata:', error);
+        }
+      }
+    
+      renderMessages(messages) {
+        const container = document.getElementById('messagesContainer');
+        container.innerHTML = messages.map(msg => {
+          const isSent = msg.sender === this.currentUserEmail;
+          const time = new Date(msg.timestamp).toLocaleTimeString('tr-TR', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+          });
+          
+          return `
+            <div class="message-bubble ${isSent ? 'message-sent' : 'message-received'}">
+              ${msg.message}
+              <div class="message-time">${time}</div>
+            </div>
+          `;
+        }).join('');
+        
+        // Scroll to bottom
+        container.scrollTop = container.scrollHeight;
+      }
+    
+      async sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        
+        if (!message || !this.currentChat) return;
+    
+        this.socket.emit('sendMessage', {
+          receiverEmail: this.currentChat,
+          message: message
+        });
+    
+        // Input'u temizle
+        input.value = '';
+      }
+    
+      async checkUnreadMessages() {
+        try {
+          const response = await fetch('/api/messages/unread-count');
+          if (response.ok) {
+            const data = await response.json();
+            this.updateUnreadBadge(data.unreadCount);
+          }
+        } catch (error) {
+          console.error('Okunmamış mesaj sayısı kontrol edilirken hata:', error);
+        }
+      }
+    
+      updateUnreadBadge(count) {
+        const badge = document.getElementById('unreadBadge');
+        if (count > 0) {
+          badge.textContent = count > 99 ? '99+' : count;
+          badge.style.display = 'flex';
+        } else {
+          badge.style.display = 'none';
+        }
+      }
+    }
+    
+    // Widget'ı başlat
+    let messageWidget;
+    document.addEventListener('DOMContentLoaded', function() {
+      messageWidget = new MessageWidget();
+    });
+    </script>
+    <% } %>
+    

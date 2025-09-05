@@ -50,17 +50,17 @@ const connectToDatabase = async () => {
 
 exports.indexPage = async (req, res) => {
   try {
-    const settingsData = await Settings.find({});
-    const settings = {};
+    const settingsData = await Settings.find({})
+    const settings = {}
     settingsData.forEach((setting) => {
-      settings[setting.key] = setting.value;
-    });
+      settings[setting.key] = setting.value
+    })
 
     // 🔧 GÜNCELLEME: İstanbul ve Dilovası menüsü ayrı ayrı alınıyor
-    const todayMenuIstanbul = menuController.getTodayMenuData("istanbul");
-    const todayMenuDilovasi = menuController.getTodayMenuData("dilovasi");
+    const todayMenuIstanbul = menuController.getTodayMenuData("istanbul")
+    const todayMenuDilovasi = menuController.getTodayMenuData("dilovasi")
 
-    await connectToDatabase();
+    await connectToDatabase()
 
     const birthdayResult = await sql.query(`
       DECLARE @tarih DATE = GETDATE();
@@ -70,46 +70,46 @@ exports.indexPage = async (req, res) => {
         AND DAY(@tarih) = DAY(DogumTarihi)
         AND CEMP_ENDDATE IS NULL
         AND SicilNo != 1001;
-    `);
-    const birthdays = birthdayResult.recordset;
+    `)
+    const birthdays = birthdayResult.recordset
 
     const newHiresResult = await sql.query(`
       SELECT * 
       FROM [vHROrganizationFromOrtakIK_ALL]
       WHERE IsYeriGirisTarihi >= DATEADD(DAY, -7, GETDATE())
         AND IsYeriGirisTarihi <= GETDATE();
-    `);
-    const newHires = newHiresResult.recordset;
+    `)
+    const newHires = newHiresResult.recordset
 
     const leaversResult = await sql.query(`
       SELECT * 
       FROM [vHROrganizationFromOrtakIK_ALL]
       WHERE CEMP_ENDDATE >= DATEADD(DAY, -8, CAST(GETDATE() AS DATE))
         AND CEMP_ENDDATE <= DATEADD(DAY, -1, CAST(GETDATE() AS DATE));
-    `);
-    const leavers = leaversResult.recordset;
+    `)
+    const leavers = leaversResult.recordset
 
-    let currencies = [];
+    let currencies = []
     try {
       const response = await axios.get("https://www.tcmb.gov.tr/kurlar/today.xml", {
         timeout: 5000,
-      });
+      })
 
-      const parsed = await xml2js.parseStringPromise(response.data);
+      const parsed = await xml2js.parseStringPromise(response.data)
       currencies = parsed.Tarih_Date.Currency.map((item) => ({
         currencyCode: item.$.CurrencyCode,
         currencyName: item.Isim[0],
         forexBuying: item.ForexBuying?.[0] || "N/A",
         forexSelling: item.ForexSelling?.[0] || "N/A",
-      }));
+      }))
     } catch (currencyError) {
-      console.error("Döviz verisi alınamadı:", currencyError.message);
+      console.error("Döviz verisi alınamadı:", currencyError.message)
     }
 
     try {
-      const sliders = await Slider.find().sort({ count: 1 });
-      const docs = await Docs.find();
-      const bilgi = await bilgiBankasi.find({ isActive: true });
+      const sliders = await Slider.find().sort({ count: 1 })
+      const docs = await Docs.find()
+      const bilgi = await bilgiBankasi.find({ isActive: true })
 
       res.render("main/index", {
         todayMenuIstanbul,
@@ -122,14 +122,15 @@ exports.indexPage = async (req, res) => {
         leavers,
         bilgi,
         settings,
-      });
+        currentPath: req.path, // Mesajlaşma widget'ı için path bilgisi
+        user: req.session.user || null, // Session'dan user bilgisini template'e geçir
+      })
     } catch (sliderError) {
-      console.error("Slider verileri alınırken hata oluştu:", sliderError);
-      res.status(500).send("Slider verileri alınırken bir sorun oluştu.");
+      console.error("Slider verileri alınırken hata oluştu:", sliderError)
+      res.status(500).send("Slider verileri alınırken bir sorun oluştu.")
     }
   } catch (err) {
-    console.error("API çağrısı sırasında hata oluştu:", err);
-    res.status(500).send("Veritabanı bağlantısı zaman aşımına uğradı.");
+    console.error("API çağrısı sırasında hata oluştu:", err)
+    res.status(500).send("Veritabanı bağlantısı zaman aşımına uğradı.")
   }
-};
-
+}

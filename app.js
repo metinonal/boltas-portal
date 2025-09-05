@@ -12,6 +12,7 @@ const azureService = require("./services/azureService")
 const cron = require("node-cron")
 const { exportADUsers } = require("./services/exportADUserService")
 const setUserLocals = require("./middlewares/setUserLocals") // header kısmındaki profil bilgilerini gosteren fonk
+const socketIo = require("socket.io")
 
 // exportADUsers();
 
@@ -51,23 +52,22 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // ✅ Kalıcı session – MongoDB tabanlı
-app.use(
-  session({
-    secret: "boltas",
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.DB_URI,
-      collectionName: "sessions",
-    }),
-    cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 gün
-      secure: false,
-      httpOnly: true,
-    },
+const sessionMiddleware = session({
+  secret: "boltas",
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.DB_URI,
+    collectionName: "sessions",
   }),
-)
+  cookie: {
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 gün
+    secure: false,
+    httpOnly: true,
+  },
+})
 
+app.use(sessionMiddleware)
 app.use(setUserLocals)
 
 connectMSSQL()
@@ -102,7 +102,7 @@ const userController = require("./controllers/main/userController")
 const bilgiBankasiRoutes = require("./routes/ikyonetim/bilgiBankasiRoutes")
 const marketplaceAdminRoutes = require("./routes/ikyonetim/marketplaceAdminRoutes")
 const sozlukAdminRoutes = require("./routes/ikyonetim/sozlukRoutes")
-const dahiliRaporRoutes = require("./routes/ikyonetim/dahiliRaporRoutes");
+const dahiliRaporRoutes = require("./routes/ikyonetim/dahiliRaporRoutes")
 
 const menuRoutes = require("./routes/main/menuRoutes")
 const indexRoutes = require("./routes/main/indexRoutes")
@@ -110,6 +110,7 @@ const phoneRoutes = require("./routes/main/phoneRoutes")
 const marketplaceRoutes = require("./routes/main/marketplaceRoutes")
 const sozlukRoutes = require("./routes/main/sozlukRoutes")
 const pdfRoutes = require("./routes/main/pdfRoutes")
+const messageRoutes = require("./routes/main/messageRoutes")
 
 //Middleware ler
 
@@ -119,13 +120,14 @@ app.use(bilgiMiddleware)
 // Routing
 app.use(authRoutes)
 app.get("/profile", sessionTimeoutMiddleware, authMiddleware, userController.mainProfile)
+app.use("/", messageRoutes)
 app.use("/ikyonetim", yemekRoutes)
 app.use("/ikyonetim", bilgiBankasiRoutes)
 app.use("/ikyonetim", sliderRoutes)
 app.use("/ikyonetim", documentRoutes)
 app.use("/ikyonetim", adminRoutes)
 app.use("/ikyonetim", userRoutes)
-app.use("/ikyonetim", dahiliRaporRoutes);
+app.use("/ikyonetim", dahiliRaporRoutes)
 app.use("/ikyonetim", marketplaceAdminRoutes)
 app.use("/ikyonetim/sozluk", sozlukAdminRoutes)
 app.use("/", menuRoutes)
@@ -146,12 +148,114 @@ app.use((req, res) => {
   res.status(404).render("main/404")
 })
 
+const httpsServer = https.createServer(options, app)
+const io = socketIo(httpsServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+})
+
+io.use((socket, next) => {
+  sessionMiddleware(socket.request, {}, next)
+})
+
+io.on("connection", (socket) => {
+  console.log("[v0] Kullanıcı bağlandı:", socket.id)
+
+  // Kullanıcı kimlik doğrulama
+  const session = socket.request.session
+  if (!session || !session.authenticated || !session.user) {
+    console.log("[v0] Kimlik doğrulaması başarısız, bağlantı kapatılıyor")
+    socket.disconnect()
+    return
+  }
+
+  const userEmail = session.user.EMail
+  console.log("[v0] Kimlik doğrulandı:", userEmail)
+
+  // Kullanıcıyı kendi odasına ekle
+  socket.join(userEmail)
+
+  // Mesaj gönderme
+  socket.on("sendMessage", async (data) => {
+    try {
+      console.log("[v0] Mesaj gönderiliyor:", data)
+      const { receiverEmail, message } = data
+
+      const conversationId = [userEmail, receiverEmail].sort().join("_")
+
+      // Mesajı veritabanına kaydet
+      const Message = require("./models/Message")
+      const newMessage = new Message({
+        conversationId: conversationId, // Eksik olan conversationId eklendi
+        sender: userEmail,
+        receiver: receiverEmail,
+        message: message,
+        timestamp: new Date(),
+        isRead: false,
+      })
+
+      await newMessage.save()
+      console.log("[v0] Mesaj veritabanına kaydedildi")
+
+      // Mesajı gönderene geri gönder
+      socket.emit("messageReceived", {
+        conversationId: conversationId, // ConversationId eklendi
+        sender: userEmail,
+        receiver: receiverEmail,
+        message: message,
+        timestamp: newMessage.timestamp,
+        isRead: false,
+      })
+
+      // Mesajı alıcıya gönder
+      socket.to(receiverEmail).emit("newMessage", {
+        conversationId: conversationId, // ConversationId eklendi
+        sender: userEmail,
+        receiver: receiverEmail,
+        message: message,
+        timestamp: newMessage.timestamp,
+        isRead: false,
+      })
+
+      console.log("[v0] Mesaj gerçek zamanlı olarak gönderildi")
+    } catch (error) {
+      console.error("[v0] Mesaj gönderme hatası:", error)
+      socket.emit("messageError", { error: "Mesaj gönderilemedi" })
+    }
+  })
+
+  // Mesaj okundu işareti
+  socket.on("markAsRead", async (data) => {
+    try {
+      const { sender } = data
+      const Message = require("./models/Message")
+
+      await Message.updateMany({ sender: sender, receiver: userEmail, isRead: false }, { isRead: true })
+
+      // Gönderene mesajların okunduğunu bildir
+      socket.to(sender).emit("messagesRead", { reader: userEmail })
+    } catch (error) {
+      console.error("[v0] Mesaj okundu işareti hatası:", error)
+    }
+  })
+
+  // Bağlantı koptuğunda
+  socket.on("disconnect", () => {
+    console.log("[v0] Kullanıcı bağlantısı koptu:", socket.id)
+  })
+})
+
+global.io = io
+
 // HTTPS başlat
-https.createServer(options, app).listen(443, (err) => {
+httpsServer.listen(443, (err) => {
   if (err) {
     return console.log("An error occurred:", err)
   }
   console.log("The HTTPS server is running on https://localhost:443")
+  console.log("Socket.IO server is ready for real-time messaging")
 })
 
 // Cron görevleri
