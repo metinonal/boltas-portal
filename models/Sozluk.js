@@ -12,6 +12,10 @@ const sozlukSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  resim: {
+    type: String,
+    default: null,
+  },
   harf: {
     type: String,
     required: true,

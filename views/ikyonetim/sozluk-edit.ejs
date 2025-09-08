@@ -105,6 +105,15 @@
                                                     <small class="form-text text-muted">Yeni resim seçmek opsiyoneldir</small>
                                                 </div>
                                             </div>
+                                            <div class="col-md-6">
+                                                <% if (sozluk.resim) { %>
+                                                    <label class="form-label">Mevcut Resim</label><br>
+                                                    <img src="<%= sozluk.resim %>" alt="<%= sozluk.kelime %>" class="img-thumbnail" style="max-height: 100px; max-width: 150px;">
+                                                <% } else { %>
+                                                    <label class="form-label">Mevcut Resim</label><br>
+                                                    <span class="text-muted">Resim bulunmuyor</span>
+                                                <% } %>
+                                            </div>
                                         </div>
                                         
                                         <div class="mb-3">
@@ -267,8 +276,33 @@
                         'undo', 'redo'
                     ],
                     image: {
+                        resizeUnit: 'px',
+                        resizeOptions: [
+                            {
+                                name: 'resizeImage:original',
+                                value: null,
+                                label: 'Orijinal'
+                            },
+                            {
+                                name: 'resizeImage:25',
+                                value: '25',
+                                label: '%25'
+                            },
+                            {
+                                name: 'resizeImage:50',
+                                value: '50',
+                                label: '%50'
+                            },
+                            {
+                                name: 'resizeImage:75',
+                                value: '75',
+                                label: '%75'
+                            }
+                        ],
                         toolbar: [
-                            'imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side'
+                            'imageTextAlternative', '|',
+                            'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText', '|',
+                            'resizeImage'
                         ]
                     },
                     table: {

@@ -44,7 +44,7 @@ function parseExcel(filePath) {
         }
     });
 
-    return menu; // JSON verisini d��ndür
+    return menu; // JSON verisini döndür
 }
 
 module.exports = { parseExcel };

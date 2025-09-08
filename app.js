@@ -161,18 +161,18 @@ io.use((socket, next) => {
 })
 
 io.on("connection", (socket) => {
-  // console.log("[v0] Kullanıcı bağlandı:", socket.id)
+  console.log("[v0] Kullanıcı bağlandı:", socket.id)
 
   // Kullanıcı kimlik doğrulama
   const session = socket.request.session
   if (!session || !session.authenticated || !session.user) {
-    // console.log("[v0] Kimlik doğrulaması başarısız, bağlantı kapatılıyor")
+    console.log("[v0] Kimlik doğrulaması başarısız, bağlantı kapatılıyor")
     socket.disconnect()
     return
   }
 
   const userEmail = session.user.EMail
-  // console.log("[v0] Kimlik doğrulandı:", userEmail)
+  console.log("[v0] Kimlik doğrulandı:", userEmail)
 
   // Kullanıcıyı kendi odasına ekle
   socket.join(userEmail)
@@ -180,7 +180,7 @@ io.on("connection", (socket) => {
   // Mesaj gönderme
   socket.on("sendMessage", async (data) => {
     try {
-      // console.log("[v0] Mesaj gönderiliyor:", data)
+      console.log("[v0] Mesaj gönderiliyor:", data)
       const { receiverEmail, message } = data
 
       const conversationId = [userEmail, receiverEmail].sort().join("_")
@@ -197,7 +197,7 @@ io.on("connection", (socket) => {
       })
 
       await newMessage.save()
-      // console.log("[v0] Mesaj veritabanına kaydedildi")
+      console.log("[v0] Mesaj veritabanına kaydedildi")
 
       // Mesajı gönderene geri gönder
       socket.emit("messageReceived", {
@@ -219,7 +219,7 @@ io.on("connection", (socket) => {
         isRead: false,
       })
 
-      // console.log("[v0] Mesaj gerçek zamanlı olarak gönderildi")
+      console.log("[v0] Mesaj gerçek zamanlı olarak gönderildi")
     } catch (error) {
       console.error("[v0] Mesaj gönderme hatası:", error)
       socket.emit("messageError", { error: "Mesaj gönderilemedi" })

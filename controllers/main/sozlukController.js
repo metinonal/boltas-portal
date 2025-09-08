@@ -74,6 +74,7 @@ exports.getSozluk = async (req, res) => {
       return indexA - indexB
     })
 
+    console.log("Bulunan harfler:", harfler) // Debug için
 
     // Kategorileri getir
     const kategoriler = await Sozluk.distinct("kategori", { aktif: true })

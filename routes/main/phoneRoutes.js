@@ -7,4 +7,3 @@ router.get("/telefon-rehberi", phoneController.getPhoneDirectory);
 router.post('/send-vcf', phoneController.sendVcf)
 
 module.exports = router;
-
