@@ -623,41 +623,47 @@
         }
       }
     
-    //   showChromeNotification(senderName, message) {
-    //     if ('Notification' in window && Notification.permission === 'granted') {
-    //       try {
-    //         const notification = new Notification(`Yeni mesaj - ${senderName}`, {
-    //           body: message,
-    //           icon: '/admin-assets/images/logo-sm.png', // Logo varsa kullan
-    //           badge: '/admin-assets/images/logo-sm.png',
-    //           tag: 'message-notification',
-    //           requireInteraction: false,
-    //           silent: false
-    //         });
+      showChromeNotification(senderName, message) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          try {
+            const notification = new Notification(`Yeni mesaj - ${senderName}`, {
+              body: message,
+              icon: '/admin-assets/images/logo-sm.png', // Logo varsa kullan
+              badge: '/admin-assets/images/logo-sm.png',
+              tag: 'message-notification',
+              requireInteraction: false,
+              silent: false
+            });
     
-    //         // Bildirime tıklandığında widget'ı aç
-    //         notification.onclick = () => {
-    //           window.focus();
-    //           if (!this.isOpen) {
-    //             this.toggleWidget();
-    //           }
-    //           notification.close();
-    //         };
+            // Bildirime tıklandığında widget'ı aç
+            notification.onclick = () => {
+              window.focus();
+              if (!this.isOpen) {
+                this.toggleWidget();
+              }
+              notification.close();
+            };
     
-    //         // 5 saniye sonra bildirimi kapat
-    //         setTimeout(() => {
-    //           notification.close();
-    //         }, 5000);
-    //       } catch (error) {
-    //         console.error('[v0] Chrome bildirimi gösterilirken hata:', error);
-    //       }
-    //     }
-    //   }
+            // 5 saniye sonra bildirimi kapat
+            setTimeout(() => {
+              notification.close();
+            }, 5000);
+          } catch (error) {
+            console.error('[v0] Chrome bildirimi gösterilirken hata:', error);
+          }
+        }
+      }
     
       initSocketEvents() {
         // Yeni mesaj geldiğinde
         this.socket.on('newMessage', (data) => {
+<<<<<<< HEAD
           // console.log('[v0] Yeni mesaj alındı:', data);
+=======
+          console.log('[v0] Yeni mesaj alındı:', data);
+          console.log('[v0] Aktif sohbet:', this.currentChat);
+          console.log('[v0] Gönderen:', data.sender);
+>>>>>>> 8baa24afadb17373b468cc796169f55b62b43713
           
           this.playNotificationSound();
           
@@ -667,27 +673,36 @@
                             `${sender.Adi} ${sender.Soyadi}` : data.sender;
           
           // Chrome bildirimi göster
-        //   this.showChromeNotification(senderName, data.message);
+          this.showChromeNotification(senderName, data.message);
           
-          if (this.currentChat === data.sender) {
+          this.loadChats();
+          
+          if (this.currentChat && this.currentChat === data.sender) {
+            console.log('[v0] Aktif sohbet güncelleniyor');
             this.loadConversation(data.sender);
+          } else {
+            console.log('[v0] Aktif sohbet farklı, sadece bildirim gösteriliyor');
+            this.unreadCount++;
+            this.updateUnreadBadge(this.unreadCount);
           }
-          
-          this.unreadCount++;
-          this.updateUnreadBadge(this.unreadCount);
         });
     
         // Mesaj gönderildiğinde onay
         this.socket.on('messageReceived', (data) => {
+<<<<<<< HEAD
           // console.log('[v0] Mesaj gönderildi onayı:', data);
+=======
+          console.log('[v0] Mesaj gönderildi onayı:', data);
+          console.log('[v0] Aktif sohbet:', this.currentChat);
+          console.log('[v0] Alıcı:', data.receiver);
+>>>>>>> 8baa24afadb17373b468cc796169f55b62b43713
           
-          // Aktif sohbetteki mesajları yenile
-          if (this.currentChat === data.receiver) {
+          this.loadChats();
+          
+          if (this.currentChat && this.currentChat === data.receiver) {
+            console.log('[v0] Gönderilen mesaj aktif sohbete ekleniyor');
             this.loadConversation(data.receiver);
           }
-          
-          // Sohbet listesini yenile
-          this.loadChats();
         });
     
         // Mesajlar okundu bilgisi
@@ -882,6 +897,7 @@
       }
     
       async openChat(userEmail) {
+        console.log('[v0] Sohbet açılıyor:', userEmail);
         this.currentChat = userEmail;
         const user = this.users.find(u => u.EMail === userEmail);
         const displayName = user && user.Adi && user.Soyadi ? 
