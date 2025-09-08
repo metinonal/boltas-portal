@@ -196,7 +196,6 @@
                                                             <label class="form-check-label" for="selectAll"></label>
                                                         </div>
                                                     </th>
-                                                    <th style="width: 80px;">Resim</th>
                                                     <th>Kelime</th>
                                                     <th>Harf</th>
                                                     <th>Kategori</th>
@@ -217,17 +216,6 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <% if (sozluk.resim) { %>
-                                                                    <img src="<%= sozluk.resim %>" alt="<%= sozluk.kelime %>" 
-                                                                         class="rounded" style="width: 50px; height: 50px; object-fit: cover;">
-                                                                <% } else { %>
-                                                                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                                                                         style="width: 50px; height: 50px;">
-                                                                        <i class="mdi mdi-image text-muted"></i>
-                                                                    </div>
-                                                                <% } %>
-                                                            </td>
-                                                            <td>
                                                                 <strong><%= sozluk.kelime %></strong>
                                                             </td>
                                                             <td>
@@ -238,7 +226,7 @@
                                                             </td>
                                                             <td>
                                                                 <span class="text-muted">
-                                                                    <%= sozluk.anlam.length > 100 ? sozluk.anlam.substring(0, 100) + '...' : sozluk.anlam %>
+                                                                    <%- sozluk.anlam.length > 100 ? sozluk.anlam.substring(0, 100) + '...' : sozluk.anlam %>
                                                                 </span>
                                                             </td>
                                                             <td>
