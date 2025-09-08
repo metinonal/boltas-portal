@@ -10,5 +10,6 @@ router.get("/edit/:id", sozlukController.getEditSozluk)
 router.post("/edit/:id", sozlukController.postEditSozluk)
 router.delete("/delete/:id", sozlukController.deleteSozluk)
 router.post("/bulk-actions", sozlukController.bulkActions)
+router.post("/upload-image", sozlukController.uploadImage)
 
 module.exports = router

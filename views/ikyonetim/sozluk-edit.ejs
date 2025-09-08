@@ -9,8 +9,9 @@
     <meta content="Coderthemes" name="author">
 
     <%- include("partials/css") %>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Added CKEditor 5 CDN for rich text editing -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 
 </head>
 
@@ -24,16 +25,16 @@
             <!-- LOGO -->
             <%- include("partials/logo") %>
 
-                <div class="h-100" id="leftside-menu-container" data-simplebar="">
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
 
-                    <!--- Sidemenu -->
-                    <%- include("partials/sidemenu") %>
-                        <!-- End Sidebar -->
+                <!--- Sidemenu -->
+                <%- include("partials/sidemenu") %>
+                <!-- End Sidebar -->
 
-                        <div class="clearfix"></div>
+                <div class="clearfix"></div>
 
-                </div>
-                <!-- Sidebar -left -->
+            </div>
+            <!-- Sidebar -left -->
 
         </div>
         <!-- Left Sidebar End -->
@@ -69,13 +70,17 @@
                     </div>
                     <!-- end page title -->
 
+                    <!-- Added alert container -->
+                    <div id="alertContainer"></div>
+
                     <div class="row">
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="header-title mb-3">Kelime Bilgileri</h4>
 
-                                    <form id="editSozlukForm">
+                                    <!-- Updated form to support file upload -->
+                                    <form id="editSozlukForm" enctype="multipart/form-data">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
@@ -91,13 +96,26 @@
                                             </div>
                                         </div>
                                         
+                                        <!-- Added image upload section -->
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="resim" class="form-label">Yeni Resim</label>
+                                                    <input type="file" class="form-control" id="resim" name="resim" accept="image/*">
+                                                    <small class="form-text text-muted">Yeni resim seçmek opsiyoneldir</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="mb-3">
                                             <label for="anlam" class="form-label">Anlam <span class="text-danger">*</span></label>
-                                            <textarea class="form-control" id="anlam" name="anlam" rows="4" required><%= sozluk.anlam %></textarea>
+                                            <!-- Changed textarea to div for CKEditor -->
+                                            <div id="anlam" name="anlam"><%- sozluk.anlam %></div>
+                                            <small class="form-text text-muted">Kelimenin anlamını detaylı olarak açıklayın. Resim ekleyebilir, yazı tipini değiştirebilirsiniz.</small>
                                         </div>
 
                                         <div class="text-end">
-                                            <button type="submit" class="btn btn-success">
+                                            <button type="submit" class="btn btn-success" id="submitBtn">
                                                 <i class="mdi mdi-content-save"></i> Güncelle
                                             </button>
                                             <a href="/ikyonetim/sozluk" class="btn btn-light ms-1">İptal</a>
@@ -160,39 +178,183 @@
 
     <%- include("partials/scripts") %>
     <script>
+        let editorInstance;
+        
+        class MyUploadAdapter {
+            constructor(loader) {
+                this.loader = loader;
+            }
+
+            upload() {
+                return this.loader.file
+                    .then(file => new Promise((resolve, reject) => {
+                        this._initRequest();
+                        this._initListeners(resolve, reject, file);
+                        this._sendRequest(file);
+                    }));
+            }
+
+            abort() {
+                if (this.xhr) {
+                    this.xhr.abort();
+                }
+            }
+
+            _initRequest() {
+                const xhr = this.xhr = new XMLHttpRequest();
+                xhr.open('POST', '/ikyonetim/sozluk/upload-image', true);
+                xhr.responseType = 'json';
+            }
+
+            _initListeners(resolve, reject, file) {
+                const xhr = this.xhr;
+                const loader = this.loader;
+                const genericErrorText = `Couldn't upload file: ${file.name}.`;
+
+                xhr.addEventListener('error', () => reject(genericErrorText));
+                xhr.addEventListener('abort', () => reject());
+                xhr.addEventListener('load', () => {
+                    const response = xhr.response;
+
+                    if (!response || xhr.status !== 200) {
+                        return reject(response && response.message ? response.message : genericErrorText);
+                    }
+
+                    if (!response.url) {
+                        return reject(response.message || genericErrorText);
+                    }
+
+                    resolve({
+                        default: response.url
+                    });
+                });
+
+                if (xhr.upload) {
+                    xhr.upload.addEventListener('progress', evt => {
+                        if (evt.lengthComputable) {
+                            loader.uploadTotal = evt.total;
+                            loader.uploaded = evt.loaded;
+                        }
+                    });
+                }
+            }
+
+            _sendRequest(file) {
+                const data = new FormData();
+                data.append('upload', file);
+                this.xhr.send(data);
+            }
+        }
+
+        function MyCustomUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+                return new MyUploadAdapter(loader);
+            };
+        }
+        
         $(document).ready(function() {
+            ClassicEditor
+                .create(document.querySelector('#anlam'), {
+                    extraPlugins: [MyCustomUploadAdapterPlugin],
+                    toolbar: [
+                        'heading', '|',
+                        'bold', 'italic', 'underline', 'strikethrough', '|',
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'outdent', 'indent', '|',
+                        'alignment', '|',
+                        'link', 'imageUpload', 'insertTable', '|',
+                        'undo', 'redo'
+                    ],
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn', 'tableRow', 'mergeTableCells'
+                        ]
+                    },
+                    language: 'tr'
+                })
+                .then(editor => {
+                    editorInstance = editor;
+                    // Set minimum height
+                    editor.editing.view.change(writer => {
+                        writer.setStyle('min-height', '200px', editor.editing.view.document.getRoot());
+                    });
+                })
+                .catch(error => {
+                    console.error('CKEditor initialization error:', error);
+                });
+
+            // Alert gösterme fonksiyonu
+            function showAlert(type, message) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                $('#alertContainer').html(alertHtml);
+                
+                // 3 saniye sonra otomatik kapat
+                setTimeout(function() {
+                    $('.alert').fadeOut();
+                }, 3000);
+            }
+
             $('#editSozlukForm').on('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = {
-                    kelime: $('#kelime').val().trim(),
-                    anlam: $('#anlam').val().trim(),
-                    kategori: $('#kategori').val().trim(),
-                    aktif: $('#aktif').is(':checked')
-                };
+                const anlamContent = editorInstance.getData();
+                
+                const formData = new FormData();
+                formData.append('kelime', $('#kelime').val().trim());
+                formData.append('anlam', anlamContent);
+                formData.append('kategori', $('#kategori').val().trim());
+                
+                const resimFile = $('#resim')[0].files[0];
+                if (resimFile) {
+                    formData.append('resim', resimFile);
+                }
 
                 // Validation
-                if (!formData.kelime || !formData.anlam) {
-                    alert('Kelime ve anlam alanları zorunludur!');
+                if (!$('#kelime').val().trim() || !anlamContent.trim()) {
+                    showAlert('danger', 'Kelime ve anlam alanları zorunludur!');
                     return;
                 }
+
+                // Button loading state
+                const submitBtn = $('#submitBtn');
+                const originalText = submitBtn.html();
+                submitBtn.html('<i class="mdi mdi-loading mdi-spin"></i> Güncelleniyor...').prop('disabled', true);
 
                 // Submit
                 $.ajax({
                     url: '/ikyonetim/sozluk/edit/<%= sozluk._id %>',
                     method: 'POST',
                     data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(response) {
                         if (response.success) {
-                            alert('Kelime başarıyla güncellendi!');
-                            window.location.href = '/ikyonetim/sozluk';
+                            showAlert('success', response.message);
+                            setTimeout(function() {
+                                window.location.href = '/ikyonetim/sozluk';
+                            }, 1500);
                         } else {
-                            alert('Hata: ' + response.message);
+                            showAlert('danger', response.message);
+                            submitBtn.html(originalText).prop('disabled', false);
                         }
                     },
                     error: function(xhr) {
+                        console.error('AJAX Error:', xhr);
                         const response = xhr.responseJSON;
-                        alert('Hata: ' + (response ? response.message : 'Bir hata oluştu!'));
+                        const errorMessage = response ? response.message : 'Bir hata oluştu!';
+                        showAlert('danger', errorMessage);
+                        submitBtn.html(originalText).prop('disabled', false);
                     }
                 });
             });

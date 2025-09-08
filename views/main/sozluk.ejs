@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Profilim | Boltas Portal</title>
+  <title>Sözlük | Boltas Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
   <meta content="Coderthemes" name="author">
@@ -30,95 +30,86 @@
         opacity: 0.9;
     }
     
-    .letter-accordion {
+    /* Updated styles for tabbed interface instead of accordion */
+    .alphabet-tabs {
         background: white;
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1rem;
+        margin-bottom: 2rem;
         overflow: hidden;
     }
     
-    .letter-header {
-        background: #f8f9fa;
-        border: none;
-        padding: 1.25rem 1.5rem;
-        width: 100%;
-        text-align: left;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #495057;
-        cursor: pointer;
-        transition: all 0.3s ease;
+    .tab-navigation {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .letter-header:hover {
-        background: #e9ecef;
-        color: #17a2b8;
-    }
-    
-    .letter-header.active {
-        background: #17a2b8;
-        color: white;
-    }
-    
-    .letter-header .arrow {
-        transition: transform 0.3s ease;
-        font-size: 1.2rem;
-    }
-    
-    .letter-header.active .arrow {
-        transform: rotate(90deg);
-    }
-    
-    .letter-content {
-        display: none;
+        flex-wrap: wrap;
+        border-bottom: 2px solid #f1f3f4;
         padding: 0;
-        background: white;
+        margin: 0;
+        list-style: none;
     }
     
-    .letter-content.show {
+    .tab-item {
+        flex: 1;
+        min-width: 50px;
+        text-align: center;
+    }
+    
+    .tab-link {
         display: block;
+        padding: 1rem 0.5rem;
+        color: #6c757d;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .tab-link:hover {
+        color: #17a2b8;
+        background: #f8f9fa;
+    }
+    
+    .tab-link.active {
+        color: #17a2b8;
+        border-bottom-color: #17a2b8;
+        background: #f8f9fa;
+    }
+    
+    .tab-content {
+        padding: 2rem;
+        min-height: 400px;
+    }
+    
+    /* Updated to 2-column grid layout matching screenshot */
+    .words-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 1rem;
     }
     
     .word-item {
         padding: 1.5rem;
-        border-bottom: 1px solid #f1f3f4;
-        transition: background-color 0.2s ease;
-    }
-    
-    .word-item:last-child {
-        border-bottom: none;
-    }
-    
-    .word-item:hover {
         background: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
     }
     
     .word-title {
-        color: #17a2b8;
+        color: #333;
         font-weight: 700;
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .word-category {
-        background: #e3f2fd;
-        color: #1976d2;
-        padding: 0.25rem 0.75rem;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        display: inline-block;
+        font-size: 1.1rem;
         margin-bottom: 0.75rem;
-        font-weight: 500;
+        display: block;
     }
     
     .word-meaning {
-        color: #6c757d;
+        color: #666;
         line-height: 1.6;
         margin: 0;
+        font-size: 0.95rem;
     }
     
     .search-container {
@@ -145,49 +136,33 @@
         text-align: center;
         padding: 3rem;
         color: #6c757d;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        grid-column: 1 / -1;
     }
     
     .loading-spinner {
         display: none;
         text-align: center;
         padding: 3rem;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .stats-badge {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        margin: 0 0.25rem;
     }
     
     @media (max-width: 768px) {
-        .dictionary-header {
-            padding: 1.5rem 0;
+        .tab-item {
+            min-width: 40px;
         }
         
-        .dictionary-title {
-            font-size: 1.5rem;
+        .tab-link {
+            padding: 0.75rem 0.25rem;
+            font-size: 0.8rem;
         }
         
-        .letter-header {
-            padding: 1rem 1.25rem;
-            font-size: 1rem;
+        /* Mobile responsive - single column on small screens */
+        .words-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
         
         .word-item {
-            padding: 1.25rem;
-        }
-        
-        .word-title {
-            font-size: 1.1rem;
+            padding: 1rem;
         }
     }
 </style>
@@ -260,51 +235,94 @@
                     </div>
                 </div>
 
-                <!-- Accordion Sözlük -->
+                <!-- Replaced accordion with tabbed interface -->
+                <!-- Tabbed Dictionary -->
                 <div class="row">
                     <div class="col-12">
-                        <div id="dictionaryAccordion">
-                            <% 
-                            // Harflere göre kelimeleri grupla
-                            const harfGruplari = {};
-                            sozlukler.forEach(sozluk => {
-                                if (!harfGruplari[sozluk.harf]) {
-                                    harfGruplari[sozluk.harf] = [];
-                                }
-                                harfGruplari[sozluk.harf].push(sozluk);
-                            });
+                        <div class="alphabet-tabs">
+                            <!-- Tab Navigation -->
+                            <ul class="tab-navigation">
+                                <% 
+                                const harfGruplari = {};
+                                
+                                // Group words by letter using the harfler array from controller
+                                sozlukler.forEach(sozluk => {
+                                    let harfKey = sozluk.harf;
+                                    // Map special characters to combined tabs
+                                    if (harfKey === 'C' || harfKey === 'Ç') harfKey = 'C-Ç';
+                                    else if (harfKey === 'İ' || harfKey === 'I') harfKey = 'İ-I';
+                                    else if (harfKey === 'O' || harfKey === 'Ö') harfKey = 'O-Ö';
+                                    else if (harfKey === 'S' || harfKey === 'Ş') harfKey = 'S-Ş';
+                                    else if (harfKey === 'U' || harfKey === 'Ü') harfKey = 'U-Ü';
+                                    
+                                    if (!harfGruplari[harfKey]) {
+                                        harfGruplari[harfKey] = [];
+                                    }
+                                    harfGruplari[harfKey].push(sozluk);
+                                });
+                                
+                                // Use harfler array from controller and apply same grouping logic
+                                const mevcutHarfler = [];
+                                harfler.forEach(harf => {
+                                    let harfKey = harf;
+                                    // Map special characters to combined tabs
+                                    if (harfKey === 'C' || harfKey === 'Ç') harfKey = 'C-Ç';
+                                    else if (harfKey === 'İ' || harfKey === 'I') harfKey = 'İ-I';
+                                    else if (harfKey === 'O' || harfKey === 'Ö') harfKey = 'O-Ö';
+                                    else if (harfKey === 'S' || harfKey === 'Ş') harfKey = 'S-Ş';
+                                    else if (harfKey === 'U' || harfKey === 'Ü') harfKey = 'U-Ü';
+                                    
+                                    if (!mevcutHarfler.includes(harfKey)) {
+                                        mevcutHarfler.push(harfKey);
+                                    }
+                                });
+                                
+                                // Sort the letters properly
+                                const turkishAlphabet = ['A', 'B', 'C-Ç', 'D', 'E', 'F', 'G', 'H', 'İ-I', 'J', 'K', 'L', 'M', 'N', 'O-Ö', 'P', 'R', 'S-Ş', 'T', 'U-Ü', 'V', 'Y', 'Z'];
+                                mevcutHarfler.sort((a, b) => {
+                                    const aIndex = turkishAlphabet.indexOf(a);
+                                    const bIndex = turkishAlphabet.indexOf(b);
+                                    if (aIndex === -1 && bIndex === -1) return a.localeCompare(b, 'tr');
+                                    if (aIndex === -1) return 1;
+                                    if (bIndex === -1) return -1;
+                                    return aIndex - bIndex;
+                                });
+                                %>
+                                
+                                <% mevcutHarfler.forEach((harf, index) => { %>
+                                    <li class="tab-item">
+                                        <a class="tab-link <%= index === 0 ? 'active' : '' %>" 
+                                           data-tab="<%= harf %>" 
+                                           href="#tab-<%= harf.replace('-', '') %>">
+                                            <%= harf %>
+                                        </a>
+                                    </li>
+                                <% }) %>
+                            </ul>
                             
-                            // Tüm harfleri sırala
-                            const tumHarfler = ['A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P', 'R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'];
-                            %>
-                            
-                            <% tumHarfler.forEach(harf => { %>
-                                <% if (harfGruplari[harf] && harfGruplari[harf].length > 0) { %>
-                                    <div class="letter-accordion">
-                                        <button class="letter-header" type="button" data-letter="<%= harf %>">
-                                            <span><%= harf %></span>
-                                            <i class="mdi mdi-chevron-right arrow"></i>
-                                        </button>
-                                        <div class="letter-content" id="content-<%= harf %>">
-                                            <% harfGruplari[harf].forEach(sozluk => { %>
-                                                <div class="word-item">
-                                                    <h5 class="word-title"><%= sozluk.kelime %></h5>
-                                                    <span class="word-category"><%= sozluk.kategori %></span>
-                                                    <p class="word-meaning"><%= sozluk.anlam %></p>
-                                                </div>
-                                            <% }) %>
-                                        </div>
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="dictionaryContent">
+                                <% mevcutHarfler.forEach((harf, index) => { %>
+                                    <div class="tab-pane <%= index === 0 ? 'active' : '' %>" id="tab-<%= harf.replace('-', '') %>">
+                                        <% if (harfGruplari[harf] && harfGruplari[harf].length > 0) { %>
+                                            <!-- Updated to use grid layout with 2 columns -->
+                                            <div class="words-grid">
+                                                <% harfGruplari[harf].forEach(sozluk => { %>
+                                                    <div class="word-item">
+                                                        <strong class="word-title"><%= sozluk.kelime %>:</strong>
+                                                        <div class="word-meaning"><%- sozluk.anlam %></div>
+                                                    </div>
+                                                <% }) %>
+                                            </div>
+                                        <% } else { %>
+                                            <div class="no-results">
+                                                <i class="mdi mdi-book-open-page-variant" style="font-size: 3rem; color: #e9ecef;"></i>
+                                                <h5 class="mt-3"><%= harf %> harfi ile başlayan kelime bulunamadı</h5>
+                                            </div>
+                                        <% } %>
                                     </div>
-                                <% } %>
-                            <% }) %>
-                            
-                            <% if (Object.keys(harfGruplari).length === 0) { %>
-                                <div class="no-results">
-                                    <i class="mdi mdi-book-open-page-variant" style="font-size: 4rem; color: #e9ecef;"></i>
-                                    <h4 class="mt-3">Kelime bulunamadı</h4>
-                                    <p class="mb-0">Arama kriterlerinizi değiştirerek tekrar deneyin.</p>
-                                </div>
-                            <% } %>
+                                <% }) %>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -329,32 +347,35 @@
     <!-- END wrapper -->
 
     <%- include("partials/scripts") %>
+    <!-- Added harfler array to JavaScript scope -->
+    <script>
+        // Make harfler array available to JavaScript
+        const harfler = <%- JSON.stringify(harfler) %>;
+    </script>
     <script>
         $(document).ready(function() {
-            // Accordion toggle
-            $('.letter-header').on('click', function() {
-                const letter = $(this).data('letter');
-                const content = $('#content-' + letter);
-                const isActive = $(this).hasClass('active');
+            // Tab switching
+            $('.tab-link').on('click', function(e) {
+                e.preventDefault();
                 
-                // Tüm accordion'ları kapat
-                $('.letter-header').removeClass('active');
-                $('.letter-content').removeClass('show').slideUp(300);
+                const targetTab = $(this).data('tab');
                 
-                // Eğer tıklanan zaten aktif değilse aç
-                if (!isActive) {
-                    $(this).addClass('active');
-                    content.addClass('show').slideDown(300);
-                }
+                // Remove active class from all tabs and content
+                $('.tab-link').removeClass('active');
+                $('.tab-pane').removeClass('active');
+                
+                // Add active class to clicked tab and corresponding content
+                $(this).addClass('active');
+                $('#tab-' + targetTab.replace('-', '')).addClass('active');
             });
             
-            // Arama fonksiyonu
+            // Search functionality
             function performSearch() {
                 const search = $('#searchInput').val();
                 const kategori = $('#kategoriFilter').val();
                 
                 $('.loading-spinner').show();
-                $('#dictionaryAccordion').hide();
+                $('.alphabet-tabs').hide();
                 
                 $.ajax({
                     url: '/sozluk/search',
@@ -362,7 +383,7 @@
                     data: { search, kategori },
                     success: function(response) {
                         if (response.success) {
-                            displayAccordion(response.data);
+                            displayTabbedResults(response.data);
                         } else {
                             showNoResults();
                         }
@@ -372,94 +393,130 @@
                     },
                     complete: function() {
                         $('.loading-spinner').hide();
-                        $('#dictionaryAccordion').show();
+                        $('.alphabet-tabs').show();
                     }
                 });
             }
             
-            // Accordion'ı göster
-            function displayAccordion(words) {
-                // Harflere göre grupla
+            // Display search results in tabbed format
+            function displayTabbedResults(words) {
+                // Group words by letter
                 const harfGruplari = {};
+                
                 words.forEach(word => {
-                    if (!harfGruplari[word.harf]) {
-                        harfGruplari[word.harf] = [];
+                    let harfKey = word.harf;
+                    // Map special characters to combined tabs
+                    if (harfKey === 'C' || harfKey === 'Ç') harfKey = 'C-Ç';
+                    else if (harfKey === 'İ' || harfKey === 'I') harfKey = 'İ-I';
+                    else if (harfKey === 'O' || harfKey === 'Ö') harfKey = 'O-Ö';
+                    else if (harfKey === 'S' || harfKey === 'Ş') harfKey = 'S-Ş';
+                    else if (harfKey === 'U' || harfKey === 'Ü') harfKey = 'U-Ü';
+                    
+                    if (!harfGruplari[harfKey]) {
+                        harfGruplari[harfKey] = [];
                     }
-                    harfGruplari[word.harf].push(word);
+                    harfGruplari[harfKey].push(word);
                 });
                 
-                let html = '';
-                const tumHarfler = ['A', 'B', 'C', 'Ç', 'D', 'E', 'F', 'G', 'Ğ', 'H', 'I', 'İ', 'J', 'K', 'L', 'M', 'N', 'O', 'Ö', 'P', 'R', 'S', 'Ş', 'T', 'U', 'Ü', 'V', 'Y', 'Z'];
+                const mevcutHarfler = [];
+                harfler.forEach(harf => {
+                    let harfKey = harf;
+                    // Map special characters to combined tabs
+                    if (harfKey === 'C' || harfKey === 'Ç') harfKey = 'C-Ç';
+                    else if (harfKey === 'İ' || harfKey === 'I') harfKey = 'İ-I';
+                    else if (harfKey === 'O' || harfKey === 'Ö') harfKey = 'O-Ö';
+                    else if (harfKey === 'S' || harfKey === 'Ş') harfKey = 'S-Ş';
+                    else if (harfKey === 'U' || harfKey === 'Ü') harfKey = 'U-Ü';
+                    
+                    if (!mevcutHarfler.includes(harfKey)) {
+                        mevcutHarfler.push(harfKey);
+                    }
+                });
                 
-                tumHarfler.forEach(harf => {
+                // Sort the letters properly
+                const turkishAlphabet = ['A', 'B', 'C-Ç', 'D', 'E', 'F', 'G', 'H', 'İ-I', 'J', 'K', 'L', 'M', 'N', 'O-Ö', 'P', 'R', 'S-Ş', 'T', 'U-Ü', 'V', 'Y', 'Z'];
+                mevcutHarfler.sort((a, b) => {
+                    const aIndex = turkishAlphabet.indexOf(a);
+                    const bIndex = turkishAlphabet.indexOf(b);
+                    if (aIndex === -1 && bIndex === -1) return a.localeCompare(b, 'tr');
+                    if (aIndex === -1) return 1;
+                    if (bIndex === -1) return -1;
+                    return aIndex - bIndex;
+                });
+                
+                // Rebuild tab navigation
+                let tabNavHtml = '';
+                mevcutHarfler.forEach((harf, index) => {
+                    tabNavHtml += `
+                        <li class="tab-item">
+                            <a class="tab-link ${index === 0 ? 'active' : ''}" 
+                               data-tab="${harf}" 
+                               href="#tab-${harf.replace('-', '')}">
+                                ${harf}
+                            </a>
+                        </li>
+                    `;
+                });
+                $('.tab-navigation').html(tabNavHtml);
+                
+                // Update tab content
+                let contentHtml = '';
+                mevcutHarfler.forEach((harf, index) => {
+                    contentHtml += `<div class="tab-pane ${index === 0 ? 'active' : ''}" id="tab-${harf.replace('-', '')}">`;
+                    
                     if (harfGruplari[harf] && harfGruplari[harf].length > 0) {
-                        html += `
-                            <div class="letter-accordion">
-                                <button class="letter-header" type="button" data-letter="${harf}">
-                                    <span>${harf}</span>
-                                    <i class="mdi mdi-chevron-right arrow"></i>
-                                </button>
-                                <div class="letter-content" id="content-${harf}">
-                        `;
-                        
+                        contentHtml += '<div class="words-grid">';
                         harfGruplari[harf].forEach(word => {
-                            html += `
+                            contentHtml += `
                                 <div class="word-item">
-                                    <h5 class="word-title">${word.kelime}</h5>
-                                    <span class="word-category">${word.kategori}</span>
-                                    <p class="word-meaning">${word.anlam}</p>
+                                    <strong class="word-title">${word.kelime}:</strong>
+                                    <div class="word-meaning">${word.anlam}</div>
                                 </div>
                             `;
                         });
-                        
-                        html += `
-                                </div>
+                        contentHtml += '</div>';
+                    } else {
+                        contentHtml += `
+                            <div class="no-results">
+                                <i class="mdi mdi-book-open-page-variant" style="font-size: 3rem; color: #e9ecef;"></i>
+                                <h5 class="mt-3">${harf} harfi ile başlayan kelime bulunamadı</h5>
                             </div>
                         `;
                     }
+                    
+                    contentHtml += '</div>';
                 });
                 
-                if (html === '') {
-                    html = showNoResultsHTML();
-                }
+                $('#dictionaryContent').html(contentHtml);
                 
-                $('#dictionaryAccordion').html(html);
-                
-                // Event listener'ları yeniden bağla
-                $('.letter-header').on('click', function() {
-                    const letter = $(this).data('letter');
-                    const content = $('#content-' + letter);
-                    const isActive = $(this).hasClass('active');
+                // Reattach tab click events
+                $('.tab-link').on('click', function(e) {
+                    e.preventDefault();
                     
-                    $('.letter-header').removeClass('active');
-                    $('.letter-content').removeClass('show').slideUp(300);
+                    const targetTab = $(this).data('tab');
                     
-                    if (!isActive) {
-                        $(this).addClass('active');
-                        content.addClass('show').slideDown(300);
-                    }
+                    $('.tab-link').removeClass('active');
+                    $('.tab-pane').removeClass('active');
+                    
+                    $(this).addClass('active');
+                    $('#tab-' + targetTab.replace('-', '')).addClass('active');
                 });
             }
             
-            // Sonuç bulunamadı HTML
-            function showNoResultsHTML() {
-                return `
+            // Show no results
+            function showNoResults() {
+                $('#dictionaryContent').html(`
                     <div class="no-results">
                         <i class="mdi mdi-book-open-page-variant" style="font-size: 4rem; color: #e9ecef;"></i>
                         <h4 class="mt-3">Kelime bulunamadı</h4>
                         <p class="mb-0">Arama kriterlerinizi değiştirerek tekrar deneyin.</p>
                     </div>
-                `;
+                `);
             }
             
-            // Sonuç bulunamadı
-            function showNoResults() {
-                $('#dictionaryAccordion').html(showNoResultsHTML());
-            }
-            
-            // Hata göster
+            // Show error
             function showError() {
-                $('#dictionaryAccordion').html(`
+                $('#dictionaryContent').html(`
                     <div class="no-results">
                         <i class="mdi mdi-alert-circle" style="font-size: 4rem; color: #e9ecef;"></i>
                         <h4 class="mt-3">Bir hata oluştu</h4>
@@ -468,17 +525,17 @@
                 `);
             }
             
-            // Kategori değişikliği
+            // Category filter change
             $('#kategoriFilter').on('change', performSearch);
             
-            // Gerçek zamanlı arama (debounce ile)
+            // Real-time search with debounce
             let searchTimeout;
             $('#searchInput').on('input', function() {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(performSearch, 500);
             });
             
-            // Enter tuşu ile arama
+            // Enter key search
             $('#searchInput').on('keypress', function(e) {
                 if (e.which === 13) {
                     performSearch();

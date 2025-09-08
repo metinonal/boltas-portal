@@ -25,9 +25,55 @@ exports.getSozluk = async (req, res) => {
     // Verileri getir
     const sozlukler = await Sozluk.find(filter).sort({ kelime: 1 }).limit(100)
 
-    // Harfleri getir (navigasyon için)
-    const harfler = await Sozluk.distinct("harf", { aktif: true })
-    harfler.sort()
+    let harfler = await Sozluk.distinct("harf", { aktif: true })
+
+    // Boş veya null harfleri filtrele
+    harfler = harfler.filter((h) => h && h.trim() !== "")
+
+    // Türkçe alfabetik sıralama
+    const turkceAlfabe = [
+      "A",
+      "B",
+      "C",
+      "Ç",
+      "D",
+      "E",
+      "F",
+      "G",
+      "Ğ",
+      "H",
+      "I",
+      "İ",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "Ö",
+      "P",
+      "R",
+      "S",
+      "Ş",
+      "T",
+      "U",
+      "Ü",
+      "V",
+      "Y",
+      "Z",
+    ]
+
+    harfler.sort((a, b) => {
+      const indexA = turkceAlfabe.indexOf(a)
+      const indexB = turkceAlfabe.indexOf(b)
+
+      if (indexA === -1 && indexB === -1) return a.localeCompare(b, "tr")
+      if (indexA === -1) return 1
+      if (indexB === -1) return -1
+
+      return indexA - indexB
+    })
+
 
     // Kategorileri getir
     const kategoriler = await Sozluk.distinct("kategori", { aktif: true })

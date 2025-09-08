@@ -1,4 +1,22 @@
 const Sozluk = require("../../models/Sozluk")
+const multer = require("multer")
+const fs = require("fs")
+const path = require("path")
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, "../../public/uploads/sozluk")
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true })
+    }
+    cb(null, uploadPath)
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname)
+  },
+})
+
+const upload = multer({ storage })
 
 // Sözlük listesi
 exports.getSozlukList = async (req, res) => {
@@ -65,54 +83,60 @@ exports.getAddSozluk = (req, res) => {
 }
 
 // Yeni kelime ekleme
-exports.postAddSozluk = async (req, res) => {
-  try {
-    const { kelime, anlam, kategori } = req.body
+exports.postAddSozluk = [
+  upload.single("resim"),
+  async (req, res) => {
+    try {
+      const { kelime, anlam, kategori } = req.body
 
-    // Validation
-    if (!kelime || !anlam) {
-      return res.status(400).json({
-        success: false,
-        message: "Kelime ve anlam alanları zorunludur",
+      // Validation
+      if (!kelime || !anlam) {
+        return res.status(400).json({
+          success: false,
+          message: "Kelime ve anlam alanları zorunludur",
+        })
+      }
+
+      // Aynı kelime var mı kontrol et
+      const mevcutKelime = await Sozluk.findOne({
+        kelime: { $regex: new RegExp(`^${kelime.trim()}$`, "i") },
+        aktif: true,
       })
-    }
 
-    // Aynı kelime var mı kontrol et
-    const mevcutKelime = await Sozluk.findOne({
-      kelime: { $regex: new RegExp(`^${kelime.trim()}$`, "i") },
-      aktif: true,
-    })
+      if (mevcutKelime) {
+        return res.status(400).json({
+          success: false,
+          message: "Bu kelime zaten sözlükte mevcut",
+        })
+      }
 
-    if (mevcutKelime) {
-      return res.status(400).json({
-        success: false,
-        message: "Bu kelime zaten sözlükte mevcut",
+      // Harfi manuel olarak belirle
+      const ilkHarf = kelime.trim().charAt(0).toUpperCase()
+
+      const resimPath = req.file ? `/uploads/sozluk/${req.file.filename}` : null
+
+      const yeniSozluk = new Sozluk({
+        kelime: kelime.trim(),
+        anlam: anlam.trim(),
+        resim: resimPath,
+        harf: ilkHarf,
+        kategori: kategori?.trim() || "Genel",
+        olusturanKullanici: req.session?.user?.displayName || req.session?.user?.username || "Admin",
       })
+
+      await yeniSozluk.save()
+
+      res.json({
+        success: true,
+        message: "Kelime başarıyla eklendi",
+        data: yeniSozluk,
+      })
+    } catch (error) {
+      console.error("Kelime ekleme hatası:", error)
+      res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
     }
-
-    // Harfi manuel olarak belirle
-    const ilkHarf = kelime.trim().charAt(0).toUpperCase()
-
-    const yeniSozluk = new Sozluk({
-      kelime: kelime.trim(),
-      anlam: anlam.trim(),
-      harf: ilkHarf, // Manuel olarak set et
-      kategori: kategori?.trim() || "Genel",
-      olusturanKullanici: req.session?.user?.displayName || req.session?.user?.username || "Admin",
-    })
-
-    await yeniSozluk.save()
-
-    res.json({
-      success: true,
-      message: "Kelime başarıyla eklendi",
-      data: yeniSozluk,
-    })
-  } catch (error) {
-    console.error("Kelime ekleme hatası:", error)
-    res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
-  }
-}
+  },
+]
 
 // Kelime düzenleme sayfası
 exports.getEditSozluk = async (req, res) => {
@@ -131,65 +155,70 @@ exports.getEditSozluk = async (req, res) => {
 }
 
 // Kelime güncelleme
-exports.postEditSozluk = async (req, res) => {
-  try {
-    const { kelime, anlam, kategori, aktif } = req.body
+exports.postEditSozluk = [
+  upload.single("resim"),
+  async (req, res) => {
+    try {
+      const { kelime, anlam, kategori, aktif } = req.body
 
-    // Validation
-    if (!kelime || !anlam) {
-      return res.status(400).json({
-        success: false,
-        message: "Kelime ve anlam alanları zorunludur",
+      // Validation
+      if (!kelime || !anlam) {
+        return res.status(400).json({
+          success: false,
+          message: "Kelime ve anlam alanları zorunludur",
+        })
+      }
+
+      // Aynı kelime var mı kontrol et (kendisi hariç)
+      const mevcutKelime = await Sozluk.findOne({
+        kelime: { $regex: new RegExp(`^${kelime.trim()}$`, "i") },
+        _id: { $ne: req.params.id },
+        aktif: true,
       })
-    }
 
-    // Aynı kelime var mı kontrol et (kendisi hariç)
-    const mevcutKelime = await Sozluk.findOne({
-      kelime: { $regex: new RegExp(`^${kelime.trim()}$`, "i") },
-      _id: { $ne: req.params.id },
-      aktif: true,
-    })
+      if (mevcutKelime) {
+        return res.status(400).json({
+          success: false,
+          message: "Bu kelime zaten sözlükte mevcut",
+        })
+      }
 
-    if (mevcutKelime) {
-      return res.status(400).json({
-        success: false,
-        message: "Bu kelime zaten sözlükte mevcut",
-      })
-    }
+      // Harfi manuel olarak belirle
+      const ilkHarf = kelime.trim().charAt(0).toUpperCase()
 
-    // Harfi manuel olarak belirle
-    const ilkHarf = kelime.trim().charAt(0).toUpperCase()
-
-    const guncelSozluk = await Sozluk.findByIdAndUpdate(
-      req.params.id,
-      {
+      const updateData = {
         kelime: kelime.trim(),
         anlam: anlam.trim(),
-        harf: ilkHarf, // Manuel olarak set et
+        harf: ilkHarf,
         kategori: kategori?.trim() || "Genel",
         aktif: true,
         guncellemeTarihi: new Date(),
-      },
-      { new: true },
-    )
+      }
 
-    if (!guncelSozluk) {
-      return res.status(404).json({
-        success: false,
-        message: "Kelime bulunamadı",
+      if (req.file) {
+        updateData.resim = `/uploads/sozluk/${req.file.filename}`
+      }
+
+      const guncelSozluk = await Sozluk.findByIdAndUpdate(req.params.id, updateData, { new: true })
+
+      if (!guncelSozluk) {
+        return res.status(404).json({
+          success: false,
+          message: "Kelime bulunamadı",
+        })
+      }
+
+      res.json({
+        success: true,
+        message: "Kelime başarıyla güncellendi",
+        data: guncelSozluk,
       })
+    } catch (error) {
+      console.error("Kelime güncelleme hatası:", error)
+      res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
     }
-
-    res.json({
-      success: true,
-      message: "Kelime başarıyla güncellendi",
-      data: guncelSozluk,
-    })
-  } catch (error) {
-    console.error("Kelime güncelleme hatası:", error)
-    res.status(500).json({ success: false, message: "Sunucu hatası: " + error.message })
-  }
-}
+  },
+]
 
 // Kelime silme
 exports.deleteSozluk = async (req, res) => {
@@ -213,7 +242,6 @@ exports.deleteSozluk = async (req, res) => {
   }
 }
 
-
 // Toplu işlemler
 exports.bulkActions = async (req, res) => {
   try {
@@ -232,16 +260,10 @@ exports.bulkActions = async (req, res) => {
         result = await Sozluk.deleteMany({ _id: { $in: ids } }) // <-- kalıcı silme
         break
       case "activate":
-        result = await Sozluk.updateMany(
-          { _id: { $in: ids } },
-          { aktif: true, guncellemeTarihi: new Date() }
-        )
+        result = await Sozluk.updateMany({ _id: { $in: ids } }, { aktif: true, guncellemeTarihi: new Date() })
         break
       case "deactivate":
-        result = await Sozluk.updateMany(
-          { _id: { $in: ids } },
-          { aktif: false, guncellemeTarihi: new Date() }
-        )
+        result = await Sozluk.updateMany({ _id: { $in: ids } }, { aktif: false, guncellemeTarihi: new Date() })
         break
       default:
         return res.status(400).json({
@@ -261,3 +283,32 @@ exports.bulkActions = async (req, res) => {
   }
 }
 
+// CKEditor image upload endpoint
+exports.uploadImage = [
+  upload.single("upload"),
+  async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          error: {
+            message: "Dosya yüklenemedi",
+          },
+        })
+      }
+
+      const imageUrl = `/uploads/sozluk/${req.file.filename}`
+
+      // CKEditor expected response format
+      res.json({
+        url: imageUrl,
+      })
+    } catch (error) {
+      console.error("Resim yükleme hatası:", error)
+      res.status(500).json({
+        error: {
+          message: "Sunucu hatası: " + error.message,
+        },
+      })
+    }
+  },
+]
