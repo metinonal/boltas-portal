@@ -604,7 +604,7 @@
       requestNotificationPermission() {
         if ('Notification' in window && Notification.permission === 'default') {
           Notification.requestPermission().then(permission => {
-            console.log('[v0] Bildirim izni:', permission);
+            // console.log('[v0] Bildirim izni:', permission);
           });
         }
       }
@@ -615,11 +615,11 @@
           if (audio) {
             audio.currentTime = 0; // Sesi baştan başlat
             audio.play().catch(error => {
-              console.log('[v0] Ses çalınamadı (kullanıcı etkileşimi gerekli):', error);
+              // console.log('[v0] Ses çalınamadı (kullanıcı etkileşimi gerekli):', error);
             });
           }
         } catch (error) {
-          console.error('[v0] Bildirim sesi çalınırken hata:', error);
+          // console.error('[v0] Bildirim sesi çalınırken hata:', error);
         }
       }
     
@@ -657,7 +657,7 @@
       initSocketEvents() {
         // Yeni mesaj geldiğinde
         this.socket.on('newMessage', (data) => {
-          console.log('[v0] Yeni mesaj alındı:', data);
+          // console.log('[v0] Yeni mesaj alındı:', data);
           
           this.playNotificationSound();
           
@@ -679,7 +679,7 @@
     
         // Mesaj gönderildiğinde onay
         this.socket.on('messageReceived', (data) => {
-          console.log('[v0] Mesaj gönderildi onayı:', data);
+          // console.log('[v0] Mesaj gönderildi onayı:', data);
           
           // Aktif sohbetteki mesajları yenile
           if (this.currentChat === data.receiver) {
@@ -692,7 +692,7 @@
     
         // Mesajlar okundu bilgisi
         this.socket.on('messagesRead', (data) => {
-          console.log('[v0] Mesajlar okundu:', data);
+          // console.log('[v0] Mesajlar okundu:', data);
           
           // Sohbet listesini yenile
           this.loadChats();
@@ -700,17 +700,17 @@
     
         // Mesaj gönderme hatası
         this.socket.on('messageError', (data) => {
-          console.error('[v0] Mesaj gönderme hatası:', data);
+          // console.error('[v0] Mesaj gönderme hatası:', data);
           alert('Mesaj gönderilemedi: ' + data.error);
         });
     
         // Bağlantı durumu
         this.socket.on('connect', () => {
-          console.log('[v0] Socket.IO bağlantısı kuruldu');
+          // console.log('[v0] Socket.IO bağlantısı kuruldu');
         });
     
         this.socket.on('disconnect', () => {
-          console.log('[v0] Socket.IO bağlantısı koptu');
+          // console.log('[v0] Socket.IO bağlantısı koptu');
         });
       }
     
@@ -778,20 +778,20 @@
     
       async loadChats() {
         try {
-          console.log('[v0] loadChats() çağrıldı');
+          // console.log('[v0] loadChats() çağrıldı');
           const response = await fetch('/api/messages/conversations');
-          console.log('[v0] API response status:', response.status);
+          // console.log('[v0] API response status:', response.status);
           
           if (response.ok) {
             const data = await response.json();
-            console.log('[v0] API response data:', data);
+            // console.log('[v0] API response data:', data);
             this.chats = data;
             this.renderChats();
           } else {
-            console.log('[v0] API response error:', response.statusText);
+            // console.log('[v0] API response error:', response.statusText);
           }
         } catch (error) {
-          console.log('[v0] loadChats fetch error:', error);
+          // console.log('[v0] loadChats fetch error:', error);
           console.error('Sohbetler yüklenirken hata:', error);
         }
       }
